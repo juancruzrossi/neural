@@ -115,5 +115,5 @@ Add `.bridge/` to `.gitignore` or commit it — your choice. The artifacts are h
 
 4. **Git-optional.** Works with or without version control. If git is initialized, Bridge makes atomic commits per task. If not, it works fully local without nagging.
 
-5. **Token-efficient.** Skills are prompt instructions — no runtime, no daemon, no build step. The entire framework is ~900 lines that load only when invoked.
+5. **Token-efficient.** No runtime, no daemon, no build step.
 
