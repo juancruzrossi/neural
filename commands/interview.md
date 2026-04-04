@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Socratic interview to clarify requirements before planning"
-argument-hint: '[feature-name] [description]'
 ---
 
 <execution_context>

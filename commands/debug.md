@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Systematic root-cause debugging"
-argument-hint: '[description of the bug or error]'
 ---
 
 <execution_context>

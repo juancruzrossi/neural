@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Fast-path for small tasks with mini-interview and inline execution"
-argument-hint: '[description of what to do]'
 ---
 
 <execution_context>
