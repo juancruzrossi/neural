@@ -65,9 +65,10 @@ Read the full BRIEF.md content. Then produce `.neural/wip/<feature>/PLAN.md` wit
 ## Waves
 
 Group independent tasks into waves that can execute in parallel.
+Each wave MUST be a vertical slice — end-to-end through all layers, not a horizontal layer.
 
-- **Wave 1**: Tasks [1, 3] — no dependencies, can start immediately
-- **Wave 2**: Tasks [2, 4] — depend on Wave 1
+- **Wave 1**: Tasks [1, 3] — complete feature slices, no dependencies
+- **Wave 2**: Tasks [2, 4] — complete feature slices, depend on Wave 1
 <!-- etc. -->
 
 ## Risk Assessment
@@ -90,6 +91,7 @@ Rules for task generation:
 - Estimate as S (< 30 min), M (30-120 min), L (> 2 hrs).
 - Group into waves: tasks with no unmet dependencies share a wave.
 - Derive acceptance criteria directly from the BRIEF's requirements.
+- **Vertical slices are mandatory.** Every wave MUST deliver end-to-end functionality cutting through all layers (data → logic → interface → test), not horizontal slabs of a single layer. A wave that produces "all database models" or "all API endpoints" is a plan failure — restructure it so each wave delivers one complete, verifiable feature slice. Example: Wave 1 delivers login (schema + API + UI + test), not Wave 1 delivers all schemas.
 
 **No placeholders allowed.** Every task must contain concrete, specific values. The following are banned from task descriptions:
 - "TBD", "TODO", "implement later", "to be determined"
@@ -110,6 +112,7 @@ After writing the plan, perform a second pass asking:
 4. **Integration risk**: Will the waves actually work in parallel, or are there hidden coupling points?
 5. **Rollback**: If a wave fails, can we revert cleanly?
 6. **Requirements coverage**: Does every requirement from the BRIEF appear in at least one task? List any BRIEF requirements not covered by the plan.
+7. **Vertical slice check**: Is every wave a vertical slice through all relevant layers? If any wave only touches one layer (e.g., "all models" or "all endpoints"), restructure it into feature-complete slices.
 
 Append findings as a section to PLAN.md:
 
