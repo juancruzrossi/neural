@@ -1,23 +1,24 @@
 # Installing Neural for Codex
 
-Neural installs as **skills only** — no prompts, no commands. The `commands/` directory in this repo is for Claude Code and must be ignored.
-
-## Prerequisites
-
-- Git
-- Codex CLI installed
+Neural installs two things: **prompts** (commands the user invokes) and **skills** (the logic behind each command).
 
 ## Installation
 
 ```bash
 git clone https://github.com/juancruzrossi/neural.git ~/.codex/neural
+
+# Install skills
 mkdir -p ~/.agents/skills
 ln -s ~/.codex/neural/skills ~/.agents/skills/neural
+
+# Install prompts (commands)
+mkdir -p ~/.codex/commands
+for f in ~/.codex/neural/prompts/*.md; do
+  ln -sf "$f" ~/.codex/commands/neural-"$(basename "$f")"
+done
 ```
 
-If `~/.agents/skills/neural` already exists, remove it first.
-
-Restart Codex.
+If symlinks already exist, the `-sf` flag overwrites them.
 
 ### Windows
 
@@ -25,39 +26,20 @@ Restart Codex.
 git clone https://github.com/juancruzrossi/neural.git "$env:USERPROFILE\.codex\neural"
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
 cmd /c mklink /J "$env:USERPROFILE\.agents\skills\neural" "$env:USERPROFILE\.codex\neural\skills"
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.codex\commands"
+Get-ChildItem "$env:USERPROFILE\.codex\neural\prompts\*.md" | ForEach-Object {
+  Copy-Item $_.FullName "$env:USERPROFILE\.codex\commands\neural-$($_.Name)"
+}
 ```
 
 ## Verify
 
 ```bash
-ls -la ~/.agents/skills/neural
-find ~/.agents/skills/neural -maxdepth 2 -name SKILL.md | sort
+ls ~/.agents/skills/neural/*/SKILL.md
+ls ~/.codex/commands/neural-*.md
 ```
 
-You should see `~/.agents/skills/neural` pointing to `~/.codex/neural/skills` with 10 SKILL.md files.
-
-## Usage
-
-Reference skills by name in your request:
-
-- `Use neural-interview for this feature`
-- `Use neural-plan for the active feature`
-- `Use neural-review before we close this task`
-
-## Available Skills
-
-| Skill | Purpose |
-|-------|---------|
-| `using-neural` | Session guidance, task suggestion, resume help |
-| `neural-interview` | Clarify requirements → `BRIEF.md` |
-| `neural-plan` | Explore codebase, generate → `PLAN.md` |
-| `neural-execute` | Execute plan in dependency waves |
-| `neural-review` | Verify implementation against brief and plan |
-| `neural-address-review` | Fix issues found during review |
-| `neural-quick` | Small-task fast path (no `.neural/` artifacts) |
-| `neural-debug` | Root-cause debugging |
-| `neural-status` | Show active feature progress |
-| `neural-archive` | Move completed work from `wip/` to `archive/` |
+You should see 10 skills and 9 prompts.
 
 ## Update
 
@@ -65,9 +47,12 @@ Reference skills by name in your request:
 cd ~/.codex/neural && git pull
 ```
 
+Symlinks point to the updated files automatically.
+
 ## Uninstall
 
 ```bash
-rm ~/.agents/skills/neural
+rm -f ~/.codex/commands/neural-*.md
+rm -f ~/.agents/skills/neural
 rm -rf ~/.codex/neural
 ```
