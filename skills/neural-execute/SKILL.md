@@ -67,8 +67,11 @@ You are executing Task <N>: <title>
    - If the project has NO git (check BRIEF.md for `**Git:** no` or run `git rev-parse --is-inside-work-tree`), skip the commit step entirely.
 6. Report back: what you did, what files you changed, verification results.
 
+## Decision Boundaries
+Check BRIEF.md for the "Decision Boundaries" section. It defines what you can decide on your own and what requires user approval for THIS specific feature. Apply those boundaries first. For anything not covered by Decision Boundaries, fall back to the generic Deviation Rules below.
+
 ## Deviation Rules
-When you encounter something not explicitly covered in the task:
+When you encounter something not explicitly covered in the task or in Decision Boundaries:
 
 **Auto-fix (just do it, mention in report):**
 - Bug found while implementing (wrong logic, broken import, typo)

@@ -11,6 +11,10 @@ Turn vague ideas into execution-ready briefs through structured Socratic interro
 
 Most implementation failures trace back to unclear requirements, not bad code. Developers skip straight to planning with unresolved ambiguities — hidden assumptions, unclear scope boundaries, missing edge cases. This interview forces those ambiguities to the surface before a single line of planning happens.
 
+## Language
+
+Respond in the same language the user uses to ask questions.
+
 ## Procedure
 
 ### Phase 1: Setup
