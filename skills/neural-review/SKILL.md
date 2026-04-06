@@ -7,18 +7,25 @@ description: "[Neural SDD] Plan vs implementation verification with goal-backwar
 
 You are running the neural-review skill. Follow these steps exactly.
 
-## Step 0: Setup
+## Step 1: Setup
 
 1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` for a single directory — use it. If multiple exist, ask the user which feature to review.
 2. Set `WIP=.neural/wip/<feature>/`.
 3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort with: "Missing BRIEF.md or PLAN.md. Run /neural:plan first."
 
-## Step 1: Code Quality Check (optional)
+## Step 2: Load Stack-Relevant Skills
+
+1. Read BRIEF.md and PLAN.md to identify the tech stack (frameworks, databases, languages).
+2. For each technology identified, attempt to load a matching skill using the Skill tool (e.g., "react-best-practices").
+3. If a skill exists and loads, use its guidelines during the review to catch stack-specific issues.
+4. If no matching skill exists, proceed without it — do not fail or warn.
+
+## Step 3: Code Quality Check (optional)
 
 1. **Claude Code only:** Attempt to invoke `Skill("simplify")` to check for code quality issues in files changed by this feature. If you are not running on Claude Code, or the skill is not available, skip this step silently and continue.
 2. Note any findings — they will be included in the review report under "Code Quality".
 
-## Step 2: Layer 1 — Plan vs Implementation (Completeness Check)
+## Step 4: Layer 1 — Plan vs Implementation (Completeness Check)
 
 1. Parse every task from `PLAN.md`. Each task typically has: description, expected files, expected functions/components, expected tests.
 2. For each task, verify:
@@ -31,7 +38,7 @@ You are running the neural-review skill. Follow these steps exactly.
    - `✗ missing` — task not implemented at all.
 4. Calculate completion score: `X/Y tasks completed` (partial counts as 0.5).
 
-## Step 2.5: Anti-pattern Scan
+## Step 5: Anti-pattern Scan
 
 Scan ALL files modified by this feature (not just those linked to specific truths). Use targeted searches:
 
@@ -45,7 +52,7 @@ Scan ALL files modified by this feature (not just those linked to specific truth
 
 Use Grep to execute these searches across the changed files. Record all findings — they feed into the Issues section of REVIEW.md.
 
-## Step 3: Layer 2 — Goal-Backward Verification
+## Step 6: Layer 2 — Goal-Backward Verification
 
 1. Read the **Problem** section of `BRIEF.md`.
 2. Derive "observable truths" — concrete, testable statements that must hold if the problem is truly solved. Example: "A user can POST /api/orders and receive a 201 with an order ID."
@@ -86,7 +93,7 @@ Use Grep to execute these searches across the changed files. Record all findings
    - `PARTIAL` — EXISTS + SUBSTANTIVE but not fully WIRED or FUNCTIONAL.
    - `FAIL` — any level fails.
 
-## Step 4: Generate REVIEW.md
+## Step 7: Generate REVIEW.md
 
 1. Create `$WIP/REVIEW.md` with this structure:
 
@@ -139,9 +146,9 @@ Use Grep to execute these searches across the changed files. Record all findings
    - **PASS WITH WARNINGS** — all tasks completed, all truths pass, but warnings exist.
    - **FAIL** — any task missing, any truth fails, or any blocking issue exists.
 
-## Step 5: Report to User
+## Step 8: Report to User
 
-**Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of neural-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 3 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
+**Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of neural-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 6 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
 
 1. Print a summary of the review to the conversation.
 2. Based on the verdict, present the user with options:
