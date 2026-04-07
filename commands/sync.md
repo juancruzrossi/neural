@@ -1,5 +1,5 @@
 ---
-description: "Neural SDD — Sync specs with current implementation (code is source of truth)"
+description: "Neural SDD — Sync specs with current implementation (code as source of truth)"
 ---
 
 <execution_context>
