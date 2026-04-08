@@ -12,7 +12,7 @@ Workflow:
   /neural:interview      Detailed interview → generates BRIEF.md
   /neural:plan           Implementation plan with optional adversarial review → generates PLAN.md
   /neural:execute        Wave-based parallel execution with fresh subagents
-  /neural:review         Plan vs implementation + goal-backward verification
+  /neural:review         Plan vs implementation + goal-backward verification → generates REVIEW.md
   /neural:address-review Fix blocking issues and warnings from REVIEW.md
   /neural:archive        Move completed feature from wip/ to archive/
 
