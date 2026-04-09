@@ -1,7 +1,7 @@
 # Neural SDD — Project Rules
 
 ## What is this
-A Spec-Driven Development plugin for Claude Code. Commands live in `commands/`, skills in `skills/`.
+A Spec-Driven Development plugin for AI agents. Commands live in `commands/`, skills in `skills/`.
 
 ## When adding or removing commands/skills
 1. Create/delete the command file in `commands/` and skill directory in `skills/`
