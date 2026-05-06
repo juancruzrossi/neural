@@ -8,7 +8,7 @@
       "name": "neural",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/neural"
       },
       "policy": {
         "installation": "AVAILABLE",
