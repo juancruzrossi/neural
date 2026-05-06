@@ -6,7 +6,7 @@ A Spec-Driven Development plugin for Claude Code and Codex. Skills live in `skil
 ## When adding or removing skills
 1. Create/delete the skill directory in `skills/`
 2. Update `README.md` — add/remove the skill section
-3. Propose a version bump in `plugin.json`, `marketplace.json`, and `package.json`
+3. Propose a version bump in `plugin.json` and `marketplace.json`
 
 ## Conventions
 - Skills contain all logic in `SKILL.md` — one file per skill
