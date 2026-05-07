@@ -1,12 +1,12 @@
 # Neural SDD — Project Rules
 
 ## What is this
-A Spec-Driven Development plugin for Claude Code and Codex. Skills live in `skills/`.
+A Spec-Driven Development plugin for Claude Code. Codex installs the same root skills globally via `.codex/install.sh`. Skills live in `skills/`.
 
 ## When adding or removing skills
 1. Create/delete the skill directory in `skills/`
 2. Update `README.md` — add/remove the skill section
-3. Propose a version bump in `plugin.json` and `marketplace.json`
+3. Propose a version bump in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
 
 ## Conventions
 - Skills contain all logic in `SKILL.md` — one file per skill
