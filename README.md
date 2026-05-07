@@ -110,17 +110,3 @@ All Neural artifacts live in `.neural/` at your project root:
         ├── PLAN.md
         └── REVIEW.md
 ```
-
-Add `.neural/` to `.gitignore` or commit it — your choice. The artifacts are human-readable and useful for team context.
-
-## Design Principles
-
-1. **Clarify before you code.** The interview phase forces ambiguities to the surface before planning begins. Decisions are locked, not revisited.
-
-2. **Fresh context per task.** Each execution subagent gets a clean context window with only what it needs. No accumulated noise, no quality degradation on task 8 because of what happened on task 1.
-
-3. **Verify against goals, not tasks.** Task completion ≠ goal achievement. A "create chat component" task can complete when the component is a placeholder. Goal-backward verification catches this.
-
-4. **Git-optional.** Works with or without version control. If git is initialized, Neural makes atomic commits per task. If not, it works fully local without nagging.
-
-5. **Token-efficient.** No runtime, no daemon, no build step.
