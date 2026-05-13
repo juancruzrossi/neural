@@ -1,120 +1,68 @@
 ---
 name: neural.interview
-description: "[Neural SDD] Socratic interview that creates concise CONTEXT.md and optional ADRs inside .neural/wip/<feature>/. Part of the neural plugin — invoke via /neural.interview"
+description: "[Neural SDD] Socratic interview that captures domain language, decisions, and ADRs inside .neural/wip/<feature>/. Part of the neural plugin — invoke via /neural.interview"
 keep-coding-instructions: true
 ---
 
 # Neural Interview
 
+Run a Socratic interview that pressure-tests every aspect of the feature until you reach a shared understanding. Walk the design tree depth-first, resolving dependencies between decisions one-by-one.
+
 ## Rules
 
 - Respond in the user's language.
-- Ask one question at a time.
-- Include your recommended answer when you can.
+- One question at a time. Include your recommended answer when you can.
 - If code/docs can answer the question, inspect them instead of asking.
-- Cross-check user claims against code. If code contradicts the user, surface it before continuing.
-- Challenge vague terms, hidden assumptions, scope creep, and contradictions with code.
-- Update `CONTEXT.md` as decisions crystallize. Keep it small.
-- Create ADRs only for decisions that are hard to reverse, surprising without context, and real trade-offs.
+- Cross-check user claims against code. If they conflict, surface it before continuing.
+- Sharpen fuzzy terms — propose a canonical name, list aliases to avoid.
+- Stress-test relationships with concrete scenarios that probe boundaries.
+- Be opinionated: when multiple words exist for the same concept, pick one and reject the rest.
+- Update `CONTEXT.md` inline as terms resolve. Don't batch.
+- Create files lazily — only when there is something to write.
+- ADRs only when hard to reverse + surprising without context + a real trade-off.
 
 ## Setup
 
 1. Check git silently: `git rev-parse --is-inside-work-tree 2>/dev/null`.
 2. Ask feature name. Normalize to kebab-case.
-3. Create `.neural/wip/<feature>/`.
-4. Ask for the raw feature description.
-5. Scan relevant code/docs before the first hard question:
-   - `CONTEXT.md`, `CONTEXT-MAP.md`
+3. Ask for the raw feature description.
+4. Scan before pressing:
+   - `CONTEXT-MAP.md` (multi-context repos), root `CONTEXT.md` (single-context)
    - `docs/adr/`
    - related source files/tests
-   - `.neural/wip/*/CONTEXT.md`, `.neural/archive/*/CONTEXT.md` when relevant
+   - `.neural/wip/*/CONTEXT.md`, `.neural/archive/*/CONTEXT.md`
+5. If `CONTEXT-MAP.md` exists, infer which bounded context this feature belongs to. Ask if unclear.
+6. Do not create `.neural/wip/<feature>/` until the first section is ready to write.
 
 ## Interview
 
-Resolve these in risk order:
+Open branches in risk order, but follow dependencies wherever they lead:
 
-1. Problem: why this exists.
-2. Scope: included behavior and explicit boundaries.
-3. Language: canonical domain terms, avoided aliases.
-4. Relationships: ownership, cardinality, lifecycle.
-5. Scenarios: normal flow, edge cases, failure states.
-6. Constraints: technical/business limits.
-7. Decisions: chosen approach, rejected alternatives.
-8. Non-goals: what not to build.
-9. Acceptance: concrete done criteria.
+1. Problem — why this exists.
+2. Scope — included behavior and explicit boundaries.
+3. Language — canonical terms vs aliases. Sharpen anything fuzzy.
+4. Relationships — ownership, cardinality, lifecycle. Probe with scenarios.
+5. Scenarios — normal flow, edge cases, failure states.
+6. Constraints — technical/business limits.
+7. Decisions — chosen approach, rejected alternatives.
+8. Non-goals — what not to build.
+9. Acceptance — concrete done criteria.
 
-Use pressure only when useful:
+Pressure tools when useful:
 
-- Evidence: "Give me a concrete case."
-- Assumption: "What is that based on?"
+- Evidence: "Concrete case?"
+- Assumption: "Based on what?"
 - Boundary: "Where does this stop?"
-- Essence: "Is that the root problem or a symptom?"
+- Essence: "Root or symptom?"
+- Glossary conflict: "Your glossary says X, but you mean Y — which is it?"
 
-When terms conflict, stop and resolve the term before moving on.
+When a term conflicts with existing language, stop and resolve it before moving on.
 
-## CONTEXT.md
+## Writing artifacts
 
-Write only useful sections:
+When ready to write the feature `CONTEXT.md`, read [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 
-```md
-# <Feature>
-
-**Git:** yes|no
-**Branch:** <branch>
-
-## Problem
-<2-3 sentences>
-
-## Scope
-- <included>
-
-## Language
-
-**<Term>**:
-<one-sentence definition>
-_Avoid_: <aliases>
-
-## Relationships
-- A **Term** belongs to exactly one **Other Term**
-
-## Decisions
-- Decision: <specific choice>
-
-## Constraints
-- <limit>
-
-## Scenarios
-- <flow or edge case>
-
-## Non-goals
-- <excluded>
-
-## Decision Boundaries
-- Agent may decide: <low-risk choices>
-- Ask user before: <high-risk choices>
-
-## Acceptance Criteria
-- [ ] <testable outcome>
-
-## Open Items
-- <unresolved item>
-```
-
-Do not add generic programming terms to `Language`.
-
-## ADRs
-
-Path: `.neural/wip/<feature>/docs/adr/0001-short-title.md`
-
-Format:
-
-```md
-# <Decision>
-
-<1-3 sentences: context, decision, why.>
-```
-
-Skip ADRs unless they earn their keep.
+When a decision earns an ADR, read [ADR-FORMAT.md](./ADR-FORMAT.md).
 
 ## Finish
 

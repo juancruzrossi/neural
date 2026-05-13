@@ -9,7 +9,7 @@ A Spec-Driven Development plugin for Claude Code. Codex installs the same root s
 3. Propose a version bump in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
 
 ## Conventions
-- Skills contain all logic in `SKILL.md` — one file per skill
+- Skill logic lives in `SKILL.md` — one per skill. Auxiliary reference files (e.g., format templates) may sit alongside `SKILL.md` and be linked from it, so they load on-demand and keep `SKILL.md` light at trigger time.
 - Skill instructions in English, concise, imperative
 - Skills are prefixed with `neural.` to avoid generic names such as `review` or `plan`
 - Claude Code invokes skills as `/neural.<name>`
