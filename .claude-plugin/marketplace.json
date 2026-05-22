@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "neural",
-      "description": "Spec-Driven Development framework for Claude Code — structured interview, planning, execution, and review workflow",
-      "version": "1.10.2",
+      "description": "Spec-Driven Development framework for AI Coding Agents - structured interview, planning, execution, and review workflow",
+      "version": "1.10.3",
       "source": "./",
       "author": {
         "name": "Juan Cruz Rossi",
