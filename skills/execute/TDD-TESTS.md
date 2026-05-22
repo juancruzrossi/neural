@@ -20,6 +20,7 @@ Characteristics:
 - Uses the public API only — no reaching into internals.
 - Survives internal refactors.
 - Describes **what**, not **how**.
+- Named in the project's domain language — reuse the terms from `CONTEXT.md`'s glossary so the test reads as a domain fact.
 - One logical assertion per test. If you need two, you usually have two tests.
 
 ## Bad tests — coupled to internals
