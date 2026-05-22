@@ -9,7 +9,7 @@ keep-coding-instructions: true
 
 You are executing an implementation plan from `PLAN.md`. Work the tasks **sequentially**, one at a time, in dependency order. For each task, follow a **vertical-slice TDD loop**: one test → minimal implementation → next test. Never batch tests, never batch implementation.
 
-The pace looks slower than parallel dispatch, but it is dramatically more reliable: every line of code answers a failing test you just wrote, so you cannot drift, cannot over-build, and cannot ship stubs.
+The pace looks slower than batch implementation, but it is far more reliable: every line of code answers a failing test you just wrote.
 
 ## 1. Locate the feature
 
@@ -32,7 +32,7 @@ There are no waves. There is no parallelism. Run tasks one at a time, in the ord
 
 ## 3. The TDD loop per task
 
-For each task in the queue, follow this loop. Read [TDD-LOOP.md](./TDD-LOOP.md) before your first task and any time you feel tempted to write tests in bulk or skip the red step.
+Before your first task, read [TDD-LOOP.md](./TDD-LOOP.md) — it defines the vertical-slice loop you follow for every task. Re-read it any time you feel tempted to write tests in bulk or skip the red step.
 
 ```
 For each behavior listed in the task:
@@ -42,13 +42,11 @@ For each behavior listed in the task:
   REFACTOR → improve names, extract duplication, deepen modules → run tests → still green
 ```
 
-Rules that hold across every loop:
+Three companion references — read each when its situation arises:
 
-- One test, then one implementation. Never write the next test until the previous is green.
-- The test asserts **behavior through the public interface**, not internal calls or shape. See [TDD-TESTS.md](./TDD-TESTS.md) when the test feels like it might be coupled to implementation.
-- Mock only at **system boundaries** (network, DB, time, randomness, filesystem). Never mock your own modules. See [TDD-MOCKING.md](./TDD-MOCKING.md) when you reach for a mock.
-- Refactor **only on green**. If a refactor breaks a test, revert; the refactor was wrong.
-- When refactoring or designing interfaces, prefer small surfaces over deep implementations. See [TDD-DESIGN.md](./TDD-DESIGN.md) for deep modules and refactor candidates.
+- [TDD-TESTS.md](./TDD-TESTS.md) — when a test feels coupled to implementation (assert behavior through the public interface, not internal calls or shape).
+- [TDD-MOCKING.md](./TDD-MOCKING.md) — when you reach for a mock (mock only at system boundaries; never your own modules).
+- [TDD-DESIGN.md](./TDD-DESIGN.md) — when refactoring or shaping an interface (deep modules, refactor candidates).
 
 If the task has no testable behavior (e.g., pure config, formatter rules, dependency bump), skip the loop and just make the change. Verify by running the build or lint. Note in the report that TDD was N/A.
 

@@ -62,7 +62,3 @@ test("createUser makes the user retrievable", async () => {
 ```
 
 The good version still works if the storage layer is rewritten to use a different table, key-value store, or remote service. The bad version breaks the moment internals change — even though behavior is identical.
-
-## When in doubt
-
-Ask: "If a future contributor renames a private function and keeps behavior identical, will my test still pass?" If you cannot say yes, the test is coupled to the wrong thing.

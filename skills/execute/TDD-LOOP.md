@@ -49,6 +49,7 @@ Rules:
 - One test at a time.
 - Only enough code to pass the current test. Do not anticipate the next test.
 - Tests describe observable behavior, not internal structure.
+- Test the behaviors the task lists — critical paths and real logic. You cannot test everything; do not invent extra edge cases.
 - Run the relevant tests after every change. Trust nothing.
 
 ### 3. Refactor (only on green)
