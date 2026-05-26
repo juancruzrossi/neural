@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "neural",
-      "description": "Spec-Driven Development framework for AI Coding Agents - structured interview, planning, execution, and review workflow",
+      "description": "Spec-Driven Development framework for AI Coding Agents",
       "version": "1.10.5",
       "source": "./",
       "author": {
