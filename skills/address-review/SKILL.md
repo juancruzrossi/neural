@@ -74,4 +74,6 @@ Address Review Complete:
   Remaining: K items (skipped by user)
 ```
 
-Then suggest: **"Fixes applied. Run `/neural:review` again to verify, or `/neural:archive` if you're confident."**
+Then ask: **"Delete `REVIEW.md`? (y/n)"** — if yes, delete it.
+
+Finally suggest: **"Fixes applied. Run `/neural:review` again to verify, or `/neural:archive` if you're confident."**
