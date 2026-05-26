@@ -2,7 +2,7 @@
 
 # Neural
 
-**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents. Turns vague ideas into verified implementations through disciplined phases — no bloat, no ceremony, just structured execution that works.**
+**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
 
 ```
 interview → plan → execute → review → archive
@@ -14,7 +14,7 @@ interview → plan → execute → review → archive
 
 Most AI agent failures aren't about bad code — they're about unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each failure mode with a specific phase:
 
-| Failure Mode | Neural Phase | How |
+| Failure Mode | Phase | How |
 |---|---|---|
 | Vague requirements | Interview | Socratic questioning with selective pressure |
 | Plans based on assumptions | Plan | Mandatory codebase exploration + adversarial self-review |
@@ -49,41 +49,41 @@ curl -fsSL https://raw.githubusercontent.com/juancruzrossi/neural/main/.codex/in
 
 ### `/neural:interview` — Clarify before you build
 
-Socratic interview that clarifies requirements and captures concise feature context in `CONTEXT.md`.
+Socratic interview. Clarifies requirements and captures feature context in `CONTEXT.md`.
 
 ### `/neural:plan` — Plan with adversarial review
 
-Generates a sequential task list with dependencies and explicit per-task **Behaviors to verify** — each behavior becomes one red→green slice during execution. Runs a self-adversarial pass ("what can go wrong?"). Optionally sends the plan to Codex for cross-review — you decide which suggestions to apply.
+Builds a sequential task list with dependencies and per-task **Behaviors to verify** (each becomes one red→green slice). Runs a self-adversarial pass. Optional Codex cross-review.
 
 ### `/neural:execute` — Test-driven execution loop
 
-Walks the plan one task at a time, in dependency order. For each task, follows a vertical-slice TDD loop: one failing test → minimum code to pass → next test → refactor on green. No subagents, no waves — fewer tokens, more discipline, no stubs. Commits are atomic per task and only happen with explicit user approval at the end.
+Walks the plan task by task in dependency order. Vertical-slice TDD per task: failing test → minimum code → refactor on green. No stubs. Optionally, atomic commits per task.
 
-### `/neural:review` — Verify against the goal, not the task list
+### `/neural:review` — Verify against the goal
 
-Two-layer verification:
+Two layers:
 1. **Plan vs Implementation** — did every task get done?
-2. **Goal-Backward** — does the code actually solve the original problem? Checks 4 levels: exists → substantive → wired → functional. Catches stubs, placeholders, and orphaned code.
+2. **Goal-Backward** — does the code solve the original problem?
 
 ### `/neural:address-review` — Fix what review found
 
-Parses REVIEW.md, builds a fix plan from blocking issues and warnings, and executes fixes with verification. No manual triage needed.
+Parses REVIEW.md, builds a fix plan from blocking issues and warnings, executes fixes with verification.
 
 ### `/neural:quick` — Fast-path for small tasks
 
-Three questions, inline plan, direct execution, light review. No files generated. For when the task is clear and small.
+Three questions, inline plan, direct execution. For small, clear tasks.
 
 ### `/neural:debug` — Root-cause investigation
 
-Four-phase systematic debugging: investigate → analyze → hypothesize → implement. No fixes without root cause.
+Systematic debugging: investigate → analyze → hypothesize → implement.
 
 ### `/neural:sync` — Align specs with reality
 
-After implementation, code evolves — refactors, bug fixes, scope changes. Specs go stale. Sync reads the actual codebase and updates CONTEXT.md and PLAN.md to match what was built. Code is the source of truth.
+Reads the codebase and implementation and updates CONTEXT.md and PLAN.md to match what was built. Code is the source of truth.
 
 ### `/neural:status` — Where am I?
 
-Shows progress of all features in `.neural/wip/` with next-step suggestions. Detects in-progress work on session start.
+Shows progress of all features in `.neural/wip/` with next-step suggestions.
 
 ### `/neural:archive` — Clean up
 
@@ -91,7 +91,7 @@ Moves completed features from `.neural/wip/` to `.neural/archive/`.
 
 ### `/neural:help` — Command reference
 
-Shows all available Neural plugin commands with short descriptions and the recommended workflow.
+Lists all Neural commands with short descriptions and the recommended workflow.
 
 ## Artifacts
 
