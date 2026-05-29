@@ -17,11 +17,8 @@ Path: `.neural/wip/<feature>/CONTEXT.md`. Write only sections that earn their pl
 ## Language
 
 **<Term>**:
-<one-sentence definition — what it IS, not what it does>
+<one or two sentence definition — what it IS, not what it does>
 _Avoid_: <aliases>
-
-## Relationships
-- A **Term** belongs to exactly one **Other Term**
 
 ## Decisions
 - <specific choice>
@@ -42,13 +39,6 @@ _Avoid_: <aliases>
 ## Acceptance Criteria
 - [ ] <testable outcome>
 
-## Flagged Ambiguities
-- "<term>" was used to mean both **A** and **B** — resolved: <which one wins, or kept distinct>
-
-## Example Dialogue
-> **Dev:** <question using bold domain terms>
-> **Expert:** <answer that clarifies boundaries>
-
 ## Open Items
 - <unresolved>
 ```
@@ -57,10 +47,8 @@ _Avoid_: <aliases>
 
 - `Language` is a glossary, not a scratch pad. No implementation details, no decisions, no acceptance criteria — those have their own sections.
 - Only domain-meaningful terms in `Language`. Skip generic programming concepts (timeouts, error types, utility patterns) even if the feature uses them.
-- One sentence per definition — what it IS, not what it does.
+- One or two sentences per definition — what it IS, not what it does.
 - Be opinionated: when multiple words exist for the same concept, pick one and list the rest under `_Avoid_`.
-- Express cardinality in `Relationships` when obvious.
-- Flag genuine ambiguities explicitly under `Flagged Ambiguities` with a clear resolution.
 
 ## Multi-context repos
 
