@@ -145,7 +145,7 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    claude -p --dangerously-skip-permissions "$PROMPT"
 
    $PROMPT:
-   Context: <project-name> (<tech stack>). Relevant docs: @/CLAUDE.md
+   Context: <project-name> (<tech stack>). Relevant docs: @/CLAUDE.md, @/AGENTS.md
 
    You are an adversarial reviewer. Review this implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
 
