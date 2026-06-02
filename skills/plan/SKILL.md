@@ -1,6 +1,6 @@
 ---
 name: plan
-description: "Implementation planning with adversarial review and optional Codex cross-review. Tasks are sequential vertical slices, each carrying its own testable behaviors"
+description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors"
 disable-model-invocation: true
 keep-coding-instructions: true
 ---
@@ -130,43 +130,49 @@ Append findings:
 
 Update tasks and behaviors if the review surfaces real issues. Note what changed.
 
-## 4. Optional Codex cross-review
+## 4. Optional cross-review
 
-After writing PLAN.md:
+After writing PLAN.md, offer an adversarial review from the *other* agent — Claude Code ⇄ Codex:
 
-1. Check if `codex` is installed: `codex --version`. If missing, skip silently and go to step 5.
-2. If available, ask: **"Codex is available. Want to send this plan for adversarial review?"**
-3. If declined, go to step 5.
-4. If accepted:
-   a. Try `Skill("codex:adversarial-review")` first, passing the feature context, ADRs, and PLAN content.
-   b. If the skill is unavailable or fails, fall back to running codex directly. Use `--dangerously-bypass-approvals-and-sandbox` to avoid git/trust prompts:
-      ```
-      codex exec --dangerously-bypass-approvals-and-sandbox -c 'model_reasoning_effort="high"' "Context: <project-name> (<tech stack>). Relevant docs: @/CLAUDE.md
+1. Check it's installed (`codex --version` / `claude --version`). If missing, skip silently and go to step 5.
+2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** If declined, go to step 5.
+3. Run it — swap the command for your runtime, the prompt is identical:
 
-You are an adversarial reviewer. Review this implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any that are coupled to implementation rather than observable through the public interface.
+   ```
+   # Claude Code → Codex:
+   codex exec --dangerously-bypass-approvals-and-sandbox "$PROMPT"
+   # Codex → Claude Code:
+   claude -p --dangerously-skip-permissions "$PROMPT"
 
-FEATURE CONTEXT:
-<CONTEXT.md content>
+   $PROMPT:
+   Context: <project-name> (<tech stack>). Relevant docs: @/CLAUDE.md
 
-FEATURE ADRS:
-<ADR contents or 'none'>
+   You are an adversarial reviewer. Review this implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
 
-PLAN:
-<plan-content>
+   FEATURE CONTEXT:
+   <CONTEXT.md content>
 
-Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers."
-      ```
-   c. Show the full Codex review and ask:
-      > "Codex review above. What do you want to do?"
-      > 1. Apply all suggestions — I update the plan
-      > 2. Cherry-pick — tell me which ones to apply
-      > 3. Ignore — keep the plan as-is
-   d. Do **not** modify the plan without explicit user approval.
-   e. If the user applies changes, update PLAN.md and append:
-      ```markdown
-      ## Codex Review
-      <!-- Codex feedback and user-approved changes noted here -->
-      ```
+   FEATURE ADRS:
+   <ADR contents or 'none'>
+
+   PLAN:
+   <plan-content>
+
+   Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers.
+   ```
+
+4. Show the full review and ask:
+   > "Review above. What do you want to do?"
+   > 1. Apply all — I update the plan
+   > 2. Cherry-pick — tell me which
+   > 3. Ignore — keep as-is
+
+   Do **not** modify the plan without explicit approval. If changes are applied, append:
+
+   ```markdown
+   ## Cross-Review
+   <!-- Reviewer feedback and user-approved changes -->
+   ```
 
 ## 5. Finalize
 
