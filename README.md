@@ -53,7 +53,7 @@ Socratic interview. Clarifies requirements and captures feature context in `CONT
 
 ### `/neural:plan` — Plan with adversarial review
 
-Builds a sequential task list with dependencies and per-task **Behaviors to verify** (each becomes one red→green slice). Runs a self-adversarial pass. Optional Codex cross-review.
+Builds a sequential task list with dependencies and per-task **Behaviors to verify** (each becomes one red→green slice). Runs a self-adversarial pass. Optional cross-review (Claude Code ⇄ Codex).
 
 ### `/neural:execute` — Test-driven execution loop
 
