@@ -1,7 +1,6 @@
 ---
 name: execute
 description: "Test-driven execution loop — one task at a time, red→green→refactor, atomic commits"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 

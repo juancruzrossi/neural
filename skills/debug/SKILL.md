@@ -1,7 +1,6 @@
 ---
 name: debug
 description: "Systematic root-cause investigation for bugs and failures"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 

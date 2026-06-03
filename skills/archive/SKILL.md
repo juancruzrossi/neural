@@ -1,7 +1,6 @@
 ---
 name: archive
 description: "Move completed features from wip to archive"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 

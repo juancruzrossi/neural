@@ -1,7 +1,6 @@
 ---
 name: address-review
 description: "Execute all fixes from a REVIEW.md — address warnings, blocking issues, and gaps found during review"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 
