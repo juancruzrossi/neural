@@ -1,7 +1,6 @@
 ---
 name: help
 description: "Show all Neural plugin commands with descriptions and the recommended workflow"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 

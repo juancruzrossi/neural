@@ -1,7 +1,6 @@
 ---
 name: plan
 description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 

@@ -1,7 +1,6 @@
 ---
 name: status
 description: "Show progress of all features in .neural/wip/ and suggest next steps"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 

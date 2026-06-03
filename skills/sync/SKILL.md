@@ -1,7 +1,6 @@
 ---
 name: sync
 description: "Sync specs (CONTEXT.md, PLAN.md) with post-implementation code — code as source of truth"
-disable-model-invocation: true
 keep-coding-instructions: true
 ---
 
