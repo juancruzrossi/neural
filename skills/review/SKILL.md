@@ -1,7 +1,6 @@
 ---
 name: review
 description: "Plan vs implementation verification with goal-backward analysis and test-quality audit"
-keep-coding-instructions: true
 ---
 
 # Neural Review — Plan vs Implementation Verification

@@ -1,7 +1,6 @@
 ---
 name: status
 description: "Show progress of all features in .neural/wip/ and suggest next steps"
-keep-coding-instructions: true
 ---
 
 # Neural Status

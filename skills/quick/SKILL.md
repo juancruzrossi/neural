@@ -1,7 +1,6 @@
 ---
 name: quick
 description: "Fast-path for small tasks — mini-interview, inline plan, execute, and light review in one pass. No files generated"
-keep-coding-instructions: true
 ---
 
 # Neural Quick — Fast-Path Execution

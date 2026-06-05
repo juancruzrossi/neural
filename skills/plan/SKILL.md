@@ -1,7 +1,6 @@
 ---
 name: plan
 description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors"
-keep-coding-instructions: true
 ---
 
 # Neural Plan — Implementation Planning
@@ -135,7 +134,7 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
 
 1. Check it's installed (`codex --version` / `claude --version`). If missing, skip silently and go to step 5.
 2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** If declined, go to step 5.
-3. Run it — swap the command for your runtime, the prompt is identical:
+3. Run it — swap the command for your runtime. Pass **file references**, never inline content:
 
    ```
    # Claude Code → Codex:
@@ -144,18 +143,16 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    claude -p --dangerously-skip-permissions "$PROMPT"
 
    $PROMPT:
-   Context: <project-name> (<tech stack>). Relevant docs: @/CLAUDE.md, @/AGENTS.md
+   You are an adversarial reviewer for <project-name> (<tech stack>).
 
-   You are an adversarial reviewer. Review this implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
+   Review the implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
 
-   FEATURE CONTEXT:
-   <CONTEXT.md content>
-
-   FEATURE ADRS:
-   <ADR contents or 'none'>
-
-   PLAN:
-   <plan-content>
+   Relevant files:
+   @CLAUDE.md
+   @AGENTS.md
+   @.neural/wip/<feature>/CONTEXT.md
+   @.neural/wip/<feature>/PLAN.md
+   @.neural/wip/<feature>/docs/
 
    Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers.
    ```

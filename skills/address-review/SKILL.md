@@ -1,7 +1,6 @@
 ---
 name: address-review
 description: "Execute all fixes from a REVIEW.md — address warnings, blocking issues, and gaps found during review"
-keep-coding-instructions: true
 ---
 
 # Neural Address Review — Fix Review Findings
