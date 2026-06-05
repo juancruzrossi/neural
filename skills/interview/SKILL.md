@@ -1,7 +1,6 @@
 ---
 name: interview
 description: "Socratic interview that captures domain language, decisions, and ADRs inside .neural/wip/<feature>/"
-keep-coding-instructions: true
 ---
 
 # Neural Interview — Clarify Before You Build

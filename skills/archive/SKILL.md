@@ -1,7 +1,6 @@
 ---
 name: archive
 description: "Move completed features from wip to archive"
-keep-coding-instructions: true
 ---
 
 # Neural Archive
