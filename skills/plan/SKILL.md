@@ -134,15 +134,23 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
 
 1. Check it's installed (`codex --version` / `claude --version`). If missing, skip silently and go to step 5.
 2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** If declined, go to step 5.
-3. Run it — swap the command for your runtime. Pass **file references**, never inline content:
+3. Run it — swap the command for your runtime. Feed the prompt on stdin, never as an `argv` string. Pass **file references**, never inline content:
+
+   ```bash
+   # Claude Code → Codex:
+   codex --ask-for-approval never exec --ephemeral -C "$PWD" -s read-only - <<'PROMPT'
+   <prompt below>
+   PROMPT
+
+   # Codex → Claude Code:
+   claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" <<'PROMPT'
+   <prompt below>
+   PROMPT
+   ```
+
+   Prompt (the heredoc body):
 
    ```
-   # Claude Code → Codex:
-   codex exec --dangerously-bypass-approvals-and-sandbox "$PROMPT"
-   # Codex → Claude Code:
-   claude -p --dangerously-skip-permissions "$PROMPT"
-
-   $PROMPT:
    You are an adversarial reviewer for <project-name> (<tech stack>).
 
    Review the implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
