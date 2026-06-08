@@ -61,7 +61,7 @@ Grep the files changed for this feature. Record any hits.
 
    **L1 EXISTS** — the artifact exists at the expected path. Use Glob + Read.
 
-   **L2 SUBSTANTIVE** — real implementation, not a stub. Look for empty bodies, `TODO`, `NotImplementedError`, hardcoded mocks, commented-out core logic.
+   **L2 SUBSTANTIVE** — real implementation, not a stub *and not a reduced version of the requirement*. Look for empty bodies, `TODO`, `NotImplementedError`, hardcoded mocks, commented-out core logic — and for partial delivery: a task that names a `CONTEXT.md` decision but ships "v1 / for now / hardcoded / basic version" of it. A requirement with no concrete evidence, or only weak evidence, is a FAIL — not a PASS.
 
    **L3 WIRED** — connected to the rest of the system. Is the route registered? Is the component rendered? Is the function imported somewhere? Flag orphan code.
 

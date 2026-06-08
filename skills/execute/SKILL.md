@@ -54,6 +54,8 @@ You will encounter things the task did not anticipate. Read [TASK-PROTOCOL.md](.
 
 Honor the "Decision Boundaries" section in `CONTEXT.md` — those are feature-specific rules that override the generic protocol.
 
+**Retry cap:** after 3 materially different failed attempts at the same task (different approaches — not the same one retried), stop and report it BLOCKED. Repeated failure usually means the plan or the design is wrong; don't keep adding risk.
+
 ## 5. Closing a task
 
 When every behavior is green and refactors are done:
