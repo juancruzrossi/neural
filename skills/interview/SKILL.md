@@ -43,6 +43,8 @@ List the assumptions you inferred; if the user corrects any, update `CONTEXT.md`
 
 If on a stable branch (`main`, `master`, `develop`, `stage`, `staging`, `production`, `release`), ask whether to create `feature/<slug>`, `enhancement/<slug>`, `fix/<slug>`, `hotfix/<slug>`, or stay.
 
+> **Git:** By default the `.neural/` directory stays out of version control — commit it only if the user explicitly asks
+
 Report:
 
 ```text
