@@ -139,9 +139,13 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
 
    ```bash
    # Claude Code → Codex:
-   codex --ask-for-approval never exec --ephemeral -C "$PWD" -s read-only - <<'PROMPT'
+   mkdir -p /tmp/.neural
+   codex exec --ephemeral -C "$PWD" -s read-only \
+     -o "/tmp/.neural/<feature>-codex-review.md" - <<'PROMPT'
    <prompt below>
    PROMPT
+   # then read the clean review FROM THE FILE (not stdout):
+   cat "/tmp/.neural/<feature>-codex-review.md"
 
    # Codex → Claude Code:
    claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" <<'PROMPT'
@@ -169,6 +173,7 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    ```
 
 4. Show the full review and ask:
+   ▎ Read the review from /tmp/.neural/<feature>-codex-review.md (the -o file), not from stdout.
    > "Review above. What do you want to do?"
    > 1. Apply all — I update the plan
    > 2. Cherry-pick — tell me which
