@@ -110,9 +110,10 @@ After writing the plan, do a second pass and answer:
 1. **Missing edge cases** — inputs, states, or flows the tasks do not cover?
 2. **Dependency gaps** — could any task fail because a predecessor is incomplete?
 3. **Scope creep** — any task exceeds what `CONTEXT.md` asks for?
-4. **Behavior coverage** — does every requirement from `CONTEXT.md` and the ADRs appear as a behavior in at least one task? List any uncovered requirements.
-5. **Rollback** — if a task fails partway, can we revert cleanly? (Atomic commits per task should make this trivial; flag exceptions.)
-6. **Behavior quality** — is each "Behavior to verify" observable through the public interface, or does it leak implementation? Rewrite leaky ones.
+4. **Scope reduction (BLOCKING)** — does any task *reference* a `CONTEXT.md` decision but deliver a reduced version of it? Scan tasks and behaviors for: "v1", "for now", "hardcoded", "placeholder", "stub", "wired later", "basic version", "too complex". If found, the task must deliver the decision in full or be split into explicit phases — never silently shrink the requirement.
+5. **Behavior coverage** — does every requirement from `CONTEXT.md` and the ADRs appear as a behavior in at least one task? List any uncovered requirements.
+6. **Rollback** — if a task fails partway, can we revert cleanly? (Atomic commits per task should make this trivial; flag exceptions.)
+7. **Behavior quality** — is each "Behavior to verify" observable through the public interface, or does it leak implementation? Rewrite leaky ones.
 
 Append findings:
 
@@ -155,6 +156,8 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
 
    Review the implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
 
+   Grounding: do not invent files, symbols, or code paths you cannot point to in the provided files. If unsure, say "unverified" — a fabricated issue is worse than a missed one. Prefer one well-grounded finding over several speculative ones.
+
    Relevant files:
    @CLAUDE.md
    @AGENTS.md
@@ -162,7 +165,7 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    @.neural/wip/<feature>/PLAN.md
    @.neural/wip/<feature>/docs/
 
-   Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers.
+   Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers. This is review only — do not apply changes yourself; the orchestrator decides what to adopt.
    ```
 
 4. Show the full review and ask:

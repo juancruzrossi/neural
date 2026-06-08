@@ -51,6 +51,7 @@ Rules:
 - Tests describe observable behavior, not internal structure.
 - Test the behaviors the task lists — critical paths and real logic. You cannot test everything; do not invent extra edge cases.
 - Run the relevant tests after every change. Trust nothing.
+- After a clean run, don't re-run the same command unless the code changed since — repeating a green check adds nothing and burns tokens.
 
 ### 3. Refactor (only on green)
 

@@ -54,6 +54,8 @@ Apply fixes one at a time, in the order listed:
    - `fix(<feature>): address review — <short description>`
    - If no git, skip commits.
 
+If the same fix fails 3 times with materially different approaches, stop and report it unresolved — do not loop. Surface it to the user as a remaining blocking item.
+
 ## 5. Re-run verification
 
 After all fixes are applied:

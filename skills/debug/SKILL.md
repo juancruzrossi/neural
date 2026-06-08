@@ -27,6 +27,7 @@ Systematic root-cause investigation for bugs and failures. Five phases: context,
    - Log what data enters each component
    - Log what data exits each component
    - Check environment variables and configuration propagation at each layer
+   - Tag every diagnostic log with a unique prefix, e.g. `[DEBUG-a4f2]`, so cleanup is a single grep later
    - Run once with instrumentation to gather concrete evidence of WHERE the data goes wrong
    
    This is faster and more reliable than theorizing about where the bug might be. Let the logs tell you.
@@ -62,9 +63,9 @@ Systematic root-cause investigation for bugs and failures. Five phases: context,
 
 ### Phase 5: IMPLEMENT
 
-16. **Fix the root cause.** Make the minimal change that addresses the actual problem, not its symptoms.
+16. **Fix the root cause.** Make the minimal change that addresses the actual problem, not its symptoms. Remove every `[DEBUG-…]` log you added — grep the prefix to find them all.
 
-17. **Verify the fix.** Run the reproduction steps from Phase 2. Confirm the error no longer occurs.
+17. **Verify the fix.** Run the reproduction steps from Phase 2. Confirm the error no longer occurs. If the fix works but you can't explain *why*, that's luck, not a fix — return to Phase 3 and find the mechanism before closing.
 
 18. **Run tests.** Execute the project's test suite to confirm no regressions.
 
