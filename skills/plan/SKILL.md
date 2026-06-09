@@ -148,9 +148,13 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    cat "/tmp/.neural/<feature>-codex-review.md"
 
    # Codex → Claude Code:
-   claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" <<'PROMPT'
+   mkdir -p /tmp/.neural
+   claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" \
+     > "/tmp/.neural/<feature>-claude-code-review.md" <<'PROMPT'
    <prompt below>
    PROMPT
+   # then read the clean review FROM THE FILE (not stdout):
+   cat "/tmp/.neural/<feature>-claude-code-review.md"
    ```
 
    Prompt (the heredoc body):
@@ -172,8 +176,8 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers. This is review only — do not apply changes yourself; the orchestrator decides what to adopt.
    ```
 
-4. Show the full review and ask:
-   ▎ Read the review from /tmp/.neural/<feature>-codex-review.md (the -o file), not from stdout.
+4. Show the full review — read it from `/tmp/.neural/<feature>-<adversarial-agent>-review.md` (the reviewer's file), not from stdout — and ask:
+
    > "Review above. What do you want to do?"
    > 1. Apply all — I update the plan
    > 2. Cherry-pick — tell me which
