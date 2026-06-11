@@ -30,11 +30,11 @@ for skill in "$src"/*; do
   [ -d "$skill" ] || continue
   [ -f "$skill/SKILL.md" ] || continue
 
-  name="neural.$(basename "$skill")"
+  name="$(basename "$skill")"
   rm -rf "$target/$name"
   cp -R "$skill" "$target/$name"
   count=$((count + 1))
 done
 
 printf 'Installed %s Neural skill(s) into %s\n' "$count" "$target"
-printf 'Restart Codex, then use skills like $neural.interview or $neural.plan.\n'
+printf 'Restart Codex, then use skills like $neural-interview or $neural-plan.\n'

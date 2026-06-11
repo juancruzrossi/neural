@@ -47,49 +47,49 @@ curl -fsSL https://raw.githubusercontent.com/juancruzrossi/neural/main/.codex/in
 
 ## The Workflow
 
-### `/neural:interview` — Clarify before you build
+### `/neural:neural-interview` — Clarify before you build
 
 Socratic interview. Clarifies requirements and captures feature context in `CONTEXT.md`.
 
-### `/neural:plan` — Plan with adversarial review
+### `/neural:neural-plan` — Plan with adversarial review
 
 Builds a sequential task list with dependencies and per-task **Behaviors to verify** (each becomes one red→green slice). Runs a self-adversarial pass. Optional cross-review (Claude Code ⇄ Codex).
 
-### `/neural:execute` — Test-driven execution loop
+### `/neural:neural-execute` — Test-driven execution loop
 
 Walks the plan task by task in dependency order. Vertical-slice TDD per task: failing test → minimum code → refactor on green. No stubs. Optionally, atomic commits per task.
 
-### `/neural:review` — Verify against the goal
+### `/neural:neural-review` — Verify against the goal
 
 Two layers:
 1. **Plan vs Implementation** — did every task get done?
 2. **Goal-Backward** — does the code solve the original problem?
 
-### `/neural:address-review` — Fix what review found
+### `/neural:neural-address-review` — Fix what review found
 
 Parses REVIEW.md, builds a fix plan from blocking issues and warnings, executes fixes with verification.
 
-### `/neural:quick` — Fast-path for small tasks
+### `/neural:neural-quick` — Fast-path for small tasks
 
 Three questions, inline plan, direct execution. For small, clear tasks.
 
-### `/neural:debug` — Root-cause investigation
+### `/neural:neural-debug` — Root-cause investigation
 
 Systematic debugging: investigate → analyze → hypothesize → implement.
 
-### `/neural:sync` — Align specs with reality
+### `/neural:neural-sync` — Align specs with reality
 
 Reads the codebase and implementation and updates CONTEXT.md and PLAN.md to match what was built. Code is the source of truth.
 
-### `/neural:status` — Where am I?
+### `/neural:neural-status` — Where am I?
 
 Shows progress of all features in `.neural/wip/` with next-step suggestions.
 
-### `/neural:archive` — Clean up
+### `/neural:neural-archive` — Clean up
 
 Moves completed features from `.neural/wip/` to `.neural/archive/`.
 
-### `/neural:help` — Command reference
+### `/neural:neural-help` — Command reference
 
 Lists all Neural commands with short descriptions and the recommended workflow.
 
