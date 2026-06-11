@@ -1,5 +1,5 @@
 ---
-name: interview
+name: neural-interview
 description: "Socratic interview that captures domain language, decisions, and ADRs inside .neural/wip/<feature>/"
 ---
 
@@ -51,5 +51,5 @@ Interview complete for <feature>
 Context: .neural/wip/<feature>/CONTEXT.md
 ADRs: <count>
 Open items: <count>
-Next: /neural:plan
+Next: /neural:neural-plan
 ```

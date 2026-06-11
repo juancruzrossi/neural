@@ -1,0 +1,62 @@
+---
+name: neural-help
+description: "Show all Neural plugin commands with descriptions and the recommended workflow"
+---
+
+# Neural Help
+
+Show the Neural command reference for the current agent.
+
+## Detect Platform
+
+1. If running in Claude Code, use slash commands: `/neural:<name>`.
+2. If running in Codex, use skill commands: `$<name>` (e.g., `$neural-plan`).
+3. If the platform is unclear, default to slash commands like Claude Code: `/neural:<name>`.
+
+## Claude Code Output
+
+```text
+Neural SDD — Plugin Commands
+
+Workflow:
+  /neural:neural-interview       Socratic interview → generates CONTEXT.md
+  /neural:neural-plan            Implementation plan with adversarial review → generates PLAN.md
+  /neural:neural-execute         Test-driven execution loop — one task at a time, red→green→refactor
+  /neural:neural-review          Plan vs implementation + goal-backward verification → generates REVIEW.md
+  /neural:neural-address-review  Fix blocking issues and warnings from REVIEW.md
+  /neural:neural-archive         Move completed feature from wip/ to archive/
+
+Utilities:
+  /neural:neural-quick           Fast-path: mini-interview + inline plan + execute + light review
+  /neural:neural-debug           Root-cause investigation for bugs and failures
+  /neural:neural-sync            Sync specs with post-implementation code
+  /neural:neural-status          Show progress of all features in .neural/wip/
+  /neural:neural-help            Show this command reference
+
+Typical flow: interview → plan → execute → review → archive
+```
+
+## Codex Output
+
+```text
+Neural SDD — Plugin Commands
+
+Workflow:
+  $neural-interview       Socratic interview → generates CONTEXT.md
+  $neural-plan            Implementation plan with adversarial review → generates PLAN.md
+  $neural-execute         Test-driven execution loop — one task at a time, red→green→refactor
+  $neural-review          Plan vs implementation + goal-backward verification → generates REVIEW.md
+  $neural-address-review  Fix blocking issues and warnings from REVIEW.md
+  $neural-archive         Move completed feature from wip/ to archive/
+
+Utilities:
+  $neural-quick           Fast-path: mini-interview + inline plan + execute + light review
+  $neural-debug           Root-cause investigation for bugs and failures
+  $neural-sync            Sync specs with post-implementation code
+  $neural-status          Show progress of all features in .neural/wip/
+  $neural-help            Show this command reference
+
+Typical flow: interview → plan → execute → review → archive
+```
+
+Print only the selected reference output. Do not include the detection rules or extra explanation.

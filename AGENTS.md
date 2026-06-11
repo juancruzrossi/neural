@@ -11,9 +11,9 @@ A Spec-Driven Development plugin for Claude Code. Codex installs the same root s
 ## Conventions
 - Skill logic lives in `SKILL.md` — one per skill. Auxiliary reference files (e.g., format templates) may sit alongside `SKILL.md` and be linked from it, so they load on-demand and keep `SKILL.md` light at trigger time.
 - Skill instructions in English, concise, imperative
-- Skill folders use bare names (`interview`, `plan`, etc.) — plugin namespace is enforced by Claude Code
-- Claude Code invokes skills as `/neural:<name>`
-- Codex invokes skills with `$neural.<name>` or implicit matching
+- Skill folders use `neural-` prefixed names (`neural-interview`, `neural-plan`, etc.) so skills stay namespaced on every platform
+- Claude Code invokes skills as `/neural:<name>` (e.g., `/neural:neural-plan`)
+- Codex invokes skills with `$<name>` (e.g., `$neural-plan`) or implicit matching
 - Descriptions: just `"<what it does>"` — no boilerplate prefixes or suffixes
 - Commits: conventional commits in English
 - PRs: squash & merge, delete branch after

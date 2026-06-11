@@ -1,5 +1,5 @@
 ---
-name: archive
+name: neural-archive
 description: "Move completed features from wip to archive"
 ---
 

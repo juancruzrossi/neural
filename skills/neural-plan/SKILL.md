@@ -1,11 +1,11 @@
 ---
-name: plan
+name: neural-plan
 description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors"
 ---
 
 # Neural Plan — Implementation Planning
 
-You are generating an implementation plan from the feature `CONTEXT.md` produced by interview. The plan feeds a test-driven execution loop, so every task must declare the **behaviors** it will deliver. Each behavior becomes one red→green slice in `/neural:execute`.
+You are generating an implementation plan from the feature `CONTEXT.md` produced by interview. The plan feeds a test-driven execution loop, so every task must declare the **behaviors** it will deliver. Each behavior becomes one red→green slice in `/neural:neural-execute`.
 
 ## 1. Locate the feature context
 
@@ -13,7 +13,7 @@ You are generating an implementation plan from the feature `CONTEXT.md` produced
 2. If exactly one feature directory exists, use it automatically.
 3. If multiple exist and `$ARGUMENTS` matches a feature name, use that one.
 4. If multiple exist and no argument matches, list them and ask: "Which feature should I plan?"
-5. Read `.neural/wip/<feature>/CONTEXT.md`. If missing, stop and tell the user to run `/neural:interview`.
+5. Read `.neural/wip/<feature>/CONTEXT.md`. If missing, stop and tell the user to run `/neural:neural-interview`.
 6. Read any ADRs under `.neural/wip/<feature>/docs/adr/` — treat as binding.
 
 ## 1b. Explore the codebase
@@ -101,7 +101,7 @@ Rules for task generation:
 - "align X with Y" (state the concrete target)
 - "add necessary tests" (the Behaviors list IS the test list — be specific)
 
-If you cannot be specific, the feature context needs more detail — send the user back to `/neural:interview`.
+If you cannot be specific, the feature context needs more detail — send the user back to `/neural:neural-interview`.
 
 ## 3. Adversarial self-review
 
@@ -194,4 +194,4 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
 
 1. Write the final PLAN.md to `.neural/wip/<feature>/PLAN.md`.
 2. Print a summary: task count, total behaviors, top risks.
-3. Suggest: **"Ready to execute? Run `/neural:execute`."**
+3. Suggest: **"Ready to execute? Run `/neural:neural-execute`."**

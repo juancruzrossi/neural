@@ -9,7 +9,7 @@
     {
       "name": "neural",
       "description": "Spec-Driven Development framework for AI Coding Agents",
-      "version": "1.11.2",
+      "version": "1.12.0",
       "source": "./",
       "author": {
         "name": "Juan Cruz Rossi",
