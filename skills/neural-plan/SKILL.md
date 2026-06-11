@@ -112,7 +112,7 @@ After writing the plan, do a second pass and answer:
 3. **Scope creep** — any task exceeds what `CONTEXT.md` asks for?
 4. **Scope reduction (BLOCKING)** — does any task *reference* a `CONTEXT.md` decision but deliver a reduced version of it? Scan tasks and behaviors for: "v1", "for now", "hardcoded", "placeholder", "stub", "wired later", "basic version", "too complex". If found, the task must deliver the decision in full or be split into explicit phases — never silently shrink the requirement.
 5. **Behavior coverage** — does every requirement from `CONTEXT.md` and the ADRs appear as a behavior in at least one task? List any uncovered requirements.
-6. **Rollback** — if a task fails partway, can we revert cleanly? (Atomic commits per task should make this trivial; flag exceptions.)
+6. **Rollback** — if a task fails partway, can we revert cleanly?
 7. **Behavior quality** — is each "Behavior to verify" observable through the public interface, or does it leak implementation? Rewrite leaky ones.
 
 Append findings:
