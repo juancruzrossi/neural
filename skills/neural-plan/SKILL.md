@@ -20,12 +20,13 @@ You are generating an implementation plan from the feature `CONTEXT.md` produced
 
 Before writing any plan, ground tasks in reality:
 
-1. Scan the project structure — frameworks, patterns, conventions.
-2. Read files related to the feature — existing models, routes, components, tests.
-3. Identify dependencies and integration points.
-4. Note existing patterns to follow (naming, folder structure, error handling).
-5. Cross-check feature language against existing code. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
-6. Detect the test runner (e.g., `vitest`, `jest`, `pytest`, `go test`) and note the canonical command. The execute phase will need it.
+1. If `.neural/knowledge/` exists, read all four files first — treat stack facts, conventions, and patterns as established, decisions as binding, and anti-patterns as constraints to plan around.
+2. Scan the project structure — frameworks, patterns, conventions.
+3. Read files related to the feature — existing models, routes, components, tests.
+4. Identify dependencies and integration points.
+5. Note existing patterns to follow (naming, folder structure, error handling).
+6. Cross-check feature language against existing code. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
+7. Detect the test runner (e.g., `vitest`, `jest`, `pytest`, `go test`) and note the canonical command. The execute phase will need it.
 
 A plan grounded in the actual codebase is dramatically more executable than one based on guesswork.
 

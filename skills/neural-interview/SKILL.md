@@ -16,7 +16,8 @@ Respond in the user's language. Write `CONTEXT.md` and ADRs in that same languag
 1. Check git silently: `git rev-parse --is-inside-work-tree 2>/dev/null`.
 2. Ask the feature name; normalize to kebab-case. Ask for the raw description.
 3. Scan for existing context: `CONTEXT-MAP.md` (multi-context) or root `CONTEXT.md` (single-context), `docs/adr/`, related source and tests, and `.neural/{wip,archive}/*/CONTEXT.md`.
-4. If `CONTEXT-MAP.md` exists, infer which bounded context this feature belongs to; ask only if unclear.
+4. If `.neural/knowledge/` exists, read all four files as background: treat glossary terms as established (re-define only when the user contradicts or extends them) and architectural decisions as binding.
+5. If `CONTEXT-MAP.md` exists, infer which bounded context this feature belongs to; ask only if unclear.
 
 Create files lazily — only when there is something to write. Don't create `.neural/wip/<feature>/` until the first section is ready.
 
