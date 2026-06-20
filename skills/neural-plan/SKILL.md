@@ -20,7 +20,7 @@ You are generating an implementation plan from the feature `CONTEXT.md` produced
 
 Before writing any plan, ground tasks in reality:
 
-1. If `.neural/knowledge/` exists, read all four files first — treat stack facts, conventions, and patterns as established, decisions as binding, and anti-patterns as constraints to plan around.
+1. If `.neural/knowledge/` exists, read it first — treat its stack, conventions, decisions, and anti-patterns as established.
 2. Scan the project structure — frameworks, patterns, conventions.
 3. Read files related to the feature — existing models, routes, components, tests.
 4. Identify dependencies and integration points.
