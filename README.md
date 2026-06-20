@@ -5,7 +5,7 @@
 **A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
 
 ```
-interview → plan → execute → review → archive
+interview → plan → execute → review → archive → learn
 ```
 
 </div>
@@ -87,7 +87,11 @@ Shows progress of all features in `.neural/wip/` with next-step suggestions.
 
 ### `/neural:neural-archive` — Clean up
 
-Moves completed features from `.neural/wip/` to `.neural/archive/`.
+Moves completed features from `.neural/wip/` to `.neural/archive/`. Automatically runs `neural-learn` on completion.
+
+### `/neural:neural-learn` — Build the project knowledge base
+
+Harvests every archived feature and synthesizes cross-feature knowledge into `.neural/knowledge/`: a unified glossary, architectural decisions, tech stack conventions, and recurring anti-patterns. Loaded automatically by `neural-interview` and `neural-plan` on subsequent features.
 
 ### `/neural:neural-help` — Command reference
 
@@ -105,10 +109,15 @@ All Neural artifacts live in `.neural/` at your project root:
 │       ├── docs/adr/     ← optional feature decisions
 │       ├── PLAN.md       ← plan output
 │       └── REVIEW.md     ← review output
-└── archive/
-    └── user-onboarding/
-        ├── CONTEXT.md
-        ├── docs/adr/
-        ├── PLAN.md
-        └── REVIEW.md
+├── archive/
+│   └── user-onboarding/
+│       ├── CONTEXT.md
+│       ├── docs/adr/
+│       ├── PLAN.md
+│       └── REVIEW.md
+└── knowledge/            ← built by neural-learn after each archive
+    ├── PROJECT-CONTEXT.md  ← stack, conventions, recurring patterns
+    ├── GLOSSARY.md         ← unified domain vocabulary
+    ├── DECISIONS.md        ← cross-feature architectural decisions
+    └── ANTIPATTERNS.md     ← recurring review findings (2+ occurrences)
 ```

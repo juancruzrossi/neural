@@ -26,3 +26,5 @@ Move completed features from `.neural/wip/` to `.neural/archive/`.
    ```
    Feature '<name>' archived. .neural/wip/<name>/ → .neural/archive/<name>/
    ```
+
+5. **Update the knowledge base.** Run `/neural:neural-learn` to harvest the newly archived feature into `.neural/knowledge/`.
