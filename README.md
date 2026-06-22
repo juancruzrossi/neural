@@ -45,7 +45,11 @@ Register the Neural marketplace:
 codex plugin marketplace add juancruzrossi/neural
 ```
 
-Then open the Codex plugin directory, select the Neural marketplace, and install the plugin. Enable or disable it anytime from the directory; Codex persists each plugin's state in `~/.codex/config.toml`.
+Then install the plugin:
+
+```bash
+codex plugin add neural@neural
+```
 
 ## The Workflow
 
