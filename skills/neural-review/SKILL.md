@@ -19,16 +19,11 @@ The review runs in this same context because `/neural:neural-execute` no longer 
 ## Step 2: Load stack-relevant skills
 
 1. From `CONTEXT.md` / `PLAN.md`, identify the tech stack.
-2. For each technology, try to load a matching skill (e.g., `react-best-practices`) via the Skill tool.
+2. For each technology, load a matching guidance skill if one is available.
 3. If loaded, apply its guidelines while reviewing.
 4. If no match exists, proceed silently — do not fail.
 
-## Step 3: Code quality check (Claude Code only)
-
-1. Try `Skill("simplify")` on the files changed for this feature. Skip silently if unavailable.
-2. Hold the findings for the "Code Quality" section of `REVIEW.md`.
-
-## Step 4: Layer 1 — Plan vs Implementation
+## Step 3: Layer 1 — Plan vs Implementation
 
 1. Parse every task from `PLAN.md`. Each task carries: expected files, behaviors to verify, acceptance.
 2. For each task, gather evidence:
@@ -41,7 +36,7 @@ The review runs in this same context because `/neural:neural-execute` no longer 
    - `✗ missing` — task not implemented.
 4. Completion score: `X/Y` (partial = 0.5).
 
-## Step 5: Anti-pattern scan
+## Step 4: Anti-pattern scan
 
 Grep the files changed for this feature. Record any hits.
 
@@ -53,7 +48,7 @@ Grep the files changed for this feature. Record any hits.
 | Hardcoded secrets | `sk_test_`, `your-api-key-here`, `password123` | Blocking |
 | Debug leftovers | `console.log`, `print(`, `debugger`, `binding.pry` | Warning |
 
-## Step 6: Layer 2 — Goal-backward verification
+## Step 5: Layer 2 — Goal-backward verification
 
 1. Read the **Problem** section of `CONTEXT.md`.
 2. Derive **observable truths** — testable statements that must hold if the problem is truly solved. Example: "A user can POST `/api/orders` and receive 201 with an order id."
@@ -74,7 +69,7 @@ Grep the files changed for this feature. Record any hits.
    - `PARTIAL` — EXISTS + SUBSTANTIVE but not fully WIRED or FUNCTIONAL.
    - `FAIL` — any level fails.
 
-## Step 7: Generate REVIEW.md
+## Step 6: Generate REVIEW.md
 
 Write `$WIP/REVIEW.md`:
 
@@ -124,9 +119,6 @@ Write `$WIP/REVIEW.md`:
 
 ### Info
 - ...
-
-## Code Quality (via /simplify)
-- <findings from Step 3, if any>
 ```
 
 Verdict rules:
@@ -135,7 +127,7 @@ Verdict rules:
 - **PASS WITH WARNINGS** — every task completed and every truth passes, but warnings exist.
 - **FAIL** — any task missing, any truth fails, or any blocking issue exists.
 
-## Step 8: Report
+## Step 7: Report
 
 **Evidence freshness rule.** The verdict must be based on evidence gathered during **this** execution. Never reuse a previous `REVIEW.md` or assume results from a prior run still hold.
 
