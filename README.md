@@ -55,6 +55,10 @@ Socratic interview. Clarifies requirements and captures feature context in `CONT
 
 Builds a sequential task list with dependencies and per-task **Behaviors to verify** (each becomes one red→green slice). Runs a self-adversarial pass. Optional cross-review (Claude Code ⇄ Codex).
 
+Pass `--visual` to also render the plan as a self-contained HTML page (`PLAN.html`).
+
+Pass `--skills /skill-1 /skill-2` to preload skills that shape the plan & execution.
+
 ### `/neural:neural-execute` — Test-driven execution loop
 
 Walks the plan task by task in dependency order. Vertical-slice TDD per task: failing test → minimum code → refactor on green. No stubs. Optionally, atomic commits per task.
@@ -104,6 +108,7 @@ All Neural artifacts live in `.neural/` at your project root:
 │       ├── CONTEXT.md    ← interview output
 │       ├── docs/adr/     ← optional feature decisions
 │       ├── PLAN.md       ← plan output
+│       ├── PLAN.html     ← optional plan render (--visual)
 │       └── REVIEW.md     ← review output
 └── archive/
     └── user-onboarding/

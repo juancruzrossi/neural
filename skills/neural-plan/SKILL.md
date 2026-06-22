@@ -1,6 +1,7 @@
 ---
 name: neural-plan
-description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors"
+description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors. Pass --visual to also render the plan as a self-contained HTML page (PLAN.html). Pass --skills <skills> to preload skills that shape the plan and that execute loads before coding"
+argument-hint: "[feature] [--visual] [--skills <skill>...]"
 ---
 
 # Neural Plan — Implementation Planning
@@ -9,9 +10,13 @@ You are generating an implementation plan from the feature `CONTEXT.md` produced
 
 ## 1. Locate the feature context
 
+First, parse `$ARGUMENTS` for `--visual`: if present, turn **visual mode** on and strip the token; whatever remains is the optional feature-name selector. Visual mode changes nothing about the planning itself — it only adds the HTML rendering in step 6. With no flag, the only output is the Markdown PLAN.md.
+
+Also parse `--skills`: the slash-named skills that follow it (e.g. `--skills /<skill-a> /<skill-b>`) are skills to load — strip them from the feature selector. If given, load each one now so its guidance shapes the plan (task breakdown, conventions, behaviors), and list them in the `## Model Invocable Skills` section so execute loads them too.
+
 1. List directories under `.neural/wip/`.
 2. If exactly one feature directory exists, use it automatically.
-3. If multiple exist and `$ARGUMENTS` matches a feature name, use that one.
+3. If multiple exist and the remaining `$ARGUMENTS` matches a feature name, use that one.
 4. If multiple exist and no argument matches, list them and ask: "Which feature should I plan?"
 5. Read `.neural/wip/<feature>/CONTEXT.md`. If missing, stop and tell the user to run `/neural:neural-interview`.
 6. Read any ADRs under `.neural/wip/<feature>/docs/adr/` — treat as binding.
@@ -41,6 +46,10 @@ Produce `.neural/wip/<feature>/PLAN.md` with this structure:
 
 ## Test Runner
 <!-- The exact command the executor should run (e.g., `pnpm test`, `pytest -q`). State "none detected" if applicable. -->
+
+## Model Invocable Skills
+<!-- Only when --skills was passed: list each skill the executor must load before coding, with a one-line reason. Omit the whole section otherwise. -->
+- `/<skill-name>` — why it applies to this feature
 
 ## File Map
 
@@ -193,5 +202,14 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
 ## 5. Finalize
 
 1. Write the final PLAN.md to `.neural/wip/<feature>/PLAN.md`.
-2. Print a summary: task count, total behaviors, top risks.
-3. Suggest: **"Ready to execute? Run `/neural:neural-execute`."**
+2. If **visual mode** is on (`--visual`), do step 6 now, before the summary.
+3. Print a summary: task count, total behaviors, top risks. If a visual was rendered, name the `PLAN.html` path too.
+4. Suggest: **"Ready to execute? Run `/neural:neural-execute`."**
+
+## 6. Visual rendering (only with `--visual`)
+
+PLAN.md stays the source of truth — execute, review, and sync read it, not the HTML. Visual mode only adds a human review surface; PLAN.html must say literally the same thing as PLAN.md.
+
+Read `references/VISUAL.md` (content fidelity + mapping; it points to `references/STYLES.md` for the design language and the self-contained template) and follow them to render the finalized plan into `.neural/wip/<feature>/PLAN.html`. Run the parity check before handoff — do not author the HTML from memory.
+
+Then open it with `open <path>` and print the path.

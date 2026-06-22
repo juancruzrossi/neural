@@ -18,6 +18,7 @@ The pace looks slower than batch implementation, but it is far more reliable: ev
 5. Read `.neural/wip/<feature>/PLAN.md`. If missing, stop and tell the user to run `/neural:neural-plan`.
 6. Read `.neural/wip/<feature>/CONTEXT.md`. If missing, stop and tell the user to run `/neural:neural-interview`.
 7. Read any ADRs under `.neural/wip/<feature>/docs/adr/` — treat as binding.
+8. If `PLAN.md` has a `## Model Invocable Skills` section, load each listed skill now — before building the queue or writing any code — and apply its guidance throughout the run.
 
 ## 2. Build the task queue
 
@@ -77,9 +78,8 @@ Progress: <done>/<total> — Task <N> "<title>": <status>
 
 After all tasks complete:
 
-1. If running on Claude Code, invoke `Skill("simplify")` on modified files. Skip if unavailable.
-2. Sweep for AI noise on modified files: comments restating obvious code, stray `console.log` / `print` / `debugger`, over-documented obvious methods.
-3. Re-run the test suite after cleanup. If something breaks, revert the cleanup for that file.
+1. Sweep for AI noise on modified files: comments restating obvious code, stray `console.log` / `print` / `debugger`, over-documented obvious methods.
+2. Re-run the test suite after cleanup. If something breaks, revert the cleanup for that file.
 
 ## 7. Commit phase (final step — always ask)
 
