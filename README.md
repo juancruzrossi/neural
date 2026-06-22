@@ -37,13 +37,15 @@ Then install the plugin:
 /plugin install neural@neural
 ```
 
-### Codex
+### Codex (via Plugin Marketplace)
 
-Install the Neural skills globally:
+Register the Neural marketplace:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/juancruzrossi/neural/main/.codex/install.sh | bash
+codex plugin marketplace add juancruzrossi/neural
 ```
+
+Then open the Codex plugin directory, select the Neural marketplace, and install the plugin. Enable or disable it anytime from the directory; Codex persists each plugin's state in `~/.codex/config.toml`.
 
 ## The Workflow
 

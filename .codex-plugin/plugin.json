@@ -1,7 +1,8 @@
 {
   "name": "neural",
-  "description": "Spec-Driven Development framework for AI Coding Agents",
   "version": "1.14.0",
+  "description": "Spec-Driven Development framework for AI Coding Agents",
+  "skills": "./skills/",
   "author": {
     "name": "Juan Cruz Rossi",
     "url": "https://github.com/juancruzrossi"

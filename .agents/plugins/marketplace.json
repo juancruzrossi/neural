@@ -1,0 +1,26 @@
+{
+  "name": "neural",
+  "interface": {
+    "displayName": "Neural"
+  },
+  "plugins": [
+    {
+      "name": "neural",
+      "description": "Spec-Driven Development framework for AI Coding Agents",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/juancruzrossi/neural.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "author": {
+        "name": "Juan Cruz Rossi",
+        "url": "https://github.com/juancruzrossi"
+      }
+    }
+  ]
+}
