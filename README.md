@@ -23,7 +23,7 @@ Most AI agent failures aren't about bad code — they're about unclear requireme
 
 ## Installation
 
-### Claude Code (via Plugin Marketplace)
+### Claude Code
 
 Register the Neural marketplace:
 
@@ -37,7 +37,7 @@ Then install the plugin:
 /plugin install neural@neural
 ```
 
-### Codex (via Plugin Marketplace)
+### Codex
 
 Register the Neural marketplace:
 
