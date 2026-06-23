@@ -12,100 +12,49 @@ interview → plan → execute → review → archive → learn
 
 ## Why Neural?
 
-Most AI agent failures aren't about bad code — they're about unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each failure mode with a specific phase:
+Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Each Neural phase targets one failure mode:
 
-| Failure Mode | Phase | How |
+| Failure mode | Phase | Fix |
 |---|---|---|
 | Vague requirements | Interview | Socratic questioning with selective pressure |
-| Plans based on assumptions | Plan | Mandatory codebase exploration + adversarial self-review |
-| Stubs and over-built code | Execute | Vertical-slice TDD loop — every line of code answers a failing test |
-| "Done" but it's stubs | Review | 4-level goal-backward verification |
+| Plans built on assumptions | Plan | Codebase exploration + adversarial self-review |
+| Stubs and over-built code | Execute | Vertical-slice TDD; every line answers a failing test |
+| "Done" but unverified | Review | 4-level goal-backward verification |
 
 ## Installation
 
 ### Claude Code
 
-Register the Neural marketplace:
-
 ```
 /plugin marketplace add juancruzrossi/neural
-```
-
-Then install the plugin:
-
-```
 /plugin install neural@neural
 ```
 
 ### Codex
 
-Register the Neural marketplace:
-
 ```bash
 codex plugin marketplace add juancruzrossi/neural
-```
-
-Then install the plugin:
-
-```bash
 codex plugin add neural@neural
 ```
 
-## The Workflow
+## Commands
 
-### `/neural:neural-interview` — Clarify before you build
+Invoke as `/neural:<name>` in Claude Code, or `$<name>` in Codex.
 
-Socratic interview. Clarifies requirements and captures feature context in `CONTEXT.md`.
-
-### `/neural:neural-plan` — Plan with adversarial review
-
-Builds a sequential task list with dependencies and per-task **Behaviors to verify** (each becomes one red→green slice). Runs a self-adversarial pass. Optional cross-review (Claude Code ⇄ Codex).
-
-Pass `--visual` to also render the plan as a self-contained HTML page (`PLAN.html`).
-
-Pass `--skills /skill-1 /skill-2` to preload skills that shape the plan & execution.
-
-### `/neural:neural-execute` — Test-driven execution loop
-
-Walks the plan task by task in dependency order. Vertical-slice TDD per task: failing test → minimum code → refactor on green. No stubs. Optionally, atomic commits per task.
-
-### `/neural:neural-review` — Verify against the goal
-
-Two layers:
-1. **Plan vs Implementation** — did every task get done?
-2. **Goal-Backward** — does the code solve the original problem?
-
-### `/neural:neural-address-review` — Fix what review found
-
-Parses REVIEW.md, builds a fix plan from blocking issues and warnings, executes fixes with verification.
-
-### `/neural:neural-quick` — Fast-path for small tasks
-
-Three questions, inline plan, direct execution. For small, clear tasks.
-
-### `/neural:neural-debug` — Root-cause investigation
-
-Systematic debugging: investigate → analyze → hypothesize → implement.
-
-### `/neural:neural-sync` — Align specs with reality
-
-Reads the codebase and implementation and updates CONTEXT.md and PLAN.md to match what was built. Code is the source of truth.
-
-### `/neural:neural-status` — Where am I?
-
-Shows progress of all features in `.neural/wip/` with next-step suggestions.
-
-### `/neural:neural-archive` — Clean up
-
-Moves completed features from `.neural/wip/` to `.neural/archive/`. Automatically runs `neural-learn` on completion.
-
-### `/neural:neural-learn` — Build the project knowledge base
-
-Harvests every archived feature and synthesizes cross-feature knowledge into `.neural/knowledge/`: a unified glossary, architectural decisions, tech stack conventions, and recurring anti-patterns. Loaded automatically by `neural-interview` and `neural-plan` on subsequent features.
-
-### `/neural:neural-help` — Command reference
-
-Lists all Neural commands with short descriptions and the recommended workflow.
+| Command | What it does |
+|---|---|
+| `neural-interview` | Socratic interview; captures requirements in `CONTEXT.md` |
+| `neural-plan` | Sequential task list with per-task behaviors to verify; adversarial self-review, optional Claude ⇄ Codex cross-review |
+| `neural-execute` | Walks the plan task by task; vertical-slice TDD, no stubs |
+| `neural-review` | Verifies plan vs. implementation, then code vs. original goal |
+| `neural-address-review` | Builds and executes a fix plan from `REVIEW.md` findings |
+| `neural-quick` | Fast path for small tasks: three questions, inline plan, direct execution |
+| `neural-debug` | Root-cause investigation: investigate, analyze, hypothesize, fix |
+| `neural-sync` | Updates `CONTEXT.md` and `PLAN.md` to match the code |
+| `neural-status` | Progress of every feature in `.neural/wip/` |
+| `neural-archive` | Moves completed features to `.neural/archive/`; runs `neural-learn` |
+| `neural-learn` | Synthesizes archived features into `.neural/knowledge/` |
+| `neural-help` | Lists all commands and the recommended workflow |
 
 ## Artifacts
 
@@ -113,22 +62,11 @@ All Neural artifacts live in `.neural/` at your project root:
 
 ```
 .neural/
-├── wip/
-│   └── auth-system/
-│       ├── CONTEXT.md    ← interview output
-│       ├── docs/adr/     ← optional feature decisions
-│       ├── PLAN.md       ← plan output
-│       ├── PLAN.html     ← optional plan render (--visual)
-│       └── REVIEW.md     ← review output
-├── archive/
-│   └── user-onboarding/
-│       ├── CONTEXT.md
-│       ├── docs/adr/
-│       ├── PLAN.md
-│       └── REVIEW.md
-└── knowledge/            ← built by neural-learn after each archive
-    ├── PROJECT-CONTEXT.md  ← stack, conventions, recurring patterns
-    ├── GLOSSARY.md         ← unified domain vocabulary
-    ├── DECISIONS.md        ← cross-feature architectural decisions
-    └── ANTIPATTERNS.md     ← recurring review findings (2+ occurrences)
+├── wip/<feature>/        CONTEXT.md · docs/adr/ · PLAN.md · REVIEW.md
+├── archive/<feature>/    same layout, completed
+└── knowledge/            built by neural-learn after each archive
+    ├── PROJECT-CONTEXT.md   stack, conventions, recurring patterns
+    ├── GLOSSARY.md          unified domain vocabulary
+    ├── DECISIONS.md         cross-feature architectural decisions
+    └── ANTIPATTERNS.md      recurring review findings (2+ occurrences)
 ```
