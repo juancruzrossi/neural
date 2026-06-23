@@ -18,9 +18,9 @@ Most AI agent failures come from unclear requirements, fantasy plans, context ro
 
 ### Claude Code
 
-```
-/plugin marketplace add juancruzrossi/neural
-/plugin install neural@neural
+```bash
+claude plugin marketplace add juancruzrossi/neural
+claude plugin install neural@neural
 ```
 
 ### Codex
