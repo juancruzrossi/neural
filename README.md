@@ -12,14 +12,7 @@ interview → plan → execute → review → archive → learn
 
 ## Why Neural?
 
-Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Each Neural phase targets one failure mode:
-
-| Failure mode | Phase | Fix |
-|---|---|---|
-| Vague requirements | Interview | Socratic questioning with selective pressure |
-| Plans built on assumptions | Plan | Codebase exploration + adversarial self-review |
-| Stubs and over-built code | Execute | Vertical-slice TDD; every line answers a failing test |
-| "Done" but unverified | Review | 4-level goal-backward verification |
+Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each one.
 
 ## Installation
 
