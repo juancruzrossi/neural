@@ -1,12 +1,22 @@
 # Neural SDD — Project Rules
 
 ## What is this
-A Spec-Driven Development plugin for Claude Code. Codex installs the same root skills globally via `.codex/install.sh`. Skills live in `skills/`.
+A Spec-Driven Development plugin for AI coding agents. It ships as a plugin for both Claude Code and Codex from the same repo. Skills live in `skills/`. Manifests:
+- Claude Code: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`
+- Codex: `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json`
+
+## Versioning (do this on EVERY change)
+`version` is duplicated across manifests and must stay in sync. On every change that ships (skills, docs, behavior), bump the version (semver) in ALL of:
+1. `.codex-plugin/plugin.json` — Codex manifest version
+2. `.claude-plugin/plugin.json`
+3. `.claude-plugin/marketplace.json`
+
+Use the same version string in all three.
 
 ## When adding or removing skills
 1. Create/delete the skill directory in `skills/`
 2. Update `README.md` — add/remove the skill section
-3. Propose a version bump in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+3. Bump the version in all three manifests (see Versioning above)
 
 ## Conventions
 - Skill logic lives in `SKILL.md` — one per skill. Auxiliary reference files (e.g., format templates) may sit alongside `SKILL.md` and be linked from it, so they load on-demand and keep `SKILL.md` light at trigger time.

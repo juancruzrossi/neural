@@ -23,7 +23,7 @@ Most AI agent failures aren't about bad code — they're about unclear requireme
 
 ## Installation
 
-### Claude Code (via Plugin Marketplace)
+### Claude Code
 
 Register the Neural marketplace:
 
@@ -39,10 +39,16 @@ Then install the plugin:
 
 ### Codex
 
-Install the Neural skills globally:
+Register the Neural marketplace:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/juancruzrossi/neural/main/.codex/install.sh | bash
+codex plugin marketplace add juancruzrossi/neural
+```
+
+Then install the plugin:
+
+```bash
+codex plugin add neural@neural
 ```
 
 ## The Workflow
