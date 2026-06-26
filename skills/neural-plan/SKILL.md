@@ -1,6 +1,6 @@
 ---
 name: neural-plan
-description: "Implementation planning with adversarial review and optional cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors. Pass --visual to also render the plan as a self-contained HTML page (PLAN.html). Pass --skills <skills> to preload skills that shape the plan and that execute loads before coding"
+description: "Implementation planning with optional adversarial cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors. Pass --visual to also render the plan as a self-contained HTML page (PLAN.html). Pass --skills <skills> to preload skills that shape the plan and that execute loads before coding"
 argument-hint: "[feature] [--visual] [--skills <skill>...]"
 ---
 
@@ -10,7 +10,7 @@ You are generating an implementation plan from the feature `CONTEXT.md` produced
 
 ## 1. Locate the feature context
 
-First, parse `$ARGUMENTS` for `--visual`: if present, turn **visual mode** on and strip the token; whatever remains is the optional feature-name selector. Visual mode changes nothing about the planning itself — it only adds the HTML rendering in step 6. With no flag, the only output is the Markdown PLAN.md.
+First, parse `$ARGUMENTS` for `--visual`: if present, turn **visual mode** on and strip the token; whatever remains is the optional feature-name selector. Visual mode changes nothing about the planning itself — it only adds the HTML rendering in step 5. With no flag, the only output is the Markdown PLAN.md.
 
 Also parse `--skills`: the slash-named skills that follow it (e.g. `--skills /<skill-a> /<skill-b>`) are skills to load — strip them from the feature selector. If given, load each one now so its guidance shapes the plan (task breakdown, conventions, behaviors), and list them in the `## Model Invocable Skills` section so execute loads them too.
 
@@ -113,38 +113,12 @@ Rules for task generation:
 
 If you cannot be specific, the feature context needs more detail — send the user back to `/neural:neural-interview`.
 
-## 3. Adversarial self-review
-
-After writing the plan, do a second pass and answer:
-
-1. **Missing edge cases** — inputs, states, or flows the tasks do not cover?
-2. **Dependency gaps** — could any task fail because a predecessor is incomplete?
-3. **Scope creep** — any task exceeds what `CONTEXT.md` asks for?
-4. **Scope reduction (BLOCKING)** — does any task *reference* a `CONTEXT.md` decision but deliver a reduced version of it? Scan tasks and behaviors for: "v1", "for now", "hardcoded", "placeholder", "stub", "wired later", "basic version", "too complex". If found, the task must deliver the decision in full or be split into explicit phases — never silently shrink the requirement.
-5. **Behavior coverage** — does every requirement from `CONTEXT.md` and the ADRs appear as a behavior in at least one task? List any uncovered requirements.
-6. **Rollback** — if a task fails partway, can we revert cleanly?
-7. **Behavior quality** — is each "Behavior to verify" observable through the public interface, or does it leak implementation? Rewrite leaky ones.
-
-Append findings:
-
-```markdown
-## Adversarial Review
-
-### Issues found
-- ...
-
-### Adjustments made
-- ...
-```
-
-Update tasks and behaviors if the review surfaces real issues. Note what changed.
-
-## 4. Optional cross-review
+## 3. Optional cross-review
 
 After writing PLAN.md, offer an adversarial review from the *other* agent — Claude Code ⇄ Codex:
 
-1. Check it's installed (`codex --version` / `claude --version`). If missing, skip silently and go to step 5.
-2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** If declined, go to step 5.
+1. Check it's installed (`codex --version` / `claude --version`). If missing, skip silently and go to step 4.
+2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** If declined, go to step 4.
 3. Run it — swap the command for your runtime. Feed the prompt on stdin, never as an `argv` string. Pass **file references**, never inline content:
 
    ```bash
@@ -200,14 +174,14 @@ After writing PLAN.md, offer an adversarial review from the *other* agent — Cl
    <!-- Reviewer feedback and user-approved changes -->
    ```
 
-## 5. Finalize
+## 4. Finalize
 
 1. Write the final PLAN.md to `.neural/wip/<feature>/PLAN.md`.
-2. If **visual mode** is on (`--visual`), do step 6 now, before the summary.
+2. If **visual mode** is on (`--visual`), do step 5 now, before the summary.
 3. Print a summary: task count, total behaviors, top risks. If a visual was rendered, name the `PLAN.html` path too.
 4. Suggest: **"Ready to execute? Run `/neural:neural-execute`."**
 
-## 6. Visual rendering (only with `--visual`)
+## 5. Visual rendering (only with `--visual`)
 
 PLAN.md stays the source of truth — execute, review, and sync read it, not the HTML. Visual mode only adds a human review surface; PLAN.html must say literally the same thing as PLAN.md.
 
