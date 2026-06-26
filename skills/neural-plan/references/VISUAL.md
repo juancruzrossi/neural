@@ -31,7 +31,7 @@ Everything on the page is verbatim from one of two files, so nothing can drift:
 
 - **From PLAN.md (verbatim):** Overview, File Map, every Task (title, What, Why,
   Files, every Behavior, Acceptance), Risk Assessment, Acceptance Criteria,
-  Adversarial Review, and Cross-Review if present.
+  and Cross-Review if present.
 - **From CONTEXT.md (verbatim):** the Problem statement and the binding Decisions
   for the Context block. Pull the text as written; do not paraphrase. Skip the
   CONTEXT sections that would duplicate the plan (Acceptance Criteria, Scenarios,
@@ -56,7 +56,6 @@ unescaped inside text.
 | Tasks table + details                | `#tasks` spine: one `.task` per task — node number, title, estimate tag, depends, What/Why/Files, Behaviors checklist, Acceptance |
 | Risk Assessment                      | `#risks` table with impact + likelihood tags                               |
 | Acceptance Criteria                  | `#acceptance` square checklist (verbatim)                                   |
-| Adversarial Review                   | `#review` note: Issues found + Adjustments made (verbatim)                  |
 | Cross-Review (only if present)       | `#cross-review` note — include only if PLAN.md has it                       |
 
 Behaviors render as a circle checklist because each becomes a red→green test slice
@@ -99,8 +98,7 @@ Re-read PLAN.md and confirm the HTML is its literal twin:
 3. **File map** — every row present, same file / action / responsibility.
 4. **Risks** — every row present, same severities.
 5. **Acceptance criteria** — every item present, verbatim, same order.
-6. **Adversarial review** — every issue and adjustment present, verbatim.
-7. **No additions** — the page contains nothing that is not in PLAN.md, except the
+6. **No additions** — the page contains nothing that is not in PLAN.md, except the
    Context block (verbatim from CONTEXT.md) and the spec-workspace tree.
 
 If any item fails, fix the HTML — never the plan — and re-check.

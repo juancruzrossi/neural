@@ -312,7 +312,6 @@ marker. `VISUAL.md` maps PLAN.md content into the slots.
       <a href="#tasks">Tasks</a>
       <a href="#risks">Risks</a>
       <a href="#acceptance">Acceptance</a>
-      <a href="#review">Adversarial review</a>
     </nav>
   </aside>
 
@@ -435,20 +434,6 @@ marker. `VISUAL.md` maps PLAN.md content into the slots.
         <li>{{CRITERION}}</li>
         <!-- /repeat -->
       </ul>
-    </section>
-
-    <section class="sec" id="review">
-      <h2>Adversarial review</h2>
-      <div class="note">
-        <h3>Issues found</h3>
-        <ul>
-          <!-- repeat --><li>{{ISSUE}}</li><!-- /repeat -->
-        </ul>
-        <h3>Adjustments made</h3>
-        <ul>
-          <!-- repeat --><li>{{ADJUSTMENT}}</li><!-- /repeat -->
-        </ul>
-      </div>
     </section>
 
     <!-- Optional: include only if PLAN.md has these sections.
