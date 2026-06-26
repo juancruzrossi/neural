@@ -37,7 +37,7 @@ Invoke as `/neural:<name>` in Claude Code, or `$<name>` in Codex.
 | Command | What it does |
 |---|---|
 | `neural-interview` | Socratic interview; captures requirements in `CONTEXT.md` |
-| `neural-plan` | Sequential task list with per-task behaviors to verify; adversarial self-review, optional Claude ⇄ Codex cross-review |
+| `neural-plan` | Sequential task list with per-task behaviors to verify; optional adversarial Claude ⇄ Codex cross-review |
 | `neural-execute` | Walks the plan task by task; vertical-slice TDD, no stubs |
 | `neural-review` | Verifies plan vs. implementation, then code vs. original goal |
 | `neural-address-review` | Builds and executes a fix plan from `REVIEW.md` findings |
