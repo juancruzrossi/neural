@@ -9,7 +9,9 @@ Harvest knowledge from `.neural/archive/` and synthesize it into `.neural/knowle
 
 ## Steps
 
-1. **Check the archive.** List all feature directories in `.neural/archive/`. If none exist, stop: "No archived features yet. Run `/neural:neural-archive` after completing a feature."
+1. **Check the archive.** List all feature directories in `.neural/archive/`. If none exist, stop: "No archived features yet. Run neural-archive after completing a feature."
+
+   Archived artifacts are historical documents — they describe the code as it was when the feature shipped. When two features conflict, the newer one wins; before recording a stack or convention fact, spot-check it against the current repo.
 
 2. **Load existing knowledge.** Read `.neural/knowledge/` in full if it exists — merge, never overwrite.
 

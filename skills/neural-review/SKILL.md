@@ -1,143 +1,70 @@
 ---
 name: neural-review
-description: "Plan vs implementation verification with goal-backward analysis and test-quality audit"
+description: "Plan vs implementation verification with goal-backward analysis and test-quality audit — then fixes findings on request"
 ---
 
-# Neural Review — Plan vs Implementation Verification
+# Neural Review — Verification
 
-You verify, inline, that the implementation actually delivers what `CONTEXT.md` and `PLAN.md` promised — and that the tests written along the way prove behavior rather than shape.
+Verify that the implementation delivers what `CONTEXT.md` and `PLAN.md` promised, and that the tests prove behavior rather than shape. Guard against **confirmation bias**: the plan is not proof. Gather fresh evidence (read files, run tests, grep) on every run — never reuse a previous `REVIEW.md`.
 
-The review runs in this same context because `/neural:neural-execute` no longer ships work through subagents — there is no "implementer bias" to escape from. The risk we still need to guard against is **confirmation bias**: treating the plan as proof. Counter it by gathering fresh evidence (read files, run tests, grep) every time. Never trust a prior REVIEW.md.
+## 1. Locate the feature
 
-## Step 1: Locate the feature
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop. Read `CONTEXT.md` and `PLAN.md` (both required — abort if missing: "cannot review without specs") and any ADRs under `docs/adr/`.
 
-1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` — one match → use it, multiple → ask.
-2. Set `WIP=.neural/wip/<feature>/`.
-3. Read `$WIP/CONTEXT.md` and `$WIP/PLAN.md`. If either is missing, abort: "Missing CONTEXT.md or PLAN.md — cannot review without specs."
-4. Read any ADRs under `$WIP/docs/adr/`.
+## 2. Layer 1 — Plan vs implementation
 
-## Step 2: Load stack-relevant skills
+For each task in `PLAN.md`, gather evidence: the listed files exist and were changed (Glob/Read), the expected symbols exist (Grep), and a test covers each entry in the task's Behaviors to verify. Status per task: `✓ completed` / `⚠️ partial` / `✗ missing`. Score `X/Y` (partial = 0.5). Execute's report may declare deviations — verify the deviation is real and sound, don't just accept it.
 
-1. From `CONTEXT.md` / `PLAN.md`, identify the tech stack.
-2. For each technology, load a matching guidance skill if one is available.
-3. If loaded, apply its guidelines while reviewing.
-4. If no match exists, proceed silently — do not fail.
+## 3. Anti-pattern scan
 
-## Step 3: Layer 1 — Plan vs Implementation
+Grep the changed files:
 
-1. Parse every task from `PLAN.md`. Each task carries: expected files, behaviors to verify, acceptance.
-2. For each task, gather evidence:
-   - **Files** — use Glob and Read to confirm the listed files exist and were actually changed.
-   - **Functions / components / routes** — use Grep to confirm the expected symbols exist.
-   - **Tests for each behavior** — use Glob and Grep to confirm a test exists that names or covers each behavior in the task's "Behaviors to verify" list.
-3. Assign a status per task:
-   - `✓ completed` — every expected artifact found and substantive, every behavior covered by a test.
-   - `⚠️ partial` — some artifacts found, others missing or weakly covered.
-   - `✗ missing` — task not implemented.
-4. Completion score: `X/Y` (partial = 0.5).
-
-## Step 4: Anti-pattern scan
-
-Grep the files changed for this feature. Record any hits.
-
-| Pattern | What to search | Severity |
-|---------|----------------|----------|
+| Pattern | Search | Severity |
+|---------|--------|----------|
 | Incomplete work | `TODO`, `FIXME`, `XXX`, `HACK` | Warning |
-| Placeholder content | `placeholder`, `coming soon`, `lorem ipsum`, `example.com` | Blocking |
-| Empty implementations | `return null`, `return {}`, `return []`, `=> {}`, `pass` as sole function body | Blocking |
+| Placeholder content | `placeholder`, `coming soon`, `lorem ipsum` | Blocking |
+| Empty implementations | `return null` / `return {}` / `pass` as sole body | Blocking |
 | Hardcoded secrets | `sk_test_`, `your-api-key-here`, `password123` | Blocking |
-| Debug leftovers | `console.log`, `print(`, `debugger`, `binding.pry` | Warning |
+| Debug leftovers | `console.log`, `print(`, `debugger` | Warning |
 
-## Step 5: Layer 2 — Goal-backward verification
+## 4. Layer 2 — Goal-backward verification
 
-1. Read the **Problem** section of `CONTEXT.md`.
-2. Derive **observable truths** — testable statements that must hold if the problem is truly solved. Example: "A user can POST `/api/orders` and receive 201 with an order id."
-3. For each truth, verify four levels:
+From the **Problem** section of `CONTEXT.md`, derive **observable truths** — testable statements that must hold if the problem is truly solved (e.g., "a user can POST `/api/orders` and receive 201 with an order id"). Verify each at four levels:
 
-   **L1 EXISTS** — the artifact exists at the expected path. Use Glob + Read.
+- **L1 EXISTS** — the artifact is at the expected path.
+- **L2 SUBSTANTIVE** — real implementation, not a stub *and not a reduced version of the requirement*: no empty bodies, `NotImplementedError`, hardcoded mocks, or "v1 / for now / basic version" of a `CONTEXT.md` decision. No concrete evidence = FAIL, not PASS.
+- **L3 WIRED** — connected: route registered, component rendered, function imported. Flag orphan code.
+- **L4 FUNCTIONAL** — the test suite runs and the outcome is produced.
 
-   **L2 SUBSTANTIVE** — real implementation, not a stub *and not a reduced version of the requirement*. Look for empty bodies, `TODO`, `NotImplementedError`, hardcoded mocks, commented-out core logic — and for partial delivery: a task that names a `CONTEXT.md` decision but ships "v1 / for now / hardcoded / basic version" of it. A requirement with no concrete evidence, or only weak evidence, is a FAIL — not a PASS.
+Per truth: `PASS` (all four) / `PARTIAL` (exists + substantive, not wired or functional) / `FAIL` (any level fails).
 
-   **L3 WIRED** — connected to the rest of the system. Is the route registered? Is the component rendered? Is the function imported somewhere? Flag orphan code.
+## 5. Test-quality audit
 
-   **L4 FUNCTIONAL** — runs and produces the expected outcome.
-   - Run the project test suite (`npm test`, `pytest`, `cargo test`, whatever applies).
-   - For the test quality audit, read [TEST-QUALITY.md](./TEST-QUALITY.md). It covers disabled tests, weak assertions, implementation-coupled tests, and circular tests — all things that make a passing test suite lie.
+A green suite only proves that whatever the tests assert is currently true. Audit the feature's tests for:
 
-4. Assign per truth:
-   - `PASS` — all four levels verified.
-   - `PARTIAL` — EXISTS + SUBSTANTIVE but not fully WIRED or FUNCTIONAL.
-   - `FAIL` — any level fails.
+- **Disabled tests** on feature requirements — `it.skip`, `xit`, `test.todo`, `@pytest.mark.skip`, `@Disabled`, `t.Skip(`. Warning; Blocking on a critical path.
+- **Weak assertions** on critical behaviors — `toBeDefined()`, `toBeTruthy()`, non-empty without checking contents. If the behavior demands a specific outcome, the test must assert it.
+- **Implementation-coupled tests** — mocks of internal collaborators, call-count/call-order assertions, verifying by bypassing the interface.
+- **Circular tests** — the expected value is generated by the code under test (`expect(f(x)).toBe(f(x))`). Consistency, not correctness.
 
-## Step 6: Generate REVIEW.md
+Findings are at least Warnings; Blocking when they sit on a behavior the feature explicitly promised.
 
-Write `$WIP/REVIEW.md`:
+## 6. Write REVIEW.md
 
-```markdown
-# Review: <feature-name>
+Write `$WIP/REVIEW.md`: verdict (**PASS** — everything completed and passing, no blocking issues, no test-quality findings / **PASS WITH WARNINGS** — complete but warnings exist / **FAIL** — any task missing, truth failed, or blocking issue), the completion score table, per-truth L1–L4 tables with evidence, test-quality findings, and issues grouped Blocking / Warnings / Info.
 
-**Date:** <current date>
-**Verdict:** <PASS | PASS WITH WARNINGS | FAIL>
+## 7. Report and next steps
 
-## Completion Score
+Print a summary, then:
 
-**X/Y tasks completed**
+- **PASS** — "All clean. Run neural-archive to close this feature."
+- **PASS WITH WARNINGS** — offer: fix the warnings now, or accept them and run neural-archive.
+- **FAIL** — offer: fix the findings now, investigate manually, or re-run neural-review after manual fixes.
 
-| Task | Status | Notes |
-|------|--------|-------|
-| <task title> | ✓ / ⚠️ / ✗ | <details, including behavior coverage> |
+### Fixing findings (on request)
 
-## Goal-Backward Verification
+If the user asks you to fix:
 
-### Truth: "<observable truth>"
-
-| Level | Status | Evidence |
-|-------|--------|----------|
-| EXISTS | ✓ / ✗ | <path or detail> |
-| SUBSTANTIVE | ✓ / ✗ | <detail> |
-| WIRED | ✓ / ✗ | <import/route/reference> |
-| FUNCTIONAL | ✓ / ✗ | <test result or gap> |
-
-**Result:** PASS / PARTIAL / FAIL
-
-<!-- Repeat for each truth -->
-
-## Test Quality
-
-- Disabled tests linked to feature requirements: <list or "none">
-- Weak assertions on critical behaviors: <list or "none">
-- Tests coupled to implementation (mocks of internal collaborators, asserting on call counts, bypassing the interface): <list or "none">
-- Circular tests (system under test generates its own expected value): <list or "none">
-
-## Issues
-
-### Blocking
-- ...
-
-### Warnings
-- ...
-
-### Info
-- ...
-```
-
-Verdict rules:
-
-- **PASS** — every task completed, every truth passes, no blocking issues, no test-quality findings.
-- **PASS WITH WARNINGS** — every task completed and every truth passes, but warnings exist.
-- **FAIL** — any task missing, any truth fails, or any blocking issue exists.
-
-## Step 7: Report
-
-**Evidence freshness rule.** The verdict must be based on evidence gathered during **this** execution. Never reuse a previous `REVIEW.md` or assume results from a prior run still hold.
-
-1. Print a summary.
-2. Present options based on the verdict:
-   - **PASS (no warnings):** "All clean. Run `/neural:neural-archive` to archive this feature."
-   - **PASS WITH WARNINGS:**
-     > 1. `/neural:neural-address-review` — fix the warnings automatically
-     > 2. `/neural:neural-archive` — archive as-is, warnings accepted
-   - **FAIL:**
-     > 1. `/neural:neural-address-review` — fix blocking issues and gaps automatically
-     > 2. `/neural:neural-debug` — investigate manually
-     > 3. Fix manually and run `/neural:neural-review` again
+1. Build a fix plan from `REVIEW.md` — blocking issues are mandatory; warnings each need user consent ("fix? y/n/skip all"); info only if explicitly asked. Show the plan and wait for confirmation.
+2. Fixes must honor `CONTEXT.md` and ADRs. Apply one at a time; verify each against the specific finding. After 3 materially different failed attempts on one fix, report it unresolved — don't loop.
+3. Re-run the test suite, then re-run this review from step 2 — fresh evidence, new verdict.

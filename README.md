@@ -12,7 +12,7 @@ interview → plan → execute → review → archive → learn
 
 ## Why Neural?
 
-Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each one.
+Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each one — with the minimum process a modern model actually needs, and nothing else.
 
 ## Installation
 
@@ -39,15 +39,10 @@ Invoke as `/neural:<name>` in Claude Code, or `$<name>` in Codex.
 | `neural-interview` | Socratic interview; captures requirements in `CONTEXT.md` |
 | `neural-plan` | Sequential task list with per-task behaviors to verify; optional adversarial Claude ⇄ Codex cross-review |
 | `neural-execute` | Walks the plan task by task; vertical-slice TDD, no stubs |
-| `neural-review` | Verifies plan vs. implementation, then code vs. original goal |
-| `neural-address-review` | Builds and executes a fix plan from `REVIEW.md` findings |
-| `neural-quick` | Fast path for small tasks: three questions, inline plan, direct execution |
-| `neural-debug` | Root-cause investigation: investigate, analyze, hypothesize, fix |
-| `neural-sync` | Updates `CONTEXT.md` and `PLAN.md` to match the code |
-| `neural-status` | Progress of every feature in `.neural/wip/` |
+| `neural-review` | Verifies plan vs. implementation, then code vs. original goal; fixes findings on request |
 | `neural-archive` | Moves completed features to `.neural/archive/`; runs `neural-learn` |
 | `neural-learn` | Synthesizes archived features into `.neural/knowledge/` |
-| `neural-help` | Lists all commands and the recommended workflow |
+| `neural-debug` | Root-cause investigation: reproduce, instrument, trace, fix |
 
 ## Artifacts
 
@@ -63,3 +58,17 @@ All Neural artifacts live in `.neural/` at your project root:
     ├── DECISIONS.md         cross-feature architectural decisions
     └── ANTIPATTERNS.md      recurring review findings (2+ occurrences)
 ```
+
+## Migrating from 1.x
+
+2.0 cuts the framework to its load-bearing core. Removed commands and where their job went:
+
+| Removed | Replacement |
+|---|---|
+| `neural-quick` | Just ask your agent — the fast path is not invoking Neural |
+| `neural-status` | Ask your agent to inspect `.neural/wip/` |
+| `neural-help` | This README |
+| `neural-sync` | Execute reports deviations; archived specs are historical documents |
+| `neural-address-review` | `neural-review` fixes its own findings on request |
+| `neural-plan --visual` | Removed |
+| `neural-plan --skills` | Ask for skills in plain words; the plan records them under `Skills to load` |

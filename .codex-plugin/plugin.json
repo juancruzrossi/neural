@@ -1,6 +1,6 @@
 {
   "name": "neural",
-  "version": "1.15.0",
+  "version": "2.0.0",
   "description": "Spec-Driven Development framework for AI Coding Agents",
   "skills": "./skills/",
   "author": {

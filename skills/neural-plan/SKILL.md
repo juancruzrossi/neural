@@ -1,43 +1,31 @@
 ---
 name: neural-plan
-description: "Implementation planning with optional adversarial cross-review (Claude Code ⇄ Codex). Tasks are sequential vertical slices, each carrying its own testable behaviors. Pass --visual to also render the plan as a self-contained HTML page (PLAN.html). Pass --skills <skills> to preload skills that shape the plan and that execute loads before coding"
-argument-hint: "[feature] [--visual] [--skills <skill>...]"
+description: "Implementation planning from CONTEXT.md — sequential vertical-slice tasks, each carrying testable behaviors, with optional adversarial cross-review (Claude Code ⇄ Codex)"
+argument-hint: "[feature]"
 ---
 
 # Neural Plan — Implementation Planning
 
-You are generating an implementation plan from the feature `CONTEXT.md` produced by interview. The plan feeds a test-driven execution loop, so every task must declare the **behaviors** it will deliver. Each behavior becomes one red→green slice in `/neural:neural-execute`.
+Generate an implementation plan from the feature `CONTEXT.md` produced by interview. The plan feeds a test-driven execution loop, so every task must declare the **behaviors** it will deliver. Each behavior becomes one red→green slice in neural-execute.
 
-## 1. Locate the feature context
+## 1. Locate the feature
 
-First, parse `$ARGUMENTS` for `--visual`: if present, turn **visual mode** on and strip the token; whatever remains is the optional feature-name selector. Visual mode changes nothing about the planning itself — it only adds the HTML rendering in step 5. With no flag, the only output is the Markdown PLAN.md.
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop and point to neural-interview. If `$ARGUMENTS` carries a flag from 1.x (`--visual`, `--skills`), tell the user it was removed in 2.0 and continue without it.
 
-Also parse `--skills`: the slash-named skills that follow it (e.g. `--skills /<skill-a> /<skill-b>`) are skills to load — strip them from the feature selector. If given, load each one now so its guidance shapes the plan (task breakdown, conventions, behaviors), and list them in the `## Model Invocable Skills` section so execute loads them too.
+Read `.neural/wip/<feature>/CONTEXT.md` (required — stop and point to neural-interview if missing) and any ADRs under `.neural/wip/<feature>/docs/adr/` — treat them as binding.
 
-1. List directories under `.neural/wip/`.
-2. If exactly one feature directory exists, use it automatically.
-3. If multiple exist and the remaining `$ARGUMENTS` matches a feature name, use that one.
-4. If multiple exist and no argument matches, list them and ask: "Which feature should I plan?"
-5. Read `.neural/wip/<feature>/CONTEXT.md`. If missing, stop and tell the user to run `/neural:neural-interview`.
-6. Read any ADRs under `.neural/wip/<feature>/docs/adr/` — treat as binding.
+## 2. Ground the plan in the codebase
 
-## 1b. Explore the codebase
-
-Before writing any plan, ground tasks in reality:
-
-1. If `.neural/knowledge/` exists, read it first — treat its stack, conventions, decisions, and anti-patterns as established.
-2. Scan the project structure — frameworks, patterns, conventions.
-3. Read files related to the feature — existing models, routes, components, tests.
-4. Identify dependencies and integration points.
-5. Note existing patterns to follow (naming, folder structure, error handling).
-6. Cross-check feature language against existing code. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
-7. Detect the test runner (e.g., `vitest`, `jest`, `pytest`, `go test`) and note the canonical command. The execute phase will need it.
+1. If `.neural/knowledge/` exists, read it first — its stack, conventions, decisions, and anti-patterns are established facts.
+2. Read the source related to the feature — models, routes, components, tests — and note the existing patterns to follow.
+3. Detect the test runner and its canonical command (e.g., `pnpm test`, `pytest -q`); execute needs it.
+4. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
 
 A plan grounded in the actual codebase is dramatically more executable than one based on guesswork.
 
-## 2. Generate the plan (single pass)
+## 3. Generate PLAN.md
 
-Produce `.neural/wip/<feature>/PLAN.md` with this structure:
+Write `.neural/wip/<feature>/PLAN.md`:
 
 ```markdown
 # Plan: <feature-name>
@@ -46,145 +34,65 @@ Produce `.neural/wip/<feature>/PLAN.md` with this structure:
 <!-- 2-3 sentences: what will be built and why -->
 
 ## Test Runner
-<!-- The exact command the executor should run (e.g., `pnpm test`, `pytest -q`). State "none detected" if applicable. -->
+<!-- The exact command. "none detected" if applicable. -->
 
-## Model Invocable Skills
-<!-- Only when --skills was passed: list each skill the executor must load before coding, with a one-line reason. Omit the whole section otherwise. -->
-- `/<skill-name>` — why it applies to this feature
-
-## File Map
-
-| File | Action | Responsibility |
-|------|--------|---------------|
-| src/auth/login.ts | Create | Login handler with JWT |
-| src/auth/middleware.ts | Modify | Add token validation |
-
-<!-- ALL files touched, with purpose. Prevents tasks from overlapping or forgetting files. -->
+## Skills to load
+<!-- Only if the user asked for specific skills to shape this work: list each one
+     with a one-line reason. Execute loads them before coding. Omit otherwise. -->
 
 ## Tasks
 
-| # | Task | Depends on | Estimate |
-|---|------|-----------|----------|
-| 1 | ... | — | S/M/L |
-| 2 | ... | 1 | S/M/L |
+| # | Task | Depends on |
+|---|------|-----------|
+| 1 | ... | — |
+| 2 | ... | 1 |
 
-### Task details
-
-#### Task 1: <title>
+### Task 1: <title>
 - **What**: concrete deliverable
-- **Why**: how it advances the feature
 - **Files**: the files this task will touch
-- **Behaviors to verify**: bullet list of observable, testable statements. Each one becomes a red→green slice during execution.
+- **Behaviors to verify**: observable, testable statements — each becomes one red→green slice.
   - e.g., "Submitting a valid login returns a JWT cookie."
   - e.g., "Invalid credentials return 401 without a cookie."
-- **Acceptance**: how to know this task is done (usually: all behaviors have passing tests + build/lint green).
+- **Acceptance**: how to know this task is done (usually: all behaviors green + build/lint clean).
 
-<!-- Repeat for each task -->
-
-## Risk Assessment
-
-| Risk | Impact | Likelihood | Mitigation |
-|------|--------|-----------|------------|
-| ... | H/M/L | H/M/L | ... |
+<!-- Repeat per task -->
 
 ## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-<!-- Derived from CONTEXT.md acceptance criteria and ADRs. -->
+- [ ] <!-- Derived from CONTEXT.md and feature ADRs. -->
 ```
 
-Rules for task generation:
+Rules:
 
-- Number tasks sequentially from 1.
-- Each task is **atomic** — one clear deliverable.
-- Declare dependencies explicitly (task numbers, or `—` for none).
-- Estimate: S (< 30 min), M (30-120 min), L (> 2 hrs).
-- Each task **must** list Behaviors to verify. The executor turns each into a single test. Tasks without testable behavior (pure config, formatter rules, dependency bumps) must say so explicitly — write `Behaviors to verify: N/A — non-testable change` and explain how it will be verified instead (build, lint, manual check).
-- Derive acceptance criteria directly from `CONTEXT.md` and feature ADRs.
+- Tasks are sequential, atomic vertical slices, numbered from 1, dependencies explicit.
+- Every task lists Behaviors to verify. Tasks with nothing testable (pure config, dependency bumps) write `Behaviors to verify: N/A — non-testable change` and say how they will be verified instead (build, lint, manual check).
+- **No placeholders.** Banned: "TBD", "TODO", "implement later", "add appropriate error handling" (specify what), "similar to Task N" (spell it out), "add necessary tests" (the Behaviors list IS the test list). If you cannot be specific, the context needs more detail — send the user back to neural-interview.
 
-**No placeholders.** Every task must contain concrete, specific values. Banned phrases:
+## 4. Optional cross-review
 
-- "TBD", "TODO", "implement later", "to be determined"
-- "add appropriate error handling" (specify what)
-- "similar to Task N" (spell it out)
-- "align X with Y" (state the concrete target)
-- "add necessary tests" (the Behaviors list IS the test list — be specific)
+Offer an adversarial review from the *other* agent — Claude Code ⇄ Codex:
 
-If you cannot be specific, the feature context needs more detail — send the user back to `/neural:neural-interview`.
-
-## 3. Optional cross-review
-
-After writing PLAN.md, offer an adversarial review from the *other* agent — Claude Code ⇄ Codex:
-
-1. Check it's installed (`codex --version` / `claude --version`). If missing, skip silently and go to step 4.
-2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** If declined, go to step 4.
-3. Run it — swap the command for your runtime. Feed the prompt on stdin, never as an `argv` string. Pass **file references**, never inline content:
+1. Check the other agent is installed (`codex --version` / `claude --version`). Missing: skip silently to step 5.
+2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** Declined: skip to step 5.
+3. Run it — feed the prompt on stdin, pass file references (never inline content), and read the review from the output file, not stdout:
 
    ```bash
    # Claude Code → Codex:
    mkdir -p /tmp/.neural
-   codex exec --ephemeral -C "$PWD" -s read-only \
-     -o "/tmp/.neural/<feature>-codex-review.md" - <<'PROMPT'
-   <prompt below>
+   codex exec --ephemeral -C "$PWD" -s read-only -o /tmp/.neural/<feature>-review.md - <<'PROMPT'
+   ...
    PROMPT
-   # then read the clean review FROM THE FILE (not stdout):
-   cat "/tmp/.neural/<feature>-codex-review.md"
 
    # Codex → Claude Code:
    mkdir -p /tmp/.neural
-   claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" \
-     > "/tmp/.neural/<feature>-claude-code-review.md" <<'PROMPT'
-   <prompt below>
+   claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" > /tmp/.neural/<feature>-review.md <<'PROMPT'
+   ...
    PROMPT
-   # then read the clean review FROM THE FILE (not stdout):
-   cat "/tmp/.neural/<feature>-claude-code-review.md"
    ```
 
-   Prompt (the heredoc body):
+   Prompt body: adversarial reviewer for <project> (<stack>); review the plan against the context and ADRs — critical issues, missing edge cases, dependency gaps, and behaviors coupled to implementation rather than observable through the public interface; do not invent files or symbols — say "unverified" when unsure; cite task numbers; review only, apply nothing. Reference `@.neural/wip/<feature>/CONTEXT.md`, `@.neural/wip/<feature>/PLAN.md`, `@.neural/wip/<feature>/docs/`.
 
-   ```
-   You are an adversarial reviewer for <project-name> (<tech stack>).
+4. Show the full review and ask: apply all / cherry-pick / ignore. Never modify the plan without explicit approval.
 
-   Review the implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps. Pay special attention to the Behaviors to verify — flag any coupled to implementation rather than observable through the public interface.
+## 5. Finalize
 
-   Grounding: do not invent files, symbols, or code paths you cannot point to in the provided files. If unsure, say "unverified" — a fabricated issue is worse than a missed one. Prefer one well-grounded finding over several speculative ones.
-
-   Relevant files:
-   @CLAUDE.md
-   @AGENTS.md
-   @.neural/wip/<feature>/CONTEXT.md
-   @.neural/wip/<feature>/PLAN.md
-   @.neural/wip/<feature>/docs/
-
-   Output a structured review with CRITICAL issues, WARNINGS, and SUGGESTIONS. Cite task numbers. This is review only — do not apply changes yourself; the orchestrator decides what to adopt.
-   ```
-
-4. Show the full review — read it from `/tmp/.neural/<feature>-<adversarial-agent>-review.md` (the reviewer's file), not from stdout — and ask:
-
-   > "Review above. What do you want to do?"
-   > 1. Apply all — I update the plan
-   > 2. Cherry-pick — tell me which
-   > 3. Ignore — keep as-is
-
-   Do **not** modify the plan without explicit approval. If changes are applied, append:
-
-   ```markdown
-   ## Cross-Review
-   <!-- Reviewer feedback and user-approved changes -->
-   ```
-
-## 4. Finalize
-
-1. Write the final PLAN.md to `.neural/wip/<feature>/PLAN.md`.
-2. If **visual mode** is on (`--visual`), do step 5 now, before the summary.
-3. Print a summary: task count, total behaviors, top risks. If a visual was rendered, name the `PLAN.html` path too.
-4. Suggest: **"Ready to execute? Run `/neural:neural-execute`."**
-
-## 5. Visual rendering (only with `--visual`)
-
-PLAN.md stays the source of truth — execute, review, and sync read it, not the HTML. Visual mode only adds a human review surface; PLAN.html must say literally the same thing as PLAN.md.
-
-Read `references/VISUAL.md` (content fidelity + mapping; it points to `references/STYLES.md` for the design language and the self-contained template) and follow them to render the finalized plan into `.neural/wip/<feature>/PLAN.html`. Run the parity check before handoff — do not author the HTML from memory.
-
-Then open it with `open <path>` and print the path.
+Print a summary — task count, total behaviors — and suggest: **"Ready to execute? Run neural-execute."**

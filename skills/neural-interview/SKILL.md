@@ -39,6 +39,8 @@ Offer an ADR only when all three hold: hard to reverse, surprising without conte
 
 ## Finish
 
+The interview is done when every acceptance criterion is testable, every hard-to-reverse decision is resolved, and what remains unknown is written down as Open Items — not before, and not later.
+
 List the assumptions *and the non-goals* you inferred out loud; if the user corrects any, update `CONTEXT.md`.
 
 If on a stable branch (`main`, `master`, `develop`, `stage`, `staging`, `production`, `release`), ask whether to create `feature/<slug>`, `enhancement/<slug>`, `fix/<slug>`, `hotfix/<slug>`, or stay.
@@ -52,5 +54,5 @@ Interview complete for <feature>
 Context: .neural/wip/<feature>/CONTEXT.md
 ADRs: <count>
 Open items: <count>
-Next: /neural:neural-plan
+Next: neural-plan
 ```
