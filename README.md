@@ -42,7 +42,7 @@ Invoke as `/neural:<name>` in Claude Code, or `$<name>` in Codex.
 | `neural-review` | Verifies plan vs. implementation, then code vs. original goal; fixes findings on request |
 | `neural-archive` | Moves completed features to `.neural/archive/`; runs `neural-learn` |
 | `neural-learn` | Synthesizes archived features into `.neural/knowledge/` |
-| `neural-debug` | Root-cause investigation: reproduce, instrument, trace, fix |
+| `neural-help` | Shows all commands and the recommended workflow |
 
 ## Artifacts
 
@@ -67,7 +67,7 @@ All Neural artifacts live in `.neural/` at your project root:
 |---|---|
 | `neural-quick` | Just ask your agent — the fast path is not invoking Neural |
 | `neural-status` | Ask your agent to inspect `.neural/wip/` |
-| `neural-help` | This README |
+| `neural-debug` | Just ask your agent to debug — models do this well by default |
 | `neural-sync` | Execute reports deviations; archived specs are historical documents |
 | `neural-address-review` | `neural-review` fixes its own findings on request |
 | `neural-plan --visual` | Removed |

@@ -9,7 +9,7 @@ Verify that the implementation delivers what `CONTEXT.md` and `PLAN.md` promised
 
 ## 1. Locate the feature
 
-Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop. Read `CONTEXT.md` and `PLAN.md` (both required — abort if missing: "cannot review without specs") and any ADRs under `docs/adr/`.
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop. Read `CONTEXT.md` and `PLAN.md` (both required — abort if missing: "cannot review without specs") and any ADRs under `docs/adr/`. If `PLAN.md` has a `## Skills to load` section, load each listed skill now — the same guidance that shaped the plan and the code applies to judging it.
 
 ## 2. Layer 1 — Plan vs implementation
 
