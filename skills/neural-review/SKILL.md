@@ -13,7 +13,7 @@ Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use i
 
 ## 2. Layer 1 — Plan vs implementation
 
-For each task in `PLAN.md`, gather evidence: the listed files exist and were changed (Glob/Read), the expected symbols exist (Grep), and a test covers each entry in the task's Behaviors to verify. Status per task: `✓ completed` / `⚠️ partial` / `✗ missing`. Score `X/Y` (partial = 0.5). Execute's report may declare deviations — verify the deviation is real and sound, don't just accept it.
+For each task in `PLAN.md`, gather evidence: the listed files exist and are substantive (Glob/Read) — with git, confirm they actually changed (`git log`/`git diff -- <path>`) — the expected symbols exist (Grep), and a test covers each entry in the task's Behaviors to verify. Status per task: `✓ completed` / `⚠️ partial` / `✗ missing`. Score `X/Y` (partial = 0.5). Execute's report may declare deviations — verify the deviation is real and sound, don't just accept it.
 
 ## 3. Anti-pattern scan
 
@@ -29,7 +29,7 @@ Grep the changed files:
 
 ## 4. Layer 2 — Goal-backward verification
 
-From the **Problem** section of `CONTEXT.md`, derive **observable truths** — testable statements that must hold if the problem is truly solved (e.g., "a user can POST `/api/orders` and receive 201 with an order id"). Verify each at four levels:
+From the **Problem** section of `CONTEXT.md` and the `## Acceptance Criteria` of `PLAN.md`, derive **observable truths** — testable statements that must hold if the problem is truly solved; every acceptance criterion maps to at least one truth (e.g., "a user can POST `/api/orders` and receive 201 with an order id"). Verify each at four levels:
 
 - **L1 EXISTS** — the artifact is at the expected path.
 - **L2 SUBSTANTIVE** — real implementation, not a stub *and not a reduced version of the requirement*: no empty bodies, `NotImplementedError`, hardcoded mocks, or "v1 / for now / basic version" of a `CONTEXT.md` decision. No concrete evidence = FAIL, not PASS.

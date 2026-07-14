@@ -34,7 +34,7 @@ Cross-reference with code: when the user states how something works, check the c
 
 Surface assumptions as you go: when you catch yourself inferring an unstated requirement, state it inline as an assumption and invite correction — don't wait for the end.
 
-Update `CONTEXT.md` inline as terms resolve — don't batch. Its `Language` section is a strict glossary — no implementation details, no decisions, no acceptance criteria (those have their own sections). The document as a whole is a lightweight context capture, not a full spec. Use [CONTEXT-FORMAT.md](./references/CONTEXT-FORMAT.md).
+Update `CONTEXT.md` inline as terms resolve — don't batch. Use [CONTEXT-FORMAT.md](./references/CONTEXT-FORMAT.md).
 
 Offer an ADR only when all three hold: hard to reverse, surprising without context, the result of a real trade-off. Otherwise skip it. Use [ADR-FORMAT.md](./references/ADR-FORMAT.md).
 

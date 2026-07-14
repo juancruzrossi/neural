@@ -22,16 +22,6 @@ Add only when they earn their place:
 - **Considered Options** — when rejected alternatives are worth remembering.
 - **Consequences** — when non-obvious downstream effects need calling out.
 
-## When to write one
-
-All three must hold:
-
-1. **Hard to reverse** — changing your mind later costs real effort.
-2. **Surprising without context** — a future reader will wonder "why?"
-3. **The result of a real trade-off** — genuine alternatives existed.
-
-Skip otherwise.
-
 ## What qualifies
 
 - **Architectural shape** — monorepo vs polyrepo, event-sourced write model, projection-based reads.

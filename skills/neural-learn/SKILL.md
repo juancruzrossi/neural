@@ -18,7 +18,7 @@ description: "Harvest knowledge from archived features into .neural/knowledge/ �
    For each directory in `.neural/archive/*/`, read:
    - `CONTEXT.md` — `Language` section (domain terms) and feature decisions
    - `PLAN.md` — tech stack signals: test runner command, frameworks, file structure patterns
-   - `REVIEW.md` — every CRITICAL and WARNING finding
+   - `REVIEW.md` — every Blocking and Warning finding
    - `docs/adr/*.md` — architectural decisions
 
 4. **Synthesize into `.neural/knowledge/`.** Write or update all four files. Every archived feature must be reflected before this step is complete.
@@ -41,7 +41,7 @@ description: "Harvest knowledge from archived features into .neural/knowledge/ �
    **`ANTIPATTERNS.md`** — patterns that blocked or warned in review:
    - Only findings that appear in 2+ `REVIEW.md` files — single occurrences are noise
    - Grouped by category (test quality, architecture, scope creep, code style)
-   - Each entry: pattern, severity (CRITICAL / WARNING), provenance (`[feature-a, feature-b]`)
+   - Each entry: pattern, severity (Blocking / Warning), provenance (`[feature-a, feature-b]`)
 
 5. **Report.**
    ```

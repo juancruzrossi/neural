@@ -51,6 +51,7 @@ Skip entirely if `CONTEXT.md` says `**Git:** no` or there is no git repo.
 Show the task → files mapping and ask: commit now (one commit per task, in order) / show full diff first / leave unstaged. If committing:
 
 - Stage each task's files by explicit path. Never `git add -A`, `git add .`, or `--no-verify`. Exclude `.neural/**`.
+- If a file carries changes you didn't make, stop and surface it — never commit work that isn't yours.
 - If tasks share a file, fold those tasks into a single combined commit rather than misattributing the file to the last task.
 - Message: `<type>(<feature-slug>): <task-title>` — type inferred (feat / fix / refactor / chore / test / docs).
 - If a commit hook fails, stop and ask: fix & retry / skip / abort.

@@ -18,7 +18,7 @@ Read `.neural/wip/<feature>/CONTEXT.md` (required — stop and point to neural-i
 
 1. If `.neural/knowledge/` exists, read it first — its stack, conventions, decisions, and anti-patterns are established facts.
 2. Read the source related to the feature — models, routes, components, tests — and note the existing patterns to follow.
-3. Detect the test runner and its canonical command (e.g., `pnpm test`, `pytest -q`); execute needs it.
+3. Detect the test runner and its canonical command (e.g., `pnpm test`, `pytest -q`); execute needs it. None detected: ask the user how behaviors will be verified before writing the plan.
 4. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
 
 ## 3. Generate PLAN.md
