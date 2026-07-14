@@ -56,3 +56,5 @@ ADRs: <count>
 Open items: <count>
 Next: neural-plan
 ```
+
+After the report, let the user know if there is any further information you think you need in order to succeed at this feature — missing access, unclear domain areas, decisions you'd want before planning.
