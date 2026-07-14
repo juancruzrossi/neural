@@ -58,17 +58,3 @@ All Neural artifacts live in `.neural/` at your project root:
     ├── DECISIONS.md         cross-feature architectural decisions
     └── ANTIPATTERNS.md      recurring review findings (2+ occurrences)
 ```
-
-## Migrating from 1.x
-
-2.0 cuts the framework to its load-bearing core. Removed commands and where their job went:
-
-| Removed | Replacement |
-|---|---|
-| `neural-quick` | Just ask your agent — the fast path is not invoking Neural |
-| `neural-status` | Ask your agent to inspect `.neural/wip/` |
-| `neural-debug` | Just ask your agent to debug — models do this well by default |
-| `neural-sync` | Execute reports deviations; archived specs are historical documents |
-| `neural-address-review` | `neural-review` fixes its own findings on request |
-| `neural-plan --visual` | Removed |
-| `neural-plan --skills` | Ask for skills in plain words; the plan records them under `Skills to load` |

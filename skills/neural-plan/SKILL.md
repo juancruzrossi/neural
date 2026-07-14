@@ -10,7 +10,7 @@ Generate an implementation plan from the feature `CONTEXT.md` produced by interv
 
 ## 1. Locate the feature
 
-Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop and point to neural-interview. If `$ARGUMENTS` carries a flag from 1.x (`--visual`, `--skills`), tell the user it was removed in 2.0 and continue without it.
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop and point to neural-interview.
 
 Read `.neural/wip/<feature>/CONTEXT.md` (required — stop and point to neural-interview if missing) and any ADRs under `.neural/wip/<feature>/docs/adr/` — treat them as binding.
 
