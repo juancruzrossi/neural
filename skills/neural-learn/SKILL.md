@@ -5,8 +5,6 @@ description: "Harvest knowledge from archived features into .neural/knowledge/ �
 
 # Neural Learn — Harvest and Synthesize
 
-Harvest knowledge from `.neural/archive/` and synthesize it into `.neural/knowledge/` — a shared context base that future interviews and plans draw from automatically.
-
 ## Steps
 
 1. **Check the archive.** List all feature directories in `.neural/archive/`. If none exist, stop: "No archived features yet. Run neural-archive after completing a feature."
@@ -48,10 +46,8 @@ Harvest knowledge from `.neural/archive/` and synthesize it into `.neural/knowle
 5. **Report.**
    ```
    Knowledge base updated: .neural/knowledge/
-   — PROJECT-CONTEXT.md  (stack, conventions, patterns)
-   — GLOSSARY.md         (<N> terms)
-   — DECISIONS.md        (<N> cross-feature decisions)
-   — ANTIPATTERNS.md     (<N> recurring patterns)
-
-   Loaded automatically on next neural-interview and neural-plan.
+   — PROJECT-CONTEXT.md
+   — GLOSSARY.md      (<N> terms)
+   — DECISIONS.md     (<N> decisions)
+   — ANTIPATTERNS.md  (<N> patterns)
    ```

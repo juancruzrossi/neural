@@ -5,7 +5,7 @@ description: "Test-driven execution loop — one task at a time, red→green→r
 
 # Neural Execute — Test-Driven Execution Loop
 
-Execute the implementation plan in `PLAN.md`. Work the tasks sequentially, one at a time, in dependency order. For each task, follow the vertical-slice TDD loop in [TDD.md](./references/TDD.md): one test → minimal implementation → next test. Never batch tests, never batch implementation.
+Execute the implementation plan in `PLAN.md`, one task at a time.
 
 ## 1. Locate the feature
 
@@ -21,7 +21,7 @@ Read from `.neural/wip/<feature>/`:
 
 Read [TDD.md](./references/TDD.md) before the first task — it defines the red→green→refactor loop, what a good test is, and when to mock. Run tasks in table order, respecting `Depends on`.
 
-For each behavior in the task: write ONE failing test, confirm it fails for the right reason, write the minimum code to pass, confirm green. Only when all behaviors are green: refactor, keeping tests green. Tasks with `Behaviors to verify: N/A` skip the loop — make the change and verify via build/lint as the plan states.
+Tasks with `Behaviors to verify: N/A` skip the loop — make the change and verify via build/lint as the plan states.
 
 ### Deviations
 

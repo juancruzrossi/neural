@@ -6,7 +6,7 @@ argument-hint: "[feature]"
 
 # Neural Plan — Implementation Planning
 
-Generate an implementation plan from the feature `CONTEXT.md` produced by interview. The plan feeds a test-driven execution loop, so every task must declare the **behaviors** it will deliver. Each behavior becomes one red→green slice in neural-execute.
+Generate an implementation plan from the feature `CONTEXT.md` produced by interview.
 
 ## 1. Locate the feature
 
@@ -20,8 +20,6 @@ Read `.neural/wip/<feature>/CONTEXT.md` (required — stop and point to neural-i
 2. Read the source related to the feature — models, routes, components, tests — and note the existing patterns to follow.
 3. Detect the test runner and its canonical command (e.g., `pnpm test`, `pytest -q`); execute needs it.
 4. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
-
-A plan grounded in the actual codebase is dramatically more executable than one based on guesswork.
 
 ## 3. Generate PLAN.md
 
@@ -38,7 +36,7 @@ Write `.neural/wip/<feature>/PLAN.md`:
 
 ## Skills to load
 <!-- Only if the user asked for specific skills to shape this work: list each one
-     with a one-line reason. Execute loads them before coding. Omit otherwise. -->
+     with a one-line reason. Omit otherwise. -->
 
 ## Tasks
 
