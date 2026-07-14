@@ -18,6 +18,7 @@ Respond in the user's language. Write `CONTEXT.md` and ADRs in that same languag
 3. Scan for existing context: `CONTEXT-MAP.md` (multi-context) or root `CONTEXT.md` (single-context), `docs/adr/`, related source and tests, and `.neural/{wip,archive}/*/CONTEXT.md`.
 4. If `.neural/knowledge/` exists, read it — treat its glossary terms as established and decisions as binding.
 5. If `CONTEXT-MAP.md` exists, infer which bounded context this feature belongs to; ask only if unclear.
+6. Before starting the interview, let the user know if there is any further information you think you need in order to succeed at this feature.
 
 Create files lazily — only when there is something to write. Don't create `.neural/wip/<feature>/` until the first section is ready.
 
@@ -56,5 +57,3 @@ ADRs: <count>
 Open items: <count>
 Next: neural-plan
 ```
-
-After the report, let the user know if there is any further information you think you need in order to succeed at this feature.
