@@ -23,8 +23,10 @@ description: "Harvest knowledge from archived features into .neural/knowledge/ �
 
 4. **Synthesize into `.neural/knowledge/`.** Write or update all four files. Every archived feature must be reflected before this step is complete.
 
+   **First feature (n=1):** the cross-feature thresholds below leave most files thin — that's correct, not a failure. Fill `GLOSSARY.md` and the stack facts in `PROJECT-CONTEXT.md`; record decisions and recurring-pattern candidates as single-provenance; write `ANTIPATTERNS.md` as `none yet — needs 2+ features`. Never invent cross-feature impact to fill a file.
+
    **`PROJECT-CONTEXT.md`** — project-level facts every feature inherits:
-   - Tech stack: language, framework, test runner with exact command
+   - Tech stack: language and supported runtime version from manifests, framework, test runner with exact command
    - Structural conventions: naming patterns, folder layout, import style derived from the archive
    - Architectural patterns that recur across 2+ features
 
@@ -35,6 +37,7 @@ description: "Harvest knowledge from archived features into .neural/knowledge/ �
 
    **`DECISIONS.md`** — cross-feature architectural decisions:
    - Only decisions with impact beyond the originating feature
+   - One feature is enough when the decision already constrains future work outside it; recurrence is not required
    - Each entry: decision summary, rationale, provenance (`[feature-name]`)
    - Feature-specific ADRs that have no cross-cutting impact are excluded
 

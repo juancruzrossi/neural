@@ -29,7 +29,7 @@ Honor the `Decision Boundaries` section of `CONTEXT.md` first — it overrides t
 
 - **Auto-fix** (mention in report): bugs found while implementing, missing imports, build/lint errors you caused.
 - **Auto-add** (flag in report): input validation, error handling for obvious failure paths, null guards on data you consume.
-- **Stop and report BLOCKED**: schema changes, new external dependencies, public API changes, new architectural patterns, files outside the task's list. When unsure, do less and report — honest incomplete work beats confident wrong work.
+- **Stop and report BLOCKED**: schema changes, new external dependencies, public API changes, new architectural patterns, files outside the task's list.
 
 Never rewrite `PLAN.md` to match what you built — deviations are recorded in your report, so review can still compare the implementation against the approved plan.
 
@@ -39,10 +39,12 @@ Never rewrite `PLAN.md` to match what you built — deviations are recorded in y
 
 1. Run the full test suite; fix any regression you caused before moving on. Run build and lint if configured.
 2. Record: title, status (`DONE` / `DONE_WITH_CONCERNS` — say the concern / `BLOCKED` — say what's missing), files touched, deviations.
-3. Do not commit yet.
+3. Do not commit yet — commits happen in the commit phase below.
 4. Print: `Progress: <done>/<total> — Task <N> "<title>": <status>`
 
 After all tasks: sweep modified files for AI noise (comments restating code, stray debug output), then re-run the suite.
+
+Write `.neural/wip/<feature>/EXECUTION.md` before the commit phase. Keep it compact: one row per task with status and files; for each planned behavior, record `RED observed` with the failing assertion reason, `already green`, or `N/A`; then deviations, verification commands with outcomes, and blockers. This is the durable handoff to a fresh reviewer; never claim a RED→GREEN cycle you did not actually observe.
 
 ## 4. Commit phase (always ask first)
 
@@ -52,7 +54,7 @@ Show the task → files mapping and ask: commit now (one commit per task, in ord
 
 - Stage each task's files by explicit path. Never `git add -A`, `git add .`, or `--no-verify`. Exclude `.neural/**`.
 - If a file carries changes you didn't make, stop and surface it — never commit work that isn't yours.
-- If tasks share a file, fold those tasks into a single combined commit rather than misattributing the file to the last task.
+- If tasks share a file, fold those tasks into a single combined commit rather than misattributing the file to the last task. A feature whose tasks all deepen one module is therefore one commit — expected, not a failure of the per-task rule.
 - Message: `<type>(<feature-slug>): <task-title>` — type inferred (feat / fix / refactor / chore / test / docs).
 - If a commit hook fails, stop and ask: fix & retry / skip / abort.
 
@@ -63,6 +65,7 @@ Feature: <feature-name>
 Tasks: <done>/<total>  (blocked/skipped: <count>)
 Deviations: <list or "none">
 Commits: <count>  (or "none — left unstaged")
+Execution: .neural/wip/<feature>/EXECUTION.md
 ```
 
 All green: suggest **"Ready to verify? Run neural-review."** Anything blocked or skipped: surface it first.

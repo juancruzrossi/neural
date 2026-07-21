@@ -50,7 +50,7 @@ All Neural artifacts live in `.neural/` at your project root:
 
 ```
 .neural/
-├── wip/<feature>/        CONTEXT.md · docs/adr/ · PLAN.md · REVIEW.md
+├── wip/<feature>/        CONTEXT.md · docs/adr/ · PLAN.md · EXECUTION.md · REVIEW.md
 ├── archive/<feature>/    same layout, completed
 └── knowledge/            built by neural-learn after each archive
     ├── PROJECT-CONTEXT.md   stack, conventions, recurring patterns

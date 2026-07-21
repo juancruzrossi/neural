@@ -1,6 +1,6 @@
 ---
 name: neural-interview
-description: "Socratic interview that captures domain language, decisions, and ADRs inside .neural/wip/<feature>/"
+description: "Socratic interview that captures domain language, decisions, and ADRs in a Neural feature workspace"
 ---
 
 # Neural Interview — Clarify Before You Build
@@ -18,7 +18,6 @@ Respond in the user's language. Write `CONTEXT.md` and ADRs in that same languag
 3. Scan for existing context: `CONTEXT-MAP.md` (multi-context) or root `CONTEXT.md` (single-context), `docs/adr/`, related source and tests, and `.neural/{wip,archive}/*/CONTEXT.md`.
 4. If `.neural/knowledge/` exists, read it — treat its glossary terms as established and decisions as binding.
 5. If `CONTEXT-MAP.md` exists, infer which bounded context this feature belongs to; ask only if unclear.
-6. Let the user know if there is any further information you think you need in order to succeed at this feature.
 
 Create files lazily — only when there is something to write. Don't create `.neural/wip/<feature>/` until the first section is ready.
 
@@ -28,13 +27,13 @@ Challenge the glossary: when a term conflicts with existing language in `CONTEXT
 
 Sharpen fuzzy language: when a term is vague or overloaded, propose one canonical name and reject the rest. Be opinionated.
 
-Stress-test relationships: **invent** concrete scenarios that probe edge cases and force the user to be precise about the boundaries between concepts — ownership, cardinality, lifecycle.
+Stress-test relationships: **invent** concrete scenarios that probe edge cases and force the user to be precise about the boundaries between concepts — ownership, cardinality, lifecycle — and about the domain of each value — sign, zero, empty, bounds, concurrency, failure, time and expiry, retries. Cover the dimensions the feature actually has; skip the ones it doesn't.
 
-Cross-reference with code: when the user states how something works, check the code agrees. Surface contradictions.
+Cross-reference with code (when a codebase already exists): when the user states how something works, check the code agrees. Surface contradictions.
 
 Surface assumptions as you go: when you catch yourself inferring an unstated requirement, state it inline as an assumption and invite correction — don't wait for the end.
 
-Update `CONTEXT.md` inline as terms resolve — don't batch. Use [CONTEXT-FORMAT.md](./references/CONTEXT-FORMAT.md).
+Update `CONTEXT.md` as terms resolve. Use [CONTEXT-FORMAT.md](./references/CONTEXT-FORMAT.md).
 
 Offer an ADR only when all three hold: hard to reverse, surprising without context, the result of a real trade-off. Otherwise skip it. Use [ADR-FORMAT.md](./references/ADR-FORMAT.md).
 

@@ -19,6 +19,8 @@ After ALL behaviors are green:
 - Test the behaviors the task lists; don't invent extra edge cases.
 - **Never write all tests first, then all code** (horizontal slicing). Bulk tests describe *imagined* behavior, drift toward asserting shape instead of outcomes, and lock in a design before the code teaches you anything. Each cycle is a tracer bullet informed by the last.
 - Never refactor while RED. Green first, always.
+- On a new module the first RED cannot fail on an assertion because nothing exists yet — write a minimal skeleton (an empty function, an unregistered route) first, so the first failure is the assertion (`expected 201, got 404`), not a missing import.
+- If a planned behavior is already green the first time you test it — earlier code generalized to cover it — don't fabricate a failure. Keep the test as a regression guard, note it in the report, and move on.
 - After a clean run, don't re-run the same command unless code changed.
 
 ## Good and bad tests
