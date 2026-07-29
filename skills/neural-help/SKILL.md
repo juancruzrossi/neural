@@ -1,26 +1,30 @@
 ---
 name: neural-help
-description: "Show all Neural commands and the recommended workflow"
+description: "Route users through the Neural workflow and show the right starting command"
 ---
 
 # Neural Help
 
-Print the command reference below, with names adapted to the platform: `/neural:<name>` in Claude Code, `$<name>` in Codex (default to Claude Code style if unclear). Print only the reference — no extra explanation.
+Adapt command names to the platform: `/neural:<name>` in Claude Code and
+`$<name>` in Codex. Print a concise reference. If the user describes a goal,
+also name the command that starts it.
 
 ```text
-Neural SDD — Commands
+Neural SDD
+
+Start a substantial feature:
+  neural-interview "<goal>"
 
 Workflow:
-  neural-interview   Socratic interview → CONTEXT.md (requirements, glossary, ADRs)
-  neural-plan        Sequential task plan with testable behaviors → PLAN.md
-  neural-execute     Test-driven execution — one task at a time, red→green→refactor
-  neural-review      Plan vs implementation + goal-backward verification → REVIEW.md
-                     (fixes its own findings on request)
-  neural-archive     Move the completed feature from wip/ to archive/
-  neural-learn       Synthesize archived features into .neural/knowledge/
+  neural-interview   Clarify scope, language, decisions, and acceptance → CONTEXT.md
+  neural-plan        Write a stable, shareable product specification → PLAN.md
+  neural-execute     Plan just in time and implement with honest evidence → EXECUTION.md
+  neural-review      Verify goal, implementation, and test quality → REVIEW.md
+  neural-archive     Freshness-check and archive a verified feature
+  neural-learn       Rebuild project knowledge from all archives
 
-Utilities:
-  neural-help        This reference
+Utility:
+  neural-help        Show this reference
 
-Flow: interview → plan → execute → review → archive (→ learn runs automatically)
+Flow: interview → plan → execute → review → archive → learn
 ```

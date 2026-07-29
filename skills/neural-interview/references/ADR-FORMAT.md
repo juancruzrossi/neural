@@ -1,33 +1,21 @@
-# ADR Format
+# ADR Interface
 
 Path: `.neural/wip/<feature>/docs/adr/NNNN-slug.md`.
 
-Numbering: scan existing `docs/adr/` (root and feature), take the highest number, increment.
-
-## Template
+Scan root and feature ADRs, then increment the highest number.
 
 ```md
 # <Decision>
 
-<1-3 sentences: context, decision, why.>
+<Context, chosen option, and why it wins.>
 ```
 
-A single paragraph is often enough. The value is recording *that* a decision was made and *why* — not filling sections.
+One paragraph is often enough. Add considered options, consequences, or status
+only when they preserve non-obvious information.
 
-## Optional sections
-
-Add only when they earn their place:
-
-- **Status** frontmatter (`proposed | accepted | deprecated | superseded by ADR-NNNN`) — when decisions get revisited.
-- **Considered Options** — when rejected alternatives are worth remembering.
-- **Consequences** — when non-obvious downstream effects need calling out.
-
-## What qualifies
-
-- **Architectural shape** — monorepo vs polyrepo, event-sourced write model, projection-based reads.
-- **Integration patterns** — events vs sync HTTP, shared DB vs API, queue topology.
-- **Technology choices with lock-in** — database, message bus, auth provider, deployment target. Not every library — only ones that would take weeks to swap.
-- **Boundary and scope decisions** — which context owns which data; the explicit "no"s are as valuable as the "yes"s.
-- **Deliberate deviations from the obvious path** — manual SQL instead of an ORM, custom auth instead of a provider. Stops the next engineer from "fixing" something deliberate.
-- **Constraints invisible in code** — compliance limits, partner SLAs, hardware ceilings.
-- **Rejected alternatives with non-obvious reasoning** — otherwise someone will re-propose them in six months.
+An ADR earns its place when changing the decision would be expensive, its
+rationale is invisible in code, or a future engineer would reasonably reopen
+the trade-off. Typical cases are architectural boundaries, integration
+patterns, technology lock-in, compliance constraints, and deliberate
+deviations. Ordinary library choices and reversible implementation details do
+not need ADRs.

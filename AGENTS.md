@@ -5,18 +5,17 @@ A Spec-Driven Development plugin for AI coding agents. It ships as a plugin for 
 - Claude Code: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`
 - Codex: `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json`
 
-## Versioning (do this on EVERY change)
-`version` is duplicated across manifests and must stay in sync. On every change that ships (skills, docs, behavior), bump the version (semver) in ALL of:
+## Versioning (do this on EVERY release)
+Each platform has one authoritative plugin manifest. On every release, bump the same semver version in:
 1. `.codex-plugin/plugin.json` — Codex manifest version
 2. `.claude-plugin/plugin.json`
-3. `.claude-plugin/marketplace.json`
 
-Use the same version string in all three.
+Do not duplicate plugin versions in marketplace catalogs. Claude resolves the version from `.claude-plugin/plugin.json`; Codex resolves it from `.codex-plugin/plugin.json`.
 
 ## When adding or removing skills
 1. Create/delete the skill directory in `skills/`
 2. Update `README.md` — add/remove the skill section
-3. Bump the version in all three manifests (see Versioning above)
+3. Bump the version in both plugin manifests (see Versioning above)
 
 ## Conventions
 - Skill logic lives in `SKILL.md` — one per skill. Auxiliary reference files (e.g., format templates) may sit alongside `SKILL.md` and be linked from it, so they load on-demand and keep `SKILL.md` light at trigger time.
@@ -24,6 +23,7 @@ Use the same version string in all three.
 - Skill folders use `neural-` prefixed names (`neural-interview`, `neural-plan`, etc.) so skills stay namespaced on every platform
 - Claude Code invokes skills as `/neural:<name>` (e.g., `/neural:neural-plan`)
 - Codex invokes skills with `$<name>` (e.g., `$neural-plan`) or implicit matching
+- Code examples in skills and references use Python. Use Bash only for shell commands and `md` or `text` for artifact templates.
 - Descriptions: just `"<what it does>"` — no boilerplate prefixes or suffixes
 - Commits: conventional commits in English
 - PRs: squash & merge, delete branch after

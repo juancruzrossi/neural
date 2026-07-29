@@ -1,63 +1,91 @@
-# TDD — The Vertical-Slice Loop
+# Behavior-First Test Loop
 
-Tests verify **behavior through public interfaces**, not implementation details. Implementations can change entirely; tests should not. A good test reads like a specification — "user can checkout with a valid cart" — and survives internal refactors because it never looked inside.
+Test observable behavior through the highest practical public interface.
+Use the interface agreed in `PLAN.md`; test names and fixtures should use the
+domain language in `CONTEXT.md`.
 
-A **seam** is the public boundary you test at. Test only at seams: prefer existing ones, and the highest one that observes the behavior.
+For each behavior or tightly related partition:
 
-## The loop
+1. **RED** — add a focused test and run it. Confirm it fails because the
+   promised outcome is absent, not because of a typo or broken fixture.
+2. **GREEN** — make the smallest coherent implementation change and run it.
+3. **REFACTOR** — improve the design while the relevant tests remain green.
 
+If a behavior is already green, keep the regression test when it adds evidence
+and record `already green`. Never weaken code or tests to manufacture RED.
+When a new module cannot import, a minimal compilable entry point is acceptable
+before the first behavioral failure.
+
+A strong test:
+
+- observes the public result and every state dimension named by the contract;
+- derives expected values independently of the implementation;
+- could fail if the promised property were broken;
+- survives an internal rewrite that preserves behavior.
+
+```python
+# GOOD: observable outcome, public interface, domain language from CONTEXT.md
+def test_user_can_checkout_with_a_valid_cart(cart, payment_method):
+    result = checkout(cart, payment_method)
+
+    assert result.status == "confirmed"
+
+
+# BAD: asserts a private collaboration
+def test_checkout_calls_payment_service(cart, payment_method, mock_payment):
+    checkout(cart, payment_method)
+
+    mock_payment.process.assert_called_once_with(cart.total)
 ```
-For each behavior in the task:
-  RED    → write ONE test → run → confirm it fails for the right reason
-           (the assertion — not a typo or missing import)
-  GREEN  → write the minimum code to pass → run → confirm green
-After ALL behaviors are green:
-  REFACTOR → improve names, extract duplication, deepen modules → tests still green
-```
-
-- One test at a time. Only enough code to pass it — don't anticipate the next test.
-- Test the behaviors the task lists; don't invent extra edge cases.
-- **Never write all tests first, then all code** (horizontal slicing). Bulk tests describe *imagined* behavior, drift toward asserting shape instead of outcomes, and lock in a design before the code teaches you anything. Each cycle is a tracer bullet informed by the last.
-- Never refactor while RED. Green first, always.
-- On a new module the first RED cannot fail on an assertion because nothing exists yet — write a minimal skeleton (an empty function, an unregistered route) first, so the first failure is the assertion (`expected 201, got 404`), not a missing import.
-- If a planned behavior is already green the first time you test it — earlier code generalized to cover it — don't fabricate a failure. Keep the test as a regression guard, note it in the report, and move on.
-- After a clean run, don't re-run the same command unless code changed.
-
-## Good and bad tests
-
-The one question: **would this test still pass if I rewrote the internals but kept the behavior?** If no, it is coupled to implementation and will fight every refactor.
-
-```typescript
-// GOOD: observable outcome, public interface, domain language from CONTEXT.md
-test("user can checkout with a valid cart", async () => {
-  const result = await checkout(cart, paymentMethod);
-  expect(result.status).toBe("confirmed");
-});
-
-// BAD: asserts a private collaboration
-test("checkout calls paymentService.process", async () => {
-  expect(mockPayment.process).toHaveBeenCalledWith(cart.total);
-});
-```
-
-Red flags: mocking internal collaborators; asserting call counts or call order; testing private methods; verifying by bypassing the interface (e.g., raw DB query when a getter exists); restating the implementation as the expected value (`expect(add(a, b)).toBe(a + b)`) — expected values come from an independent source: a known-good literal, a worked example, the spec.
 
 Verify through the interface, not around it:
 
-```typescript
-// BAD: bypasses the interface            // GOOD: still works if storage is rewritten
-const row = await db.query("SELECT …");   const retrieved = await getUser(user.id);
-expect(row).toBeDefined();                expect(retrieved.name).toBe("Alice");
+```python
+# BAD: bypasses the public interface
+row = database.execute("SELECT * FROM users WHERE id = ?", (user.id,)).fetchone()
+assert row is not None
+
+# GOOD: survives a storage rewrite
+retrieved = get_user(user.id)
+assert retrieved.name == "Alice"
 ```
 
-One logical assertion per test — needing two usually means two tests.
+For concurrency, retry, rollback, timeout, ordering, cache, or another emergent
+property, actively create the condition that could break the promise. Merely
+using threads, mocks, retries, or a timer is not evidence.
 
-## Mocking
+When adding a verification rule—lint, import boundary, migration guard, schema
+check, or similar—prove that it bites: observe a pass, introduce one disposable
+violation and observe the expected failure, restore it, then observe a pass.
 
-Mock at **system boundaries only** — seams where your code meets something it does not own: external APIs, time and randomness, the filesystem in narrow cases, databases only when a real test DB is infeasible. Never mock your own classes, modules, or internal collaborators — those mocks couple to call shape rather than outcome, so refactors break them while real bugs pass.
+For an atomic multi-step change, atomicity is not complete until all of the
+following evidence exists:
 
-Design boundaries so mocks stay trivial: pass dependencies in rather than constructing them inside, and prefer specific functions per operation (`api.getUser`, `api.createOrder`) over one generic fetcher that forces branching inside the mock.
+1. Inventory every reachable operation from the last validation through final
+   publication that can fail or run caller-controlled code. Include overloaded
+   lookup, comparison, arithmetic, hashing and assignment; callbacks;
+   serialization; allocation; I/O; receipt or event construction; registry
+   insertion; and any rollback operation.
+2. Induce a failure at every inventoried boundary through the highest practical
+   public interface. After each failure, assert every observable state
+   dimension, side effect, and reservation, then retry the same identifier
+   successfully.
+3. Run a disposable negative control against a plausible broken implementation
+   for the atomicity test and for each critical emergent-property detector.
+   Record the observed RED result; repeated green runs are not a negative
+   control.
+4. Record a table in `EXECUTION.md`: boundary, induced failure, observed state,
+   retry result, and negative-control result.
 
-## Refactor candidates (only on green)
+Prefer preparing every fallible result before the first visible mutation and
+publishing once. Catch-and-restore is not atomicity evidence unless the same
+inventory and fault tests also prove that every restore operation can fail
+without exposing partial state.
 
-Duplication → extract. Long methods → helpers, tests stay on the public interface. Shallow pass-through modules → combine or deepen (small interface, complexity hidden inside). Feature envy → move logic to its data. Primitive obsession → value object. Re-run tests after each step; if one breaks, the refactor changed behavior — revert and take a smaller step.
+Avoid private-method assertions, internal call order, circular expectations,
+and mocks of code the project owns. Mock only external system boundaries such
+as network services, time, randomness, or an impractical real datastore.
+
+One test may contain several assertions that jointly prove one behavior.
+Several related cases may be table-driven. The unit of discipline is a
+falsifiable behavior, not an arbitrary assertion count.

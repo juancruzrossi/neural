@@ -1,99 +1,92 @@
 ---
 name: neural-plan
-description: "Implementation planning from CONTEXT.md — sequential vertical-slice tasks, each carrying testable behaviors, with optional adversarial cross-review (Claude Code ⇄ Codex)"
+description: "Synthesize approved discovery into a stable, shareable product spec with public contracts and testing decisions"
+argument-hint: "[feature] [--skills <skill-1>, <skill-2>...]"
 ---
 
-# Neural Plan — Implementation Planning
+# Neural Plan
 
-Generate an implementation plan from the feature `CONTEXT.md` produced by interview.
+Turn approved discovery into `.neural/wip/<feature>/PLAN.md`: the stable product
+specification for teammates and future agent sessions. It defines what will be
+built, not an implementation checklist. Do not create a separate PRD.
 
-## 1. Locate the feature
+## Establish the contract
 
-Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop and point to neural-interview.
+1. Parse `$ARGUMENTS`. `--skills` is the final argument group; split every
+   remaining value on commas, trim separator whitespace, and remove the flag and
+   values from the feature selector. Preserve each complete skill identifier
+   exactly as the user wrote it: do not shorten, translate, or remove its
+   namespace or leading `/` or `$`. Only while resolving the skill for loading,
+   treat that leading character as platform invocation notation. Load every
+   requested skill before planning so its guidance shapes the specification. If
+   one is unavailable, stop and name it.
+2. Resolve the feature from the remaining selector or `.neural/wip/`. If none
+   exists, point to neural-interview; if several exist, ask which one.
+3. Require `CONTEXT.md`. Read it, every feature ADR, and `.neural/knowledge/`
+   when present.
+4. Inspect related code and tests to understand current behavior, domain
+   language, existing public interfaces, and testing precedent. Use that
+   knowledge to keep the spec realistic, not to predict an edit list.
+5. Normalize each public operation and lifecycle transition into its input,
+   success output, errors, next state, and observable side effects. If repeated
+   statements conflict, return the exact conflict to neural-interview.
+6. Run a counterexample check: imagine two reasonable implementations that
+   satisfy the written context. If callers could observe different results for
+   the same input or lifecycle, return the smallest distinguishing product
+   decision to neural-interview.
 
-Read `.neural/wip/<feature>/CONTEXT.md` (required — stop and point to neural-interview if missing) and any ADRs under `.neural/wip/<feature>/docs/adr/` — treat them as binding.
+Do not reopen resolved decisions. Implementation freedom is valid only inside
+the approved decision boundaries.
 
-If the user asked for specific skills to shape this work, load them now before analyzing the code or designing tasks, then record them under `## Skills to load` in `PLAN.md`.
+## Write the specification
 
-## 2. Ground the plan in the codebase
+Use [PLAN-FORMAT.md](./references/PLAN-FORMAT.md). Make it understandable
+without the interview transcript: state the problem, proposed product outcome,
+observable behaviors, public contracts, consequential implementation
+decisions, testing strategy, acceptance criteria, and exclusions.
 
-1. If `.neural/knowledge/` exists, read it first — its stack, conventions, decisions, and anti-patterns are established facts.
-2. Read the source related to the feature — models, routes, components, tests — and note the existing patterns to follow.
-3. Detect the test runner and its canonical command (e.g., `pnpm test`, `pytest -q`); execute needs it. None detected on an existing codebase: ask the user how behaviors will be verified before writing the plan. New project with no runner yet: scaffolding it is Task 1 of the plan.
-4. If `CONTEXT.md` contradicts the code, stop and ask the user to resolve it.
+`PLAN.md` becomes the canonical approved specification. Link `CONTEXT.md` and
+ADRs for discovery history and rationale rather than copying the conversation.
+When `--skills` was provided, include `## Skills to load` and record every
+requested identifier verbatim with a one-line reason grounded in the loaded
+skill's guidance and this feature. Verbatim includes the leading `/` or `$`;
+copy the identifier character for character. Omit the section otherwise.
 
-## 3. Generate PLAN.md
+Keep decisions at product, public-interface, module, schema, or architectural
+level. Do not include exact file paths, an exhaustive task breakdown, edit
+order, progress tracking, or code snippets likely to become stale. A compact
+prototype fragment is valid only when it expresses an approved contract more
+precisely than prose. Write every code fragment in Python.
 
-Write `.neural/wip/<feature>/PLAN.md`:
+Prefer an existing public interface. When the feature creates or materially
+changes one, load [INTERFACE-DESIGN.md](./references/INTERFACE-DESIGN.md) and
+compare alternatives before recording the decision.
 
-```markdown
-# Plan: <feature-name>
+Testing decisions must observe behavior through the same public interface used
+by callers or another established public interface. Internal database, private
+method, filesystem, or log inspection cannot prove product behavior unless that
+surface is itself part of the public contract.
 
-## Overview
-<!-- 2-3 sentences: what will be built and why -->
+Define each behavior once with an ID. Testing decisions and acceptance criteria
+refer to those IDs instead of repeating the behavior. Every behavior ID must
+appear in both sections; no specified behavior sits outside the release gate.
+Include failure states, ordering, retries, concurrency, or rollback only where
+the product promises them.
 
-## Test Runner
-<!-- The exact command. "none detected" if applicable. -->
+Planning is complete only when a teammate can explain what is being built and
+why, behavior IDs have complete testing and acceptance coverage, every behavior
+has a public way to observe it, no product ambiguity remains, and the document
+contains no implementation checklist or placeholder.
 
-## Skills to load
-<!-- Only if the user asked for specific skills to shape this work: list each one
-     with a one-line reason. Omit otherwise. -->
+## Optional adversarial review
 
-## Tasks
+If another supported coding agent is installed, offer one cross-review. Load
+[CROSS-REVIEW.md](./references/CROSS-REVIEW.md) only if the user accepts.
+Never change the specification from external feedback without explicit
+approval. When declined, omit review output.
 
-| # | Task | Depends on |
-|---|------|-----------|
-| 1 | ... | — |
-| 2 | ... | 1 |
+Report the behavior count and major public-interface decisions, then suggest:
+`Ready to execute? Run neural-execute.`
 
-### Task 1: <title>
-- **What**: concrete deliverable
-- **Files**: the files this task will touch
-- **Behaviors to verify**: observable, testable statements — each becomes one red→green slice.
-  - e.g., "Submitting a valid login returns a JWT cookie."
-  - e.g., "Invalid credentials return 401 without a cookie."
-- **Acceptance**: how to know this task is done (usually: all behaviors green + build/lint clean).
-
-<!-- Repeat per task -->
-
-## Acceptance Criteria
-- [ ] <!-- Derived from CONTEXT.md and feature ADRs. -->
-```
-
-Rules:
-
-- Tasks are sequential, atomic vertical slices, numbered from 1, dependencies explicit.
-- Prefer the fewest slices that preserve behavioral progress. Do not split one cohesive module into ceremonial tasks that cannot be reviewed independently.
-- Every task lists Behaviors to verify. Tasks with nothing testable (pure config, dependency bumps) write `Behaviors to verify: N/A — non-testable change` and say how they will be verified instead (build, lint, manual check).
-- **No placeholders.** Banned: "TBD", "TODO", "implement later", "add appropriate error handling" (specify what), "similar to Task N" (spell it out), "add necessary tests" (the Behaviors list IS the test list). If you cannot be specific, the context needs more detail — send the user back to neural-interview.
-- Every Acceptance Criterion must trace to at least one task Behavior, or be listed as explicitly deferred — otherwise it reaches review untested.
-
-## 4. Optional cross-review
-
-Offer an adversarial review from the *other* agent — Claude Code ⇄ Codex:
-
-1. Check the other agent is installed (`codex --version` / `claude --version`). Missing: skip silently to step 5.
-2. Ask: **"<other agent> is available. Send this plan for adversarial review?"** Declined: skip to step 5.
-3. Run it — feed the prompt on stdin, pass file references (never inline content), and read the review from the output file, not stdout. The call can take several minutes to boot: allow a generous timeout (≥5 min). A non-zero exit or empty output file means the review did not complete: report it unavailable and continue to step 5; never treat it as a clean review.
-
-   ```bash
-   # Claude Code → Codex:
-   mkdir -p /tmp/.neural
-   codex exec --ephemeral -C "$PWD" -s read-only -o /tmp/.neural/<feature>-review.md - <<'PROMPT'
-   ...
-   PROMPT
-
-   # Codex → Claude Code:
-   mkdir -p /tmp/.neural
-   claude --print --no-session-persistence --allowedTools "Read,Grep,Glob" > /tmp/.neural/<feature>-review.md <<'PROMPT'
-   ...
-   PROMPT
-   ```
-
-   Prompt body: adversarial reviewer for <project> (<stack>); review the plan against the context and ADRs — critical issues, missing edge cases, dependency gaps, and behaviors coupled to implementation rather than observable through the public interface; do not invent files or symbols — say "unverified" when unsure; cite task numbers; keep the whole review under 400 words; review only, apply nothing. Reference `@.neural/wip/<feature>/CONTEXT.md`, `@.neural/wip/<feature>/PLAN.md`, `@.neural/wip/<feature>/docs/`.
-
-4. Show the full review and ask: apply all / cherry-pick / ignore. Never modify the plan without explicit approval.
-
-## 5. Finalize
-
-Print a summary — task count, total behaviors — and suggest: **"Ready to execute? Run neural-execute."**
+Leave the specification local. Never stage, commit, or push; preserve
+pre-existing staged and unrelated changes as found.

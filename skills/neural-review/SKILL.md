@@ -1,73 +1,96 @@
 ---
 name: neural-review
-description: "Plan vs implementation verification with goal-backward analysis and test-quality audit — then fixes findings on request"
+description: "Review implementation and test evidence against the approved feature goal, then seal the reviewed state"
 ---
 
-# Neural Review — Verification
+# Neural Review
 
-Verify that the implementation delivers what `CONTEXT.md` and `PLAN.md` promised, and that the tests prove behavior rather than shape. Guard against **confirmation bias**: the plan is not proof. Gather fresh evidence (read files, run tests, grep) on every run — never reuse a previous `REVIEW.md`.
+Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
-## 1. Locate the feature
+## Establish scope
 
-Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop. Set `$WIP=.neural/wip/<feature>`. Read `$WIP/CONTEXT.md` and `$WIP/PLAN.md` (both required — abort if missing: "cannot review without specs"), `$WIP/EXECUTION.md` if present, and every ADR under `$WIP/docs/adr/`. List the ADR paths in the evidence section so a missing glob cannot silently become "no ADRs." If `PLAN.md` has a `## Skills to load` section, load each listed skill now.
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/`. Require `CONTEXT.md`
+and `PLAN.md`; read `EXECUTION.md`, every feature ADR, and any skills listed in
+the plan.
 
-## 2. Layer 1 — Plan vs implementation
+Identify the product and test files implicated by the actual changes. Read them,
+inspect relevant wiring, and run the canonical suite plus targeted probes when
+the suite cannot prove a promised property.
 
-For each task in `PLAN.md`, gather evidence: the listed files exist and are substantive (Glob/Read) — with git, confirm they actually changed (`git log`/`git diff -- <path>`) — the expected symbols exist (Grep), and a test covers each entry in the task's Behaviors to verify. Status per task: `✓ completed` / `⚠️ partial` / `✗ missing`. Score `X/Y` (partial = 0.5). Execute's report may declare deviations — verify the deviation is real and sound, don't just accept it.
+Identify repo standards that apply to changed files, including `AGENTS.md`,
+`CLAUDE.md`, `CONTRIBUTING.md`, and local equivalents.
 
-## 3. Anti-pattern scan
+## Verify on two independent axes
 
-Grep the changed files. The searches below are polyglot examples — run the ones matching the repo's language(s), skip idioms from ecosystems not present (don't report a clean scan for greps that couldn't have hit). Before flagging an empty implementation, confirm the token is the function's *entire* body: a `return null` / `{}` / `pass` used as a sentinel inside real logic is fine.
+Complete both passes. Do not let strength on one axis compensate for failure on
+the other.
 
-| Pattern | Search | Severity |
-|---------|--------|----------|
-| Incomplete work | `TODO`, `FIXME`, `XXX`, `HACK` | Warning |
-| Placeholder content | `placeholder`, `coming soon`, `lorem ipsum` | Blocking |
-| Empty implementations | `return null` / `return {}` / `pass` as sole body | Blocking |
-| Hardcoded secrets | `sk_test_`, `your-api-key-here`, `password123` | Blocking |
-| Debug leftovers | `console.log`, `print(`, `debugger` | Warning |
+### Product fidelity
 
-## 4. Layer 2 — Goal-backward verification
+1. Check each specified behavior against substantive files, wiring, and fresh
+   command results. Verify declared deviations rather than accepting them.
+2. Derive observable truths from the product outcome and every acceptance
+   criterion.
+   For each truth, establish that the implementation exists, is substantive,
+   is reachable through the intended public interface, and produces the
+   promised outcome.
 
-From the **Problem** section of `CONTEXT.md` and the `## Acceptance Criteria` of `PLAN.md`, derive **observable truths** — testable statements that must hold if the problem is truly solved; every acceptance criterion maps to at least one truth (e.g., "a user can POST `/api/orders` and receive 201 with an order id"). Verify each at four levels:
+### Engineering quality
 
-- **L1 EXISTS** — the artifact is at the expected path.
-- **L2 SUBSTANTIVE** — real implementation, not a stub *and not a reduced version of the requirement*: no empty bodies, `NotImplementedError`, hardcoded mocks, or "v1 / for now / basic version" of a `CONTEXT.md` decision. No concrete evidence = FAIL, not PASS.
-- **L3 WIRED** — connected: route registered, component rendered, function imported. Flag orphan code.
-- **L4 FUNCTIONAL** — the test suite runs and the outcome is produced.
+1. Check the change against applicable repo standards.
+2. Audit interface design: callers and tests use the specified public interface,
+   complexity is hidden rather than pushed through a shallow wrapper, and no
+   speculative interface or scope was added.
+3. Audit tests with the adversarial question: **could this test pass while the
+   promised property is broken?** Check in particular:
+   - every observable state dimension after rejected or atomic operations;
+   - every reachable operation from the last validation through atomic
+     publication that can fail or run caller-controlled code—including
+     overloaded operations, callbacks, serialization, allocation, and I/O—
+     using fault injection to prove no partial state, side effect, or
+     reservation survives;
+   - whether race, retry, rollback, timeout, ordering, or cache tests actively
+     create the condition they claim to test;
+   - a negative control for any critical emergent property without recorded
+     RED evidence, using a disposable probe rather than changing reviewed files;
+   - disabled, weak, circular, or implementation-coupled assertions;
+   - expected values derived from an independent source.
+4. Scan changed files for context-relevant incomplete work, placeholders,
+   secrets, and debug residue. Confirm matches in context before reporting.
 
-Per truth: `PASS` (all four) / `PARTIAL` (exists + substantive, not wired or functional) / `FAIL` (any level fails).
+No concrete evidence means not verified.
 
-## 5. Test-quality audit
+## Record the review
 
-A green suite only proves that whatever the tests assert is currently true. Audit the feature's tests for:
+Write `.neural/wip/<feature>/REVIEW.md` using
+[REVIEW-FORMAT.md](./references/REVIEW-FORMAT.md).
 
-- **Disabled tests** on feature requirements — `it.skip`, `xit`, `test.todo`, `@pytest.mark.skip`, `@Disabled`, `t.Skip(`. Warning; Blocking on a critical path.
-- **Weak assertions** on critical behaviors — `toBeDefined()`, `toBeTruthy()`, non-empty without checking contents. If the behavior demands a specific outcome, the test must assert it.
-- **Implementation-coupled tests** — mocks of internal collaborators, call-count/call-order assertions on internal collaborators, verifying by bypassing the interface. Carve-out: counting an observable effect through an injected seam (e.g., how many times a charge actually executed) is legitimate — that IS the behavior; the smell is asserting calls on a collaborator the feature owns.
-- **Circular tests** — the expected value is generated by the code under test (`expect(f(x)).toBe(f(x))`). Consistency, not correctness.
-- **Incomplete atomicity proofs** — when a rejected operation promises no mutation, tests must probe every observable state dimension named by the contract after the error, not only the easiest one.
+Always include a `## Reviewed state` with SHA-256 hashes for every reviewed
+product and test file. In git repos also record `HEAD` and `git status --short`
+excluding `.neural/`; otherwise record `Git: unavailable`. Recompute the file
+set and hashes after writing. If product state drifted, gather evidence again
+before issuing a verdict.
 
-Findings are at least Warnings; Blocking when they sit on a behavior the feature explicitly promised.
+Verdicts:
 
-## 6. Write REVIEW.md
+- `PASS` — complete, verified, no findings.
+- `PASS WITH WARNINGS` — complete and verified, with non-blocking findings.
+- `FAIL` — missing behavior or truth, failed verification, or blocking
+  product-fidelity or engineering-quality issue.
 
-Write `$WIP/REVIEW.md`: verdict (**PASS** — everything completed and passing, no blocking issues, no test-quality findings / **PASS WITH WARNINGS** — complete but warnings exist / **FAIL** — any task missing, truth failed, or blocking issue), the completion score table, per-truth L1–L4 tables with evidence, test-quality findings, and issues grouped Blocking / Warnings / Info.
+The review is complete only when every behavior and acceptance criterion is
+accounted for, both axes have explicit verdicts, fresh commands have finished,
+every implicated product and test file is hashed, and the overall verdict is no
+better than the worse axis.
 
-With git, also record `## Reviewed state`: the current `HEAD`, `git status --short` excluding `.neural/`, and SHA-256 hashes for every changed or untracked product file reviewed. Re-check those hashes after writing `REVIEW.md`; if product files drifted during review, gather evidence again before issuing a verdict.
+## Findings
 
-## 7. Report and next steps
+Report the verdict and next action. On request to fix, show a scoped fix plan
+and wait for approval before changing product files or tests. Fix approved
+findings, rerun verification, and replace the verdict only after a fresh review.
 
-Print a summary, then:
+`PASS`: suggest neural-archive. `PASS WITH WARNINGS`: offer fix or explicit
+acceptance. `FAIL`: do not suggest archive.
 
-- **PASS** — "All clean. Run neural-archive."
-- **PASS WITH WARNINGS** — offer: fix the warnings now, or accept them and run neural-archive.
-- **FAIL** — offer: fix the findings now, investigate manually, or re-run neural-review after manual fixes.
-
-### Fixing findings (on request)
-
-If the user asks you to fix:
-
-1. Build a fix plan from `REVIEW.md` — blocking issues are mandatory; warnings each need user consent ("fix? y/n/skip all"); info only if explicitly asked. Show the plan and wait for confirmation.
-2. Fixes must honor `CONTEXT.md` and ADRs. Apply one at a time; verify each against the specific finding. After 3 materially different failed attempts on one fix, report it unresolved — don't loop.
-3. Re-run the test suite, then re-run this review from step 2 — fresh evidence, new verdict.
+Leave reports and approved fixes local. Never stage, commit, or push; preserve
+pre-existing staged and unrelated changes as found.

@@ -1,71 +1,73 @@
 ---
 name: neural-execute
-description: "Test-driven execution loop — one task at a time, red→green→refactor, atomic commits"
+description: "Implement an approved product spec with just-in-time planning, honest behavior-first evidence, and a durable handoff"
 ---
 
-# Neural Execute — Test-Driven Execution Loop
+# Neural Execute
 
-Execute the implementation plan in `PLAN.md`, one task at a time.
+Implement the approved behaviors in `PLAN.md`. Discover implementation details
+from the current codebase instead of following a predicted file-by-file plan.
 
-## 1. Locate the feature
+## Load the contract
 
-Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: use it; several: ask which; none: stop and point to neural-interview.
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/`. Require `CONTEXT.md`
+and `PLAN.md`; otherwise point to the missing prior phase. Read every feature
+ADR. Before inspecting or changing code, load every identifier under
+`Skills to load`. Preserve its recorded name and namespace; adapt only a leading
+`/` or `$` to the current platform's invocation notation. If any requested skill
+is unavailable, stop and report it rather than silently executing without its
+guidance.
 
-Read from `.neural/wip/<feature>/`:
-- `PLAN.md` (required — stop and point to neural-plan if missing)
-- `CONTEXT.md` (required — stop and point to neural-interview if missing)
-- ADRs under `docs/adr/` — binding
-- If `PLAN.md` has a `## Skills to load` section, load each listed skill now, before writing any code.
+Require every product behavior to name a public interface and testing decision.
+An incomplete specification returns to neural-plan.
 
-## 2. The loop per task
+Before changing code, read [TDD.md](./references/TDD.md) and apply every rule.
 
-Read [TDD.md](./references/TDD.md) before the first task — it defines the red→green→refactor loop, what a good test is, and when to mock. Run tasks in table order, respecting `Depends on`.
+## Execute
 
-Tasks with `Behaviors to verify: N/A` skip the loop — make the change and verify via build/lint as the plan states.
+Choose the next smallest coherent behavior or related group from the current
+repository state. Inspect only then for the implementation areas and tests it
+actually affects; do not predict the complete file map upfront.
 
-### Deviations
+For each group:
 
-Honor the `Decision Boundaries` section of `CONTEXT.md` first — it overrides these defaults.
+1. Apply the behavior-first loop through the specified public interface. If
+   that interface cannot expose the behavior or must change, stop and return to
+   neural-plan rather than testing internals or silently redesigning the spec.
+2. Run focused tests during RED–GREEN. The group is complete only when each
+   behavior has falsifiable evidence and its focused checks are green. For an
+   atomicity or critical emergent-property promise, also require the boundary
+   inventory, induced failures, and negative controls in `TDD.md`.
+3. Refactor while green. Run the full suite at coherent checkpoints and always
+   before handoff, plus configured build, type, and lint checks relevant to the
+   actual changes.
+4. Update `EXECUTION.md` with the behavior status, actual files, decisions, and
+   evidence before choosing the next group.
 
-- **Auto-fix** (mention in report): bugs found while implementing, missing imports, build/lint errors you caused.
-- **Auto-add** (flag in report): input validation, error handling for obvious failure paths, null guards on data you consume.
-- **Stop and report BLOCKED**: schema changes, new external dependencies, public API changes, new architectural patterns, files outside the task's list.
+Honor `Decision Boundaries`. Decide reversible implementation details and
+record them. Stop for scope changes, new dependencies, public-contract changes,
+schemas, or architectural patterns outside the approved spec. If repeated
+attempts show that the specification is wrong, report the behavior blocked
+instead of coding around it.
 
-Never rewrite `PLAN.md` to match what you built — deviations are recorded in your report, so review can still compare the implementation against the approved plan.
+Never rewrite `PLAN.md` to match the implementation.
 
-**Retry cap:** after 3 materially different failed attempts at one task, report it BLOCKED and stop the queue — repeated failure usually means the plan or the design is wrong. The user decides: retry, skip, or abort.
+## Handoff
 
-## 3. Closing a task
+Write `.neural/wip/<feature>/EXECUTION.md` with:
 
-1. Run the full test suite; fix any regression you caused before moving on. Run build and lint if configured.
-2. Record: title, status (`DONE` / `DONE_WITH_CONCERNS` — say the concern / `BLOCKED` — say what's missing), files touched, deviations.
-3. Do not commit yet — commits happen in the commit phase below.
-4. Print: `Progress: <done>/<total> — Task <N> "<title>": <status>`
+- one row per behavior: status, actual files, and focused evidence;
+- `RED observed` with reason, `already green`, or `N/A` for each behavior;
+- for each atomicity promise, every fallible boundary, induced failure,
+  observed state, retry result, and negative control;
+- implementation decisions and deviations within approved boundaries;
+- verification commands and results;
+- blockers.
 
-After all tasks: sweep modified files for AI noise (comments restating code, stray debug output), then re-run the suite.
+Leave all implementation and test changes local for the user to review. Never
+stage files, commit, or push in any execution phase. Preserve pre-existing
+staged and unrelated changes exactly as found.
 
-Write `.neural/wip/<feature>/EXECUTION.md` before the commit phase. Keep it compact: one row per task with status and files; for each planned behavior, record `RED observed` with the failing assertion reason, `already green`, or `N/A`; then deviations, verification commands with outcomes, and blockers. This is the durable handoff to a fresh reviewer; never claim a RED→GREEN cycle you did not actually observe.
-
-## 4. Commit phase (always ask first)
-
-Skip entirely if `CONTEXT.md` says `**Git:** no` or there is no git repo.
-
-Show the task → files mapping and ask: commit now (one commit per task, in order) / show full diff first / leave unstaged. If committing:
-
-- Stage each task's files by explicit path. Never `git add -A`, `git add .`, or `--no-verify`. Exclude `.neural/**`.
-- If a file carries changes you didn't make, stop and surface it — never commit work that isn't yours.
-- If tasks share a file, fold those tasks into a single combined commit rather than misattributing the file to the last task. A feature whose tasks all deepen one module is therefore one commit — expected, not a failure of the per-task rule.
-- Message: `<type>(<feature-slug>): <task-title>` — type inferred (feat / fix / refactor / chore / test / docs).
-- If a commit hook fails, stop and ask: fix & retry / skip / abort.
-
-## 5. Final report
-
-```
-Feature: <feature-name>
-Tasks: <done>/<total>  (blocked/skipped: <count>)
-Deviations: <list or "none">
-Commits: <count>  (or "none — left unstaged")
-Execution: .neural/wip/<feature>/EXECUTION.md
-```
-
-All green: suggest **"Ready to verify? Run neural-review."** Anything blocked or skipped: surface it first.
+Report behavior counts, deviations, local worktree state, and the
+`EXECUTION.md` path.
+All green: suggest `Ready to verify? Run neural-review.`

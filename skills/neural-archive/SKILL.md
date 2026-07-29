@@ -1,20 +1,40 @@
 ---
 name: neural-archive
-description: "Move completed features from wip to archive, then update the knowledge base"
+description: "Archive a freshly verified feature and refresh project knowledge"
 ---
 
 # Neural Archive
 
-## Procedure
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/`; ask which one when
+ambiguous.
 
-1. Resolve the feature from `$ARGUMENTS` or `.neural/wip/` — one directory: confirm "Archive `<name>`? (y/n)"; several: ask which; none: report "Nothing to archive" and stop.
-2. If `REVIEW.md` is missing or its verdict is FAIL, say so — archive only with explicit confirmation.
-3. If `REVIEW.md` contains `## Reviewed state`, recompute its product-file hashes. If `HEAD`, changed-file set, or any hash differs, stop: "Reviewed state has drifted; run neural-review again." Never archive a stale verdict. If no reviewed state is recorded, warn that freshness cannot be verified and require explicit confirmation.
-4. If `.neural/archive/<name>/` already exists, stop and ask — never overwrite or nest.
-5. Move it:
-   ```bash
-   mkdir -p .neural/archive/
-   mv .neural/wip/<name>/ .neural/archive/<name>/
-   ```
-6. Report: `Feature '<name>' archived.`
-7. Run neural-learn.
+Require `REVIEW.md` with verdict `PASS` or `PASS WITH WARNINGS`. Missing or
+`FAIL` reviews are not archivable; point to neural-review. Warnings require
+explicit acceptance.
+
+Verify `## Reviewed state` before asking to move:
+
+- recompute every recorded product-file hash;
+- in git repos, compare the recorded `HEAD` and changed-file set;
+- any drift stops the archive and requires a fresh review;
+- for a legacy review without recorded state, explain that freshness is
+  unverifiable and require explicit risk acceptance.
+
+Stop if `.neural/archive/<feature>/` already exists. Never overwrite or nest an
+archive.
+
+Show the verdict and freshness result, then ask once:
+`Archive <feature>? (y/n)`. On confirmation:
+
+```bash
+mkdir -p .neural/archive/
+mv .neural/wip/<feature>/ .neural/archive/<feature>/
+```
+
+Report `Feature '<feature>' archived.`
+
+Then load [neural-learn](../neural-learn/SKILL.md) and follow it to refresh the
+knowledge base. Do not look for a shell command named `neural-learn`.
+
+Leave the archive and knowledge changes local. Never stage, commit, or push;
+preserve pre-existing staged and unrelated changes as found.

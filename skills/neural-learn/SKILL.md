@@ -1,56 +1,78 @@
 ---
 name: neural-learn
-description: "Harvest knowledge from archived features into .neural/knowledge/ — run after archiving a feature, or invoke manually to rebuild the project knowledge base"
+description: "Rebuild project knowledge from verified archived features with provenance"
 ---
 
-# Neural Learn — Harvest and Synthesize
+# Neural Learn
 
-## Steps
+Synthesize durable project knowledge from every feature in `.neural/archive/`.
+If the archive is empty, point to neural-archive and stop.
 
-1. **Check the archive.** List all feature directories in `.neural/archive/`. If none exist, stop: "No archived features yet. Run neural-archive after completing a feature."
+## Establish complete sources
 
-   Archived artifacts are historical documents — they describe the code as it was when the feature shipped. When two features conflict, the newer one wins; before recording a stack or convention fact, spot-check it against the current repo.
+Read existing `.neural/knowledge/` before updating it. For every archived
+feature, require and read in full:
 
-2. **Load existing knowledge.** Read `.neural/knowledge/` in full if it exists — merge, never overwrite.
+- `CONTEXT.md` — domain language and approved decisions;
+- `PLAN.md` — approved product, public-interface, testing, and architectural
+  decisions;
+- `REVIEW.md` — Blocking and Warning findings;
+- every `docs/adr/*.md`.
 
-3. **Harvest from every archived feature.**
+Do not synthesize until each archive has source coverage. A missing required
+file is an error; an absent ADR directory is valid. Never infer “no findings”
+without reading the review.
 
-   For each directory in `.neural/archive/*/`, read:
-   - `CONTEXT.md` — `Language` section (domain terms) and feature decisions
-   - `PLAN.md` — tech stack signals: test runner command, frameworks, file structure patterns
-   - `REVIEW.md` — every Blocking and Warning finding
-   - `docs/adr/*.md` — architectural decisions
+Archived artifacts are historical evidence. Spot-check stack, convention, and
+architecture claims against the current repo. When archives disagree, prefer
+current verified code; if current code cannot resolve the conflict, record it
+explicitly rather than guessing which archive is newer.
 
-4. **Synthesize into `.neural/knowledge/`.** Write or update all four files. Every archived feature must be reflected before this step is complete.
+## Rebuild `.neural/knowledge/`
 
-   **First feature (n=1):** the cross-feature thresholds below leave most files thin — that's correct, not a failure. Fill `GLOSSARY.md` and the stack facts in `PROJECT-CONTEXT.md`; record decisions and recurring-pattern candidates as single-provenance; write `ANTIPATTERNS.md` as `none yet — needs 2+ features`. Never invent cross-feature impact to fill a file.
+Update all four files from the complete archive set. Existing knowledge may
+preserve an explicit human conflict resolution, but unsupported or stale claims
+must not survive merely because they were already present.
 
-   **`PROJECT-CONTEXT.md`** — project-level facts every feature inherits:
-   - Tech stack: language and supported runtime version from manifests, framework, test runner with exact command
-   - Structural conventions: naming patterns, folder layout, import style derived from the archive
-   - Architectural patterns that recur across 2+ features
+### `PROJECT-CONTEXT.md`
 
-   **`GLOSSARY.md`** — unified domain vocabulary:
-   - One entry per term, merged from every `Language` section in every `CONTEXT.md`
-   - Conflicts surface explicitly: `⚠️ Conflict: [feature-a] defines as X; [feature-b] defines as Y — resolved to Z`
-   - Strict glossary — no decisions, no implementation details
+- Current verified stack and exact test/build commands.
+- Structural conventions supported by evidence.
+- Architectural patterns only when they recur in 2+ archived features.
+- Provenance for non-obvious claims.
 
-   **`DECISIONS.md`** — cross-feature architectural decisions:
-   - Only decisions with impact beyond the originating feature
-   - One feature is enough when the decision already constrains future work outside it; recurrence is not required
-   - Each entry: decision summary, rationale, provenance (`[feature-name]`)
-   - Feature-specific ADRs that have no cross-cutting impact are excluded
+### `GLOSSARY.md`
 
-   **`ANTIPATTERNS.md`** — patterns that blocked or warned in review:
-   - Only findings that appear in 2+ `REVIEW.md` files — single occurrences are noise
-   - Grouped by category (test quality, architecture, scope creep, code style)
-   - Each entry: pattern, severity (Blocking / Warning), provenance (`[feature-a, feature-b]`)
+- Every domain term from every archived `Language` section, with provenance.
+- Definitions only: no implementation decisions.
+- Surface conflicting definitions and their verified or unresolved resolution.
 
-5. **Report.**
-   ```
-   Knowledge base updated: .neural/knowledge/
-   — PROJECT-CONTEXT.md
-   — GLOSSARY.md      (<N> terms)
-   — DECISIONS.md     (<N> decisions)
-   — ANTIPATTERNS.md  (<N> patterns)
-   ```
+### `DECISIONS.md`
+
+- Only decisions that constrain work beyond their originating feature.
+- One feature is sufficient when the future impact is concrete; otherwise omit
+  the decision, even on the first archive.
+- Record rationale and provenance.
+
+### `ANTIPATTERNS.md`
+
+- Only materially equivalent Blocking or Warning findings present in 2+
+  `REVIEW.md` files.
+- Record category, severity, and all provenance.
+- With fewer than two occurrences, write `none yet — needs 2+ features`.
+
+Thin files after the first archive are correct. Never invent cross-feature
+significance to fill them.
+
+## Report
+
+```text
+Knowledge base updated: .neural/knowledge/
+— PROJECT-CONTEXT.md
+— GLOSSARY.md      (<N> terms)
+— DECISIONS.md     (<N> decisions)
+— ANTIPATTERNS.md  (<N> patterns)
+```
+
+Leave knowledge changes local. Never stage, commit, or push; preserve
+pre-existing staged and unrelated changes as found.

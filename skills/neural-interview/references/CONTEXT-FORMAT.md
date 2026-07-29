@@ -1,55 +1,56 @@
-# CONTEXT.md Format
+# CONTEXT.md Interface
 
-Path: `.neural/wip/<feature>/CONTEXT.md`. Write only sections that earn their place. Skip empty ones.
+Path: `.neural/wip/<feature>/CONTEXT.md`.
 
-## Template
+Required sections preserve the contract between interview, plan, execute, and
+review. Optional sections should appear only when they contain useful evidence.
 
 ```md
 # <Feature>
 
 **Git:** yes|no
 **Branch:** <branch>
-**Parent context:** <name>  <!-- only when CONTEXT-MAP.md exists -->
+**Parent context:** <name> <!-- only for multi-context repos -->
 
 ## Problem
-<1-2 sentences: what this feature is and why it exists.>
+<What must change and why.>
 
-## Language
-
-**<Term>**:
-<one or two sentence definition — what it IS, not what it does>
+## Language <!-- optional -->
+**<Domain term>**:
+<Definition of what it is.>
 _Avoid_: <aliases>
 
 ## Decisions
-- <specific choice>
+- <Resolved product or technical choice>
 
-## Constraints
-- <limit>
+## Constraints <!-- optional -->
+- <Limit imposed by product, platform, policy, or compatibility>
 
-## Scenarios
-- <flow or edge case>
+## Scenarios <!-- optional -->
+- <Representative flow or edge case>
 
 ## Non-goals
-- <excluded>
+- <Explicitly excluded outcome>
+
+## Assumptions <!-- optional -->
+- <Reversible choice made by the agent, open to correction>
 
 ## Decision Boundaries
-- Agent may decide: <low-risk choices>
-- Ask user before: <high-risk choices>
+- Agent may decide: <reversible, low-risk choices>
+- Ask user before: <scope, contract, irreversible, or high-risk choices>
 
 ## Acceptance Criteria
-- [ ] <testable outcome>
+- [ ] <Observable, testable outcome>
 
-## Open Items
-- <unresolved>
+## Open Items <!-- optional -->
+- <Unresolved question and why it remains unresolved>
 ```
 
-## Rules
+`Problem`, `Decisions`, `Non-goals`, `Decision Boundaries`, and `Acceptance
+Criteria` are required. Acceptance must cover the observable success path and
+each relevant failure or side effect. Add concurrency, retry, timing, or
+rollback criteria only when the feature promises those properties.
 
-- `Language` is a glossary, not a scratch pad. No implementation details, no decisions, no acceptance criteria — those have their own sections.
-- Only domain-meaningful terms in `Language`. Skip generic programming concepts (timeouts, error types, utility patterns) even if the feature uses them.
-- One or two sentences per definition — what it IS, not what it does.
-- Be opinionated: when multiple words exist for the same concept, pick one and list the rest under `_Avoid_`.
-
-## Multi-context repos
-
-If `CONTEXT-MAP.md` exists at the repo root, the repo has multiple bounded contexts. Each feature `CONTEXT.md` declares its `**Parent context:**`. If unclear which context the feature belongs to, ask before writing.
+`Language` is a strict domain glossary: no implementation details or generic
+programming terms. Choose one canonical term and list meaningful aliases under
+`_Avoid_`.
