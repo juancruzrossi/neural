@@ -1,30 +1,40 @@
 ---
 name: neural-archive
-description: "Move completed features from wip to archive"
+description: "Archive a freshly verified feature and refresh project knowledge"
 ---
 
 # Neural Archive
 
-Move completed features from `.neural/wip/` to `.neural/archive/`.
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/`; ask which one when
+ambiguous.
 
-## Procedure
+Require `REVIEW.md` with verdict `PASS` or `PASS WITH WARNINGS`. Missing or
+`FAIL` reviews are not archivable; point to neural-review. Warnings require
+explicit acceptance.
 
-1. **Check for active features.** List all directories in `.neural/wip/`. If none exist, report: "No active features in `.neural/wip/`. Nothing to archive." and stop.
+Verify `## Reviewed state` before asking to move:
 
-2. **Select the feature to archive.**
-   - If an argument was provided, use it as the feature name. Verify it exists in `.neural/wip/<name>/`. If not found, list available features and ask the user to pick one.
-   - If multiple features exist and no argument was given, list them and ask: "Which feature do you want to archive?"
-   - If only one feature exists, confirm: "Archive `<name>`? (y/n)"
+- recompute every recorded product-file hash;
+- in git repos, compare the recorded `HEAD` and changed-file set;
+- any drift stops the archive and requires a fresh review;
+- for a legacy review without recorded state, explain that freshness is
+  unverifiable and require explicit risk acceptance.
 
-3. **Move the feature directory.** Run:
-   ```bash
-   mkdir -p .neural/archive/
-   mv .neural/wip/<name>/ .neural/archive/<name>/
-   ```
+Stop if `.neural/archive/<feature>/` already exists. Never overwrite or nest an
+archive.
 
-4. **Confirm completion.** Report:
-   ```
-   Feature '<name>' archived. .neural/wip/<name>/ → .neural/archive/<name>/
-   ```
+Show the verdict and freshness result, then ask once:
+`Archive <feature>? (y/n)`. On confirmation:
 
-5. **Update the knowledge base.** Run `/neural:neural-learn` to harvest the newly archived feature into `.neural/knowledge/`.
+```bash
+mkdir -p .neural/archive/
+mv .neural/wip/<feature>/ .neural/archive/<feature>/
+```
+
+Report `Feature '<feature>' archived.`
+
+Then load [neural-learn](../neural-learn/SKILL.md) and follow it to refresh the
+knowledge base. Do not look for a shell command named `neural-learn`.
+
+Leave the archive and knowledge changes local. Never stage, commit, or push;
+preserve pre-existing staged and unrelated changes as found.

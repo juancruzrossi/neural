@@ -1,49 +1,73 @@
 ---
 name: neural-interview
-description: "Socratic interview that captures domain language, decisions, and ADRs inside .neural/wip/<feature>/"
+description: "Interview a feature request into testable acceptance, domain language, decision boundaries, and selective ADRs"
 ---
 
-# Neural Interview — Clarify Before You Build
+# Neural Interview
 
-> **Never use the `AskUserQuestion` tool.** One question at a time, in plain prose, waiting for the user's free-form answer — no multiple-choice, ever.
+Turn a raw feature request into a shared, testable context. Respond and write
+artifacts in the user's language.
 
-Interview the user relentlessly about every aspect of the feature until you reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer. If a question is a matter of fact about the existing code (stack, naming, current patterns), explore instead of asking — but never infer a design decision, requirement, or the user's intent from how things work today; ask those.
+## Orient
 
-Respond in the user's language. Write `CONTEXT.md` and ADRs in that same language.
+1. Resolve the feature name and raw goal from `$ARGUMENTS`; ask only for what is
+   missing. Normalize the name to kebab-case.
+2. Inspect the repo for facts: git state, project context, related source and
+   tests, existing ADRs, `.neural/{wip,archive}/`, and `.neural/knowledge/`.
+   Established glossary and decisions are binding unless the user changes them
+   explicitly.
+3. In a multi-context repo, infer the parent context from `CONTEXT-MAP.md`; ask
+   only if evidence is ambiguous.
 
-## Before pressing
+Do not ask the user questions the repo can answer.
 
-1. Check git silently: `git rev-parse --is-inside-work-tree 2>/dev/null`.
-2. Ask the feature name; normalize to kebab-case. Ask for the raw description.
-3. Scan for existing context: `CONTEXT-MAP.md` (multi-context) or root `CONTEXT.md` (single-context), `docs/adr/`, related source and tests, and `.neural/{wip,archive}/*/CONTEXT.md`.
-4. If `.neural/knowledge/` exists, read it — treat its glossary terms as established and decisions as binding.
-5. If `CONTEXT-MAP.md` exists, infer which bounded context this feature belongs to; ask only if unclear.
+## Interview
 
-Create files lazily — only when there is something to write. Don't create `.neural/wip/<feature>/` until the first section is ready.
+Map unresolved decisions as a dependency tree. In each round, compute the
+**frontier**: every decision whose prerequisites are already settled. Ask the
+whole frontier together, numbered, with a recommended answer and brief
+trade-off for each. A question that depends on an answer still open in this
+round belongs to the next round. Do not serialize independent decisions into
+one-question turns.
 
-## During the session
+Before sending a round, dependency-check every pair of questions: if answering
+one could change how the other is asked, defer the dependent question. The
+frontier may be smaller than the full list of decisions; completeness is
+required across rounds, not inside one round.
 
-Challenge the glossary: when a term conflicts with existing language in `CONTEXT.md`, call it out before moving on — "your glossary defines X as Y, but you mean Z — which is it?"
+Facts belong to the agent: inspect the repo or environment instead of asking.
+Decisions belong to the user when they change acceptance, scope, a public
+contract, or a hard-to-reverse choice. Use the interaction tools available on
+the platform when they make a frontier easier to answer.
 
-Sharpen fuzzy language: when a term is vague or overloaded, propose one canonical name and reject the rest. Be opinionated.
+Use scenarios to expose relevant boundaries: success, failure, lifecycle,
+ownership, value ranges, retries, concurrency, or time. Skip dimensions the
+feature does not have.
 
-Stress-test relationships: **invent** concrete scenarios that probe edge cases and force the user to be precise about the boundaries between concepts — ownership, cardinality, lifecycle.
+Use judgment for reversible details inside an agreed decision boundary. Record
+the choice as an assumption instead of asking for permission. Surface
+contradictions with existing language, code, or decisions.
 
-Cross-reference with code: when the user states how something works, check the code agrees. Surface contradictions.
+After each round, write resolved content to
+`.neural/wip/<feature>/CONTEXT.md` using
+[CONTEXT-FORMAT.md](./references/CONTEXT-FORMAT.md). Create the directory only
+when there is resolved content to preserve.
 
-Surface assumptions as you go: when you catch yourself inferring an unstated requirement, state it inline as an assumption and invite correction — don't wait for the end.
-
-Update `CONTEXT.md` inline as terms resolve — don't batch. Its `Language` section is a strict glossary — no implementation details, no decisions, no acceptance criteria (those have their own sections). The document as a whole is a lightweight context capture, not a full spec. Use [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
-
-Offer an ADR only when all three hold: hard to reverse, surprising without context, the result of a real trade-off. Otherwise skip it. Use [ADR-FORMAT.md](./ADR-FORMAT.md).
+Offer an ADR only when a decision is hard to reverse, surprising without its
+rationale, and the result of a real trade-off. If accepted, use
+[ADR-FORMAT.md](./references/ADR-FORMAT.md).
 
 ## Finish
 
-List the assumptions *and the non-goals* you inferred out loud; if the user corrects any, update `CONTEXT.md`.
+Finish when the decision frontier is empty: acceptance criteria are testable,
+high-impact decisions are resolved, non-goals and assumptions are visible, and
+remaining external unknowns are explicit Open Items. Present the resulting
+contract for one final confirmation. Do not continue interviewing for
+reversible details the agent is authorized to decide.
 
-If on a stable branch (`main`, `master`, `develop`, `stage`, `staging`, `production`, `release`), ask whether to create `feature/<slug>`, `enhancement/<slug>`, `fix/<slug>`, `hotfix/<slug>`, or stay.
-
-> **Git:** By default the `.neural/` directory stays out of version control — commit it only if the user explicitly asks
+If git is enabled and the repo is on a stable branch, ask once whether to create
+an appropriate feature branch or stay. Never stage, commit, or push during the
+interview; preserve pre-existing staged and unrelated changes as found.
 
 Report:
 
@@ -52,5 +76,5 @@ Interview complete for <feature>
 Context: .neural/wip/<feature>/CONTEXT.md
 ADRs: <count>
 Open items: <count>
-Next: /neural:neural-plan
+Next: neural-plan
 ```

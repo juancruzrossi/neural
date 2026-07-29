@@ -1,143 +1,96 @@
 ---
 name: neural-review
-description: "Plan vs implementation verification with goal-backward analysis and test-quality audit"
+description: "Review implementation and test evidence against the approved feature goal, then seal the reviewed state"
 ---
 
-# Neural Review — Plan vs Implementation Verification
+# Neural Review
 
-You verify, inline, that the implementation actually delivers what `CONTEXT.md` and `PLAN.md` promised — and that the tests written along the way prove behavior rather than shape.
+Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
-The review runs in this same context because `/neural:neural-execute` no longer ships work through subagents — there is no "implementer bias" to escape from. The risk we still need to guard against is **confirmation bias**: treating the plan as proof. Counter it by gathering fresh evidence (read files, run tests, grep) every time. Never trust a prior REVIEW.md.
+## Establish scope
 
-## Step 1: Locate the feature
+Resolve the feature from `$ARGUMENTS` or `.neural/wip/`. Require `CONTEXT.md`
+and `PLAN.md`; read `EXECUTION.md`, every feature ADR, and any skills listed in
+the plan.
 
-1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` — one match → use it, multiple → ask.
-2. Set `WIP=.neural/wip/<feature>/`.
-3. Read `$WIP/CONTEXT.md` and `$WIP/PLAN.md`. If either is missing, abort: "Missing CONTEXT.md or PLAN.md — cannot review without specs."
-4. Read any ADRs under `$WIP/docs/adr/`.
+Identify the product and test files implicated by the actual changes. Read them,
+inspect relevant wiring, and run the canonical suite plus targeted probes when
+the suite cannot prove a promised property.
 
-## Step 2: Load stack-relevant skills
+Identify repo standards that apply to changed files, including `AGENTS.md`,
+`CLAUDE.md`, `CONTRIBUTING.md`, and local equivalents.
 
-1. From `CONTEXT.md` / `PLAN.md`, identify the tech stack.
-2. For each technology, load a matching guidance skill if one is available.
-3. If loaded, apply its guidelines while reviewing.
-4. If no match exists, proceed silently — do not fail.
+## Verify on two independent axes
 
-## Step 3: Layer 1 — Plan vs Implementation
+Complete both passes. Do not let strength on one axis compensate for failure on
+the other.
 
-1. Parse every task from `PLAN.md`. Each task carries: expected files, behaviors to verify, acceptance.
-2. For each task, gather evidence:
-   - **Files** — use Glob and Read to confirm the listed files exist and were actually changed.
-   - **Functions / components / routes** — use Grep to confirm the expected symbols exist.
-   - **Tests for each behavior** — use Glob and Grep to confirm a test exists that names or covers each behavior in the task's "Behaviors to verify" list.
-3. Assign a status per task:
-   - `✓ completed` — every expected artifact found and substantive, every behavior covered by a test.
-   - `⚠️ partial` — some artifacts found, others missing or weakly covered.
-   - `✗ missing` — task not implemented.
-4. Completion score: `X/Y` (partial = 0.5).
+### Product fidelity
 
-## Step 4: Anti-pattern scan
+1. Check each specified behavior against substantive files, wiring, and fresh
+   command results. Verify declared deviations rather than accepting them.
+2. Derive observable truths from the product outcome and every acceptance
+   criterion.
+   For each truth, establish that the implementation exists, is substantive,
+   is reachable through the intended public interface, and produces the
+   promised outcome.
 
-Grep the files changed for this feature. Record any hits.
+### Engineering quality
 
-| Pattern | What to search | Severity |
-|---------|----------------|----------|
-| Incomplete work | `TODO`, `FIXME`, `XXX`, `HACK` | Warning |
-| Placeholder content | `placeholder`, `coming soon`, `lorem ipsum`, `example.com` | Blocking |
-| Empty implementations | `return null`, `return {}`, `return []`, `=> {}`, `pass` as sole function body | Blocking |
-| Hardcoded secrets | `sk_test_`, `your-api-key-here`, `password123` | Blocking |
-| Debug leftovers | `console.log`, `print(`, `debugger`, `binding.pry` | Warning |
+1. Check the change against applicable repo standards.
+2. Audit interface design: callers and tests use the specified public interface,
+   complexity is hidden rather than pushed through a shallow wrapper, and no
+   speculative interface or scope was added.
+3. Audit tests with the adversarial question: **could this test pass while the
+   promised property is broken?** Check in particular:
+   - every observable state dimension after rejected or atomic operations;
+   - every reachable operation from the last validation through atomic
+     publication that can fail or run caller-controlled code—including
+     overloaded operations, callbacks, serialization, allocation, and I/O—
+     using fault injection to prove no partial state, side effect, or
+     reservation survives;
+   - whether race, retry, rollback, timeout, ordering, or cache tests actively
+     create the condition they claim to test;
+   - a negative control for any critical emergent property without recorded
+     RED evidence, using a disposable probe rather than changing reviewed files;
+   - disabled, weak, circular, or implementation-coupled assertions;
+   - expected values derived from an independent source.
+4. Scan changed files for context-relevant incomplete work, placeholders,
+   secrets, and debug residue. Confirm matches in context before reporting.
 
-## Step 5: Layer 2 — Goal-backward verification
+No concrete evidence means not verified.
 
-1. Read the **Problem** section of `CONTEXT.md`.
-2. Derive **observable truths** — testable statements that must hold if the problem is truly solved. Example: "A user can POST `/api/orders` and receive 201 with an order id."
-3. For each truth, verify four levels:
+## Record the review
 
-   **L1 EXISTS** — the artifact exists at the expected path. Use Glob + Read.
+Write `.neural/wip/<feature>/REVIEW.md` using
+[REVIEW-FORMAT.md](./references/REVIEW-FORMAT.md).
 
-   **L2 SUBSTANTIVE** — real implementation, not a stub *and not a reduced version of the requirement*. Look for empty bodies, `TODO`, `NotImplementedError`, hardcoded mocks, commented-out core logic — and for partial delivery: a task that names a `CONTEXT.md` decision but ships "v1 / for now / hardcoded / basic version" of it. A requirement with no concrete evidence, or only weak evidence, is a FAIL — not a PASS.
+Always include a `## Reviewed state` with SHA-256 hashes for every reviewed
+product and test file. In git repos also record `HEAD` and `git status --short`
+excluding `.neural/`; otherwise record `Git: unavailable`. Recompute the file
+set and hashes after writing. If product state drifted, gather evidence again
+before issuing a verdict.
 
-   **L3 WIRED** — connected to the rest of the system. Is the route registered? Is the component rendered? Is the function imported somewhere? Flag orphan code.
+Verdicts:
 
-   **L4 FUNCTIONAL** — runs and produces the expected outcome.
-   - Run the project test suite (`npm test`, `pytest`, `cargo test`, whatever applies).
-   - For the test quality audit, read [TEST-QUALITY.md](./TEST-QUALITY.md). It covers disabled tests, weak assertions, implementation-coupled tests, and circular tests — all things that make a passing test suite lie.
+- `PASS` — complete, verified, no findings.
+- `PASS WITH WARNINGS` — complete and verified, with non-blocking findings.
+- `FAIL` — missing behavior or truth, failed verification, or blocking
+  product-fidelity or engineering-quality issue.
 
-4. Assign per truth:
-   - `PASS` — all four levels verified.
-   - `PARTIAL` — EXISTS + SUBSTANTIVE but not fully WIRED or FUNCTIONAL.
-   - `FAIL` — any level fails.
+The review is complete only when every behavior and acceptance criterion is
+accounted for, both axes have explicit verdicts, fresh commands have finished,
+every implicated product and test file is hashed, and the overall verdict is no
+better than the worse axis.
 
-## Step 6: Generate REVIEW.md
+## Findings
 
-Write `$WIP/REVIEW.md`:
+Report the verdict and next action. On request to fix, show a scoped fix plan
+and wait for approval before changing product files or tests. Fix approved
+findings, rerun verification, and replace the verdict only after a fresh review.
 
-```markdown
-# Review: <feature-name>
+`PASS`: suggest neural-archive. `PASS WITH WARNINGS`: offer fix or explicit
+acceptance. `FAIL`: do not suggest archive.
 
-**Date:** <current date>
-**Verdict:** <PASS | PASS WITH WARNINGS | FAIL>
-
-## Completion Score
-
-**X/Y tasks completed**
-
-| Task | Status | Notes |
-|------|--------|-------|
-| <task title> | ✓ / ⚠️ / ✗ | <details, including behavior coverage> |
-
-## Goal-Backward Verification
-
-### Truth: "<observable truth>"
-
-| Level | Status | Evidence |
-|-------|--------|----------|
-| EXISTS | ✓ / ✗ | <path or detail> |
-| SUBSTANTIVE | ✓ / ✗ | <detail> |
-| WIRED | ✓ / ✗ | <import/route/reference> |
-| FUNCTIONAL | ✓ / ✗ | <test result or gap> |
-
-**Result:** PASS / PARTIAL / FAIL
-
-<!-- Repeat for each truth -->
-
-## Test Quality
-
-- Disabled tests linked to feature requirements: <list or "none">
-- Weak assertions on critical behaviors: <list or "none">
-- Tests coupled to implementation (mocks of internal collaborators, asserting on call counts, bypassing the interface): <list or "none">
-- Circular tests (system under test generates its own expected value): <list or "none">
-
-## Issues
-
-### Blocking
-- ...
-
-### Warnings
-- ...
-
-### Info
-- ...
-```
-
-Verdict rules:
-
-- **PASS** — every task completed, every truth passes, no blocking issues, no test-quality findings.
-- **PASS WITH WARNINGS** — every task completed and every truth passes, but warnings exist.
-- **FAIL** — any task missing, any truth fails, or any blocking issue exists.
-
-## Step 7: Report
-
-**Evidence freshness rule.** The verdict must be based on evidence gathered during **this** execution. Never reuse a previous `REVIEW.md` or assume results from a prior run still hold.
-
-1. Print a summary.
-2. Present options based on the verdict:
-   - **PASS (no warnings):** "All clean. Run `/neural:neural-archive` to archive this feature."
-   - **PASS WITH WARNINGS:**
-     > 1. `/neural:neural-address-review` — fix the warnings automatically
-     > 2. `/neural:neural-archive` — archive as-is, warnings accepted
-   - **FAIL:**
-     > 1. `/neural:neural-address-review` — fix blocking issues and gaps automatically
-     > 2. `/neural:neural-debug` — investigate manually
-     > 3. Fix manually and run `/neural:neural-review` again
+Leave reports and approved fixes local. Never stage, commit, or push; preserve
+pre-existing staged and unrelated changes as found.

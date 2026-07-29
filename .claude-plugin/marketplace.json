@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "neural",
-      "description": "Spec-Driven Development framework for AI Coding Agents",
-      "version": "1.15.0",
+      "displayName": "Neural",
+      "description": "Spec-driven feature development for Claude Code and Codex",
       "source": "./",
       "author": {
         "name": "Juan Cruz Rossi",
