@@ -14,10 +14,10 @@
 ## Evidence
 - <files, ADRs, commands, and targeted probes actually inspected>
 
-## Plan completion
-| Task | Status | Evidence |
+## Behavior completion
+| Behavior | Status | Evidence |
 |---|---|---|
-| <task> | completed | <file, symbol, test, command> |
+| B1 | verified | <file, symbol, test, command> |
 
 **Score:** <completed>/<total>
 

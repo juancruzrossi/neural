@@ -1,6 +1,6 @@
 # Neural
 
-**Spec-driven feature development for Claude Code and Codex.**
+**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
 
 ```
 interview → plan → execute → review → archive → learn
@@ -8,9 +8,7 @@ interview → plan → execute → review → archive → learn
 
 ## Why Neural?
 
-Neural turns a feature request into a stable product spec, tested code, an
-independent review, and reusable project knowledge. Implementation planning
-happens just in time. Neural never stages, commits, or pushes.
+Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each one.
 
 ## Installation
 
@@ -28,32 +26,41 @@ codex plugin marketplace add juancruzrossi/neural
 codex plugin add neural@neural
 ```
 
+### Or, via skills protocol
+```bash
+npx skills@latest add juancruzrossi/neural
+```
+
 ## Skills
 
 | Skill | What it does |
 |---|---|
 | `neural-interview` | Clarify the feature → `CONTEXT.md` |
 | `neural-plan` | Write the product spec → `PLAN.md` |
-| `neural-execute` | Walks the plan task by task; vertical-slice TDD |
-| `neural-review` | Verifies plan vs. implementation, then code vs. original goal |
+| `neural-execute` | Walks the plan task by task; vertical-slicing TDD |
+| `neural-review` | Verifies plan vs. implementation |
 | `neural-archive` | Freshness-check and archive the feature |
-| `neural-learn` | Rebuild project knowledge from verified archives |
+| `neural-learn` | Add project knowledge for future references |
 | `neural-help` | Show the workflow |
-
-Start with `neural-interview "<goal>"`, then follow the flow.
 
 ## Artifacts
 
-Neural creates artifacts progressively under `.neural/` at the project root:
+All artifacts live in `.neural/` at your project root:
 
 ```
 .neural/
-├── wip/<feature>/        CONTEXT.md · PLAN.md · EXECUTION.md · REVIEW.md
-│   └── docs/adr/         optional, consequential decisions only
-├── archive/<feature>/    freshly reviewed completed features
-└── knowledge/            built by neural-learn after each archive
+├── wip/
+│   └── <feature>/
+│       ├── CONTEXT.md
+│       ├── PLAN.md
+│       ├── EXECUTION.md
+│       ├── REVIEW.md
+│       └── docs/adr/     optional, consequential decisions only
+├── archive/
+│   └── <feature>/        freshly reviewed completed feature
+└── knowledge/            built by neural-learn after each archived feature
     ├── PROJECT-CONTEXT.md   stack, conventions, recurring patterns
     ├── GLOSSARY.md          unified domain vocabulary
     ├── DECISIONS.md         cross-feature architectural decisions
-    └── ANTIPATTERNS.md      recurring review findings (2+ occurrences)
+    └── ANTIPATTERNS.md      recurring review findings
 ```

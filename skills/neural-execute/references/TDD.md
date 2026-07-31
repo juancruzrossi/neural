@@ -4,6 +4,11 @@ Test observable behavior through the highest practical public interface.
 Use the interface agreed in `PLAN.md`; test names and fixtures should use the
 domain language in `CONTEXT.md`.
 
+Before the first test run, discover the repository's canonical focused and full
+verification commands from its instructions, CI, wrappers, and tool
+configuration. Do not substitute a familiar command when the repository already
+defines one.
+
 For each behavior or tightly related partition:
 
 1. **RED** — add a focused test and run it. Confirm it fails because the
