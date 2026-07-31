@@ -12,14 +12,8 @@ built, not an implementation checklist. Do not create a separate PRD.
 
 ## Establish the contract
 
-1. Parse `$ARGUMENTS`. `--skills` is the final argument group; split every
-   remaining value on commas, trim separator whitespace, and remove the flag and
-   values from the feature selector. Preserve each complete skill identifier
-   exactly as the user wrote it: do not shorten, translate, or remove its
-   namespace or leading `/` or `$`. Only while resolving the skill for loading,
-   treat that leading character as platform invocation notation. Load every
-   requested skill before planning so its guidance shapes the specification. If
-   one is unavailable, stop and name it.
+1. Parse `$ARGUMENTS`. When `--skills` is provided, keep the requested skills
+   in mind and load each one on demand when relevant to the current work.
 2. Resolve the feature from the remaining selector or `.neural/wip/`. If none
    exists, point to neural-interview; if several exist, ask which one.
 3. Require `CONTEXT.md`. Read it, every feature ADR, and `.neural/knowledge/`
@@ -47,10 +41,9 @@ decisions, testing strategy, acceptance criteria, and exclusions.
 
 `PLAN.md` becomes the canonical approved specification. Link `CONTEXT.md` and
 ADRs for discovery history and rationale rather than copying the conversation.
-When `--skills` was provided, include `## Skills to load` and record every
-requested identifier verbatim with a one-line reason grounded in the loaded
-skill's guidance and this feature. Verbatim includes the leading `/` or `$`;
-copy the identifier character for character. Omit the section otherwise.
+When `--skills` was provided, include `## Skills to load` as a reminder of
+the requested skills. Load them on demand when relevant. Omit the section
+otherwise.
 
 Keep decisions at product, public-interface, module, schema, or architectural
 level. Do not include exact file paths, an exhaustive task breakdown, edit

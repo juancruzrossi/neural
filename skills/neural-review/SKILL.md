@@ -10,12 +10,8 @@ Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
 ## Establish scope
 
-1. Parse `$ARGUMENTS`. Treat `--skills` as the final argument group: split
-   comma-separated values, trim whitespace, and remove the flag and its values
-   from the feature selector. Preserve each complete skill identifier exactly
-   as written, including any leading `/` or `$`. Resolve that notation only
-   when locating the skill, then load every requested skill before reviewing.
-   If a requested skill is unavailable, stop and name it.
+1. Parse `$ARGUMENTS`. When `--skills` is provided, keep the requested skills
+   in mind and load each one on demand when relevant to the current work.
 2. Resolve the feature from the remaining selector or `.neural/wip/`. Require
    `CONTEXT.md` and `PLAN.md`; read `EXECUTION.md`, every feature ADR, and
    any skills listed in the plan.
@@ -29,9 +25,9 @@ Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
 ## Model Invocable Skills
 
-When `--skills` is provided, load every requested skill before gathering
-review evidence. Include this section in `REVIEW.md`, preserving each
-identifier verbatim. Omit the section when the argument is absent.
+When `--skills` is provided, include this section in `REVIEW.md` as a
+reminder of the requested skills. Load them on demand when relevant. Omit the
+section when the argument is absent.
 
 ## Verify on two independent axes
 

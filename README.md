@@ -28,7 +28,7 @@ codex plugin add neural@neural
 
 ### Or, via skills protocol
 ```bash
-npx skills@latest add juancruzrossi/neural
+npx skills@latest add juancruzrossi/neural --skill '*'
 ```
 
 ## Skills

@@ -16,7 +16,7 @@
 
 <!-- Include this section only when --skills was provided. -->
 ## Model Invocable Skills
-- `<skill identifier>`
+- `<skill-identifier>`
 
 ## Behavior completion
 | Behavior | Status | Evidence |
