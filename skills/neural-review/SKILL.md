@@ -31,8 +31,7 @@ Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
 When `--skills` is provided, load every requested skill before gathering
 review evidence. Include this section in `REVIEW.md`, preserving each
-identifier verbatim and giving one short reason it applies. Omit the section
-when the argument is absent.
+identifier verbatim. Omit the section when the argument is absent.
 
 ## Verify on two independent axes
 
