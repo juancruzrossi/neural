@@ -53,15 +53,11 @@ the other.
 3. Audit tests with the adversarial question: **could this test pass while the
    promised property is broken?** Check in particular:
    - every observable state dimension after rejected or atomic operations;
-   - every reachable operation from the last validation through atomic
-     publication that can fail or run caller-controlled code—including
-     overloaded operations, callbacks, serialization, allocation, and I/O—
-     using fault injection to prove no partial state, side effect, or
-     reservation survives;
+   - every fallible boundary through atomic publication, using fault injection
+     to prove no partial state, side effect, or reservation survives;
    - whether race, retry, rollback, timeout, ordering, or cache tests actively
-     create the condition they claim to test;
-   - a negative control for any critical emergent property without recorded
-     RED evidence, using a disposable probe rather than changing reviewed files;
+     create the condition they claim to test, with a negative control when
+     critical RED evidence is missing;
    - disabled, weak, circular, or implementation-coupled assertions;
    - expected values derived from an independent source.
 4. Scan changed files for context-relevant incomplete work, placeholders,
@@ -98,8 +94,9 @@ Report the verdict and next action. On request to fix, show a scoped fix plan
 and wait for approval before changing product files or tests. Fix approved
 findings, rerun verification, and replace the verdict only after a fresh review.
 
-`PASS`: suggest neural-archive. `PASS WITH WARNINGS`: offer fix or explicit
-acceptance. `FAIL`: do not suggest archive.
+`PASS`: suggest neural-archive. `PASS WITH WARNINGS`: offer
+neural-address-review or explicit acceptance. `FAIL`: suggest
+neural-address-review for approved findings; do not suggest archive.
 
 Leave reports and approved fixes local. Never stage, commit, or push; preserve
 pre-existing staged and unrelated changes as found.

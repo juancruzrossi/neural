@@ -5,7 +5,7 @@ description: "Apply approved fixes from a previous review."
 
 # Neural Address Review
 
-Apply approved findings from `.neural/wip/<feature>/REVIEW.md` after the user approved the fix plan
+Apply approved findings from `.neural/wip/<feature>/REVIEW.md` after the user approves the fix plan.
 
 ## Establish scope
 

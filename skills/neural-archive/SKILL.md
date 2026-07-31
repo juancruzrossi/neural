@@ -14,8 +14,8 @@ explicit acceptance.
 
 Verify `## Reviewed state` before asking to move:
 
-- recompute every recorded product-file hash;
-- in git repos, compare the recorded `HEAD` and changed-file set;
+- confirm the recorded product and test file set is unchanged;
+- in git repos, compare the recorded `HEAD` and status;
 - any drift stops the archive and requires a fresh review;
 - for a legacy review without recorded state, explain that freshness is
   unverifiable and require explicit risk acceptance.
