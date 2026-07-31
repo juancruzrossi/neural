@@ -39,6 +39,7 @@ npx skills@latest add juancruzrossi/neural
 | `neural-plan` | Write the product spec → `PLAN.md` |
 | `neural-execute` | Walks the plan task by task; vertical-slicing TDD |
 | `neural-review` | Verifies plan vs. implementation |
+| `neural-address-review` | Apply approved fixes from a previous review. |
 | `neural-archive` | Freshness-check and archive the feature |
 | `neural-learn` | Add project knowledge for future references |
 | `neural-help` | Show the workflow |
