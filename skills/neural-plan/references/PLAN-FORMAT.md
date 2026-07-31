@@ -30,9 +30,8 @@ Path: `.neural/wip/<feature>/PLAN.md`.
 - <Consequential module, schema, compatibility, or architectural decision>
 
 ## Skills to load
-<!-- Include only when --skills was provided. Preserve each complete identifier
-character for character, including its leading / or $. -->
-- `<skill-name>` — <why it applies to this feature>
+<!-- Include only when --skills was provided. -->
+- `<skill-identifier>`
 
 ## Testing Strategy
 - **B1**: <how behavior is tested through a public interface and useful prior art>
