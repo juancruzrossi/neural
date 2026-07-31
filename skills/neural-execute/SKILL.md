@@ -26,8 +26,10 @@ Before changing code, read [TDD.md](./references/TDD.md) and apply every rule.
 ## Execute
 
 Choose the next smallest coherent behavior or related group from the current
-repository state. Inspect only then for the implementation areas and tests it
-actually affects; do not predict the complete file map upfront.
+repository state. When groups are similarly small, choose the one that resolves
+the highest implementation uncertainty or product risk first. Inspect only then
+for the implementation areas and tests it actually affects; do not predict the
+complete file map upfront.
 
 For each group:
 

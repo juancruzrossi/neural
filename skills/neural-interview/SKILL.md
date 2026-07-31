@@ -15,7 +15,9 @@ artifacts in the user's language.
 2. Inspect the repo for facts: git state, project context, related source and
    tests, existing ADRs, `.neural/{wip,archive}/`, and `.neural/knowledge/`.
    Established glossary and decisions are binding unless the user changes them
-   explicitly.
+   explicitly. Carry relevant terms, constraints, decisions, and recurring
+   warnings into the new context. Current verified code and an explicit user
+   decision override stale knowledge.
 3. In a multi-context repo, infer the parent context from `CONTEXT-MAP.md`; ask
    only if evidence is ambiguous.
 

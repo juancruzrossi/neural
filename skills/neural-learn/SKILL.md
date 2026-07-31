@@ -73,6 +73,3 @@ Knowledge base updated: .neural/knowledge/
 — DECISIONS.md     (<N> decisions)
 — ANTIPATTERNS.md  (<N> patterns)
 ```
-
-Leave knowledge changes local. Never stage, commit, or push; preserve
-pre-existing staged and unrelated changes as found.
