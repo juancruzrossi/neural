@@ -12,11 +12,8 @@ from the current codebase instead of following a predicted file-by-file plan.
 
 Resolve the feature from `$ARGUMENTS` or `.neural/wip/`. Require `CONTEXT.md`
 and `PLAN.md`; otherwise point to the missing prior phase. Read every feature
-ADR. Before inspecting or changing code, load every identifier under
-`Skills to load`. Preserve its recorded name and namespace; adapt only a leading
-`/` or `$` to the current platform's invocation notation. If any requested skill
-is unavailable, stop and report it rather than silently executing without its
-guidance.
+ADR. Keep the skills listed under `Skills to load` in mind and load each one on
+demand when its guidance is relevant to the current behavior.
 
 Require every product behavior to name a public interface and testing decision.
 An incomplete specification returns to neural-plan.

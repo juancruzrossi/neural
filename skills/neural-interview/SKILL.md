@@ -32,10 +32,9 @@ trade-off for each. A question that depends on an answer still open in this
 round belongs to the next round. Do not serialize independent decisions into
 one-question turns.
 
-Before sending a round, dependency-check every pair of questions: if answering
-one could change how the other is asked, defer the dependent question. The
+Defer questions that depend on answers still open in the current round. The
 frontier may be smaller than the full list of decisions; completeness is
-required across rounds, not inside one round.
+required across rounds.
 
 Facts belong to the agent: inspect the repo or environment instead of asking.
 Decisions belong to the user when they change acceptance, scope, a public
