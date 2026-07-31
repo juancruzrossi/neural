@@ -14,6 +14,10 @@
 ## Evidence
 - <files, ADRs, commands, and targeted probes actually inspected>
 
+<!-- Include this section only when --skills was provided. -->
+## Model Invocable Skills
+- `<skill identifier>`
+
 ## Behavior completion
 | Behavior | Status | Evidence |
 |---|---|---|
@@ -39,8 +43,8 @@
 
 ## Reviewed state
 Git: <HEAD and status | unavailable | disabled by context>
-Product files:
-- `<path>` — sha256:<hash>
+Files reviewed:
+- `<path>` — product or test
 
 ## Next action
 <one safe next step>

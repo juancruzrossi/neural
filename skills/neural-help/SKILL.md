@@ -20,6 +20,7 @@ Workflow:
   neural-plan        Write a stable, shareable product specification → PLAN.md
   neural-execute     Plan just in time and implement with honest evidence → EXECUTION.md
   neural-review      Verify goal, implementation, and test quality → REVIEW.md
+  neural-address-review  Apply approved fixes from a previous review.
   neural-archive     Freshness-check and archive a verified feature
   neural-learn       Rebuild project knowledge from all archives
 

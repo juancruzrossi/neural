@@ -1,6 +1,7 @@
 ---
 name: neural-review
 description: "Review implementation and test evidence against the approved feature goal, then seal the reviewed state"
+argument-hint: "[feature] [--skills <skill-1>, <skill-2>...]"
 ---
 
 # Neural Review
@@ -9,16 +10,28 @@ Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
 ## Establish scope
 
-Resolve the feature from `$ARGUMENTS` or `.neural/wip/`. Require `CONTEXT.md`
-and `PLAN.md`; read `EXECUTION.md`, every feature ADR, and any skills listed in
-the plan.
+1. Parse `$ARGUMENTS`. Treat `--skills` as the final argument group: split
+   comma-separated values, trim whitespace, and remove the flag and its values
+   from the feature selector. Preserve each complete skill identifier exactly
+   as written, including any leading `/` or `$`. Resolve that notation only
+   when locating the skill, then load every requested skill before reviewing.
+   If a requested skill is unavailable, stop and name it.
+2. Resolve the feature from the remaining selector or `.neural/wip/`. Require
+   `CONTEXT.md` and `PLAN.md`; read `EXECUTION.md`, every feature ADR, and
+   any skills listed in the plan.
 
-Identify the product and test files implicated by the actual changes. Read them,
-inspect relevant wiring, and run the canonical suite plus targeted probes when
-the suite cannot prove a promised property.
+3. Identify the product and test files implicated by the actual changes. Read
+   them, inspect relevant wiring, and run the canonical suite plus targeted
+   probes when the suite cannot prove a promised property.
 
-Identify repo standards that apply to changed files, including `AGENTS.md`,
-`CLAUDE.md`, `CONTRIBUTING.md`, and local equivalents.
+4. Identify repo standards that apply to changed files, including `AGENTS.md`,
+   `CLAUDE.md`, relevant skills, and local equivalents.
+
+## Model Invocable Skills
+
+When `--skills` is provided, load every requested skill before gathering
+review evidence. Include this section in `REVIEW.md`, preserving each
+identifier verbatim. Omit the section when the argument is absent.
 
 ## Verify on two independent axes
 
@@ -65,11 +78,11 @@ No concrete evidence means not verified.
 Write `.neural/wip/<feature>/REVIEW.md` using
 [REVIEW-FORMAT.md](./references/REVIEW-FORMAT.md).
 
-Always include a `## Reviewed state` with SHA-256 hashes for every reviewed
-product and test file. In git repos also record `HEAD` and `git status --short`
-excluding `.neural/`; otherwise record `Git: unavailable`. Recompute the file
-set and hashes after writing. If product state drifted, gather evidence again
-before issuing a verdict.
+Always include a `## Reviewed state` listing every reviewed product and test
+file. In git repos also record `HEAD` and `git status --short` excluding
+`.neural/`; otherwise record `Git: unavailable`. Reconfirm the reviewed file
+set after writing. If product state drifted, gather evidence again before
+issuing a verdict.
 
 Verdicts:
 
@@ -80,8 +93,8 @@ Verdicts:
 
 The review is complete only when every behavior and acceptance criterion is
 accounted for, both axes have explicit verdicts, fresh commands have finished,
-every implicated product and test file is hashed, and the overall verdict is no
-better than the worse axis.
+every implicated product and test file is accounted for, and the overall
+verdict is no better than the worse axis.
 
 ## Findings
 
