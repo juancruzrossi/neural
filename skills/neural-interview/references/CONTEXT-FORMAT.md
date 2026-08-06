@@ -54,3 +54,7 @@ rollback criteria only when the feature promises those properties.
 `Language` is a strict domain glossary: no implementation details or generic
 programming terms. Choose one canonical term and list meaningful aliases under
 `_Avoid_`.
+
+Record each rule once. Use Decisions for rationale-bearing choices, Acceptance
+Criteria for observable outcomes, and Scenarios only when one example
+disambiguates multiple rules.

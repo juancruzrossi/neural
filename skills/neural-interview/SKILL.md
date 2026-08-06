@@ -45,6 +45,9 @@ Use scenarios to expose relevant boundaries: success, failure, lifecycle,
 ownership, value ranges, retries, concurrency, or time. Skip dimensions the
 feature does not have.
 
+When contract-relevant terms are ambiguous, resolve the distinction explicitly.
+Choose one canonical term and record meaningful aliases under `_Avoid_`.
+
 Use judgment for reversible details inside an agreed decision boundary. Record
 the choice as an assumption instead of asking for permission. Surface
 contradictions with existing language, code, or decisions.
@@ -61,6 +64,7 @@ rationale, and the result of a real trade-off. If accepted, use
 ## Finish
 
 Finish when the decision frontier is empty: acceptance criteria are testable,
+every externally visible operation has an exact interface and result,
 high-impact decisions are resolved, non-goals and assumptions are visible, and
 remaining external unknowns are explicit Open Items. Present the resulting
 contract for one final confirmation. Do not continue interviewing for

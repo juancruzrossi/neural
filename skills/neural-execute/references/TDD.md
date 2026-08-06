@@ -63,24 +63,15 @@ When adding a verification rule—lint, import boundary, migration guard, schema
 check, or similar—prove that it bites: observe a pass, introduce one disposable
 violation and observe the expected failure, restore it, then observe a pass.
 
-For an atomic multi-step change, atomicity is not complete until all of the
-following evidence exists:
+For a critical atomic multi-step change:
 
-1. Inventory every reachable operation from the last validation through final
-   publication that can fail or run caller-controlled code. Include overloaded
-   lookup, comparison, arithmetic, hashing and assignment; callbacks;
-   serialization; allocation; I/O; receipt or event construction; registry
-   insertion; and any rollback operation.
-2. Induce a failure at every inventoried boundary through the highest practical
-   public interface. After each failure, assert every observable state
-   dimension, side effect, and reservation, then retry the same identifier
-   successfully.
-3. Run a disposable negative control against a plausible broken implementation
-   for the atomicity test and for each critical emergent-property detector.
-   Record the observed RED result; repeated green runs are not a negative
-   control.
-4. Record a table in `EXECUTION.md`: boundary, induced failure, observed state,
-   retry result, and negative-control result.
+1. Inventory observable state and fallible external or caller-controlled
+   boundaries from final validation through publication.
+2. Induce representative early and late failures, including one after valid
+   work, then assert complete no-change and a successful retry.
+3. Run a disposable negative control against plausible partial publication.
+4. Record one concise table in `EXECUTION.md`: boundary, failure, observed
+   state, retry, and negative-control result.
 
 Prefer preparing every fallible result before the first visible mutation and
 publishing once. Catch-and-restore is not atomicity evidence unless the same
