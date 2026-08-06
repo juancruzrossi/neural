@@ -37,7 +37,10 @@ For each group:
    behavior has falsifiable evidence and its focused checks are green. For an
    atomicity or critical emergent-property promise, also require the boundary
    inventory, induced failures, and negative controls in `TDD.md`.
-3. Refactor while green. Run the full suite at coherent checkpoints and always
+3. Refactor while green, but keep refactors local to the approved behavior.
+   Before changing a shared or hot path, prove no worse asymptotic complexity
+   with a focused benchmark or return the broader refactor to planning. Run the
+   full suite at coherent checkpoints and always
    before handoff, plus configured build, type, and lint checks relevant to the
    actual changes.
 4. Update `EXECUTION.md` with the behavior status, actual files, decisions, and
@@ -57,8 +60,9 @@ Write `.neural/wip/<feature>/EXECUTION.md` with:
 
 - one row per behavior: status, actual files, and focused evidence;
 - `RED observed` with reason, `already green`, or `N/A` for each behavior;
-- for each atomicity promise, every fallible boundary, induced failure,
-  observed state, retry result, and negative control;
+- for each atomicity promise, representative early and late fallible
+  boundaries, induced failure, observed state, retry result, and negative
+  control;
 - implementation decisions and deviations within approved boundaries;
 - verification commands and results;
 - blockers.

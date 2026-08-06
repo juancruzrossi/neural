@@ -3,3 +3,5 @@ node_modules/
 *.log
 .lab/
 run.log
+__pycache__/
+*.pyc

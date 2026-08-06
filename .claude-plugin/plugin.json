@@ -2,7 +2,7 @@
   "name": "neural",
   "displayName": "Neural",
   "description": "Spec-driven feature development for Claude Code and Codex",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": {
     "name": "Juan Cruz Rossi",
     "url": "https://github.com/juancruzrossi"

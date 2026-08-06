@@ -18,17 +18,12 @@
 ## Model Invocable Skills
 - `<skill-identifier>`
 
-## Behavior completion
-| Behavior | Status | Evidence |
-|---|---|---|
-| B1 | verified | <file, symbol, test, command> |
+## Contract verification
+| Behavior / truth | Implementation evidence | Test/runtime evidence | Status |
+|---|---|---|---|
+| <identity> — <observable truth> | <path/symbol> | <test/probe/result> | PASS/PARTIAL/FAIL |
 
 **Score:** <completed>/<total>
-
-## Goal-backward verification
-| Observable truth | Implementation evidence | Test/runtime evidence | Status |
-|---|---|---|---|
-| <truth> | <path/symbol> | <test/probe/result> | PASS/PARTIAL/FAIL |
 
 ## Test-quality audit
 - <finding or "None">
