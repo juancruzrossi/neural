@@ -60,6 +60,11 @@ by callers or another established public interface. Internal database, private
 method, filesystem, or log inspection cannot prove product behavior unless that
 surface is itself part of the public contract.
 
+Assign each behavior an evidence mode. Use `outcome` by default. Use
+`test-first` only for a bug reproduction, a pre-approved executable example,
+or an explicit user decision, and record the reason. Include a representative
+scale scenario only when input growth can affect the promised outcome.
+
 Define each behavior once with an ID. Testing decisions and acceptance criteria
 refer to those IDs instead of repeating the behavior. Every behavior ID must
 appear in both sections; no specified behavior sits outside the release gate.

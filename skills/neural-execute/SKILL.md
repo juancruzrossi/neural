@@ -18,8 +18,6 @@ demand when its guidance is relevant to the current behavior.
 Require every product behavior to name a public interface and testing decision.
 An incomplete specification returns to neural-plan.
 
-Before changing code, read [TDD.md](./references/TDD.md) and apply every rule.
-
 ## Execute
 
 Choose the next smallest coherent behavior or related group from the current
@@ -30,20 +28,28 @@ complete file map upfront.
 
 For each group:
 
-1. Apply the behavior-first loop through the specified public interface. If
+1. Work through the specified public interface. If
    that interface cannot expose the behavior or must change, stop and return to
    neural-plan rather than testing internals or silently redesigning the spec.
-2. Run focused tests during RED–GREEN. The group is complete only when each
-   behavior has falsifiable evidence and its focused checks are green. For an
-   atomicity or critical emergent-property promise, also require the boundary
-   inventory, induced failures, and negative controls in `TDD.md`.
-3. Refactor while green, but keep refactors local to the approved behavior.
-   Before changing a shared or hot path, prove no worse asymptotic complexity
-   with a focused benchmark or return the broader refactor to planning. Run the
-   full suite at coherent checkpoints and always
-   before handoff, plus configured build, type, and lint checks relevant to the
-   actual changes.
-4. Update `EXECUTION.md` with the behavior status, actual files, decisions, and
+2. Use the evidence mode recorded in `PLAN.md`. If none is recorded, use
+   **outcome**.
+   - **Outcome**: model the complete behavior group, implement it coherently,
+     then add focused tests or probes through the public interface.
+   - **Test-first**: write or select one behavioral test, observe a behavioral
+     failure from an importable public interface, add the smallest coherent
+     implementation, and repeat. Never write the whole test suite before the
+     implementation. Refactor only after the behavior group is green.
+3. Require falsifiable evidence for every behavior: observe the public outcome
+   and promised state, derive expectations independently, and prove the check
+   could fail. Read [EVIDENCE.md](./references/EVIDENCE.md) when the behavior
+   promises an emergent property, uses ambient process state, or handles input
+   that can grow.
+4. Refactor locally after the behavior is proven. Before changing a shared or
+   hot path, prove no worse asymptotic complexity with a focused benchmark or
+   return the broader refactor to planning. Run the full suite at coherent
+   checkpoints and always before handoff, plus configured build, type, and lint
+   checks relevant to the actual changes.
+5. Update `EXECUTION.md` with the behavior status, actual files, decisions, and
    evidence before choosing the next group.
 
 Honor `Decision Boundaries`. Decide reversible implementation details and
@@ -59,7 +65,7 @@ Never rewrite `PLAN.md` to match the implementation.
 Write `.neural/wip/<feature>/EXECUTION.md` with:
 
 - one row per behavior: status, actual files, and focused evidence;
-- `RED observed` with reason, `already green`, or `N/A` for each behavior;
+- evidence mode and observed result for each behavior;
 - for each atomicity promise, representative early and late fallible
   boundaries, induced failure, observed state, retry result, and negative
   control;

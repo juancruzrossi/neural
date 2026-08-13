@@ -42,8 +42,8 @@ contract, or a hard-to-reverse choice. Use the interaction tools available on
 the platform when they make a frontier easier to answer.
 
 Use scenarios to expose relevant boundaries: success, failure, lifecycle,
-ownership, value ranges, retries, concurrency, or time. Skip dimensions the
-feature does not have.
+ownership, value ranges, scale limits, retries, concurrency, or time. Skip
+dimensions the feature does not have.
 
 When contract-relevant terms are ambiguous, resolve the distinction explicitly.
 Choose one canonical term and record meaningful aliases under `_Avoid_`.

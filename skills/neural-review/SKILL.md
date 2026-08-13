@@ -57,7 +57,11 @@ the other.
      to prove no partial state, side effect, or reservation survives;
    - whether race, retry, rollback, timeout, ordering, or cache tests actively
      create the condition they claim to test, with a negative control when
-     critical RED evidence is missing;
+     critical outcome evidence is missing;
+   - relevant ambient state such as time, timezone, locale, decimal precision,
+     randomness, configuration, environment, or cache contents;
+   - unbounded input, nested work, or I/O per item without a stated bound and a
+     representative scale probe;
    - disabled, weak, circular, or implementation-coupled assertions;
    - expected values derived from an independent source.
 4. Scan changed files for context-relevant incomplete work, placeholders,

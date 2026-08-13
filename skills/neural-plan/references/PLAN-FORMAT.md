@@ -34,7 +34,7 @@ Path: `.neural/wip/<feature>/PLAN.md`.
 - `<skill-identifier>`
 
 ## Testing Strategy
-- **B1**: <how behavior is tested through a public interface and useful prior art>
+- **B1**: <public check>; evidence mode: <outcome, or test-first with reason>
 
 ## Acceptance Criteria
 - [ ] <criterion> — B1
@@ -58,7 +58,7 @@ Each behavior has one definition in `Product Behaviors`. `Testing Strategy` and
 `Acceptance Criteria` must each cover every behavior ID without redefining it.
 Product evidence crosses a public interface; internal inspection may diagnose a
 failure but cannot close an acceptance criterion unless the internal surface is
-part of the contract.
+part of the contract. Add a scale scenario only when it is material.
 
 No open product question belongs in an approved specification. Return unresolved
 decisions to neural-interview.
