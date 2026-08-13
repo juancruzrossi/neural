@@ -15,8 +15,9 @@ and `PLAN.md`; otherwise point to the missing prior phase. Read every feature
 ADR. Keep the skills listed under `Skills to load` in mind and load each one on
 demand when its guidance is relevant to the current behavior.
 
-Require every product behavior to name a public interface and testing decision.
-An incomplete specification returns to neural-plan.
+Require every product behavior to map to a public interface and testing
+decision. If an older plan omits the evidence mode, use the default below.
+Other incomplete specifications return to neural-plan.
 
 ## Execute
 

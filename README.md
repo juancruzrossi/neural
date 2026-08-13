@@ -2,8 +2,10 @@
 
 **A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
 
-```
-interview → plan → execute → review → archive → learn
+```text
+interview → plan → execute → review
+                             ├─ pass or accepted warnings → archive → learn
+                             └─ approved findings → address-review → review
 ```
 
 ## Why Neural?

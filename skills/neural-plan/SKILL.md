@@ -55,10 +55,10 @@ Prefer an existing public interface. When the feature creates or materially
 changes one, load [INTERFACE-DESIGN.md](./references/INTERFACE-DESIGN.md) and
 compare alternatives before recording the decision.
 
-Testing decisions must observe behavior through the same public interface used
-by callers or another established public interface. Internal database, private
-method, filesystem, or log inspection cannot prove product behavior unless that
-surface is itself part of the public contract.
+Testing decisions must name and observe the public interface used by callers or
+another established public interface. Internal database, private method,
+filesystem, or log inspection cannot prove product behavior unless that surface
+is itself part of the public contract.
 
 Assign each behavior an evidence mode. Use `outcome` by default. Use
 `test-first` only for a bug reproduction, a pre-approved executable example,

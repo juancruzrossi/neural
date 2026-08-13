@@ -34,7 +34,7 @@ Path: `.neural/wip/<feature>/PLAN.md`.
 - `<skill-identifier>`
 
 ## Testing Strategy
-- **B1**: <public check>; evidence mode: <outcome, or test-first with reason>
+- **B1**: <public interface and check>; evidence mode: <outcome, or test-first with reason>
 
 ## Acceptance Criteria
 - [ ] <criterion> — B1

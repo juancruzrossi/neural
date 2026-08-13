@@ -27,5 +27,8 @@ Workflow:
 Utility:
   neural-help        Show this reference
 
-Flow: interview → plan → execute → review → address-review → archive → learn
+Flow:
+  interview → plan → execute → review
+                               ├─ pass or accepted warnings → archive → learn
+                               └─ approved findings → address-review → review
 ```

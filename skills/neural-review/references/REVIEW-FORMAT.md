@@ -39,7 +39,9 @@
 ## Reviewed state
 Git: <HEAD and status | unavailable | disabled by context>
 Files reviewed:
-- `<path>` — product or test
+- `<path>` — <product | test | context | plan | execution | ADR> — SHA-256: `<digest>`
+Feature-Tree-SHA256: `<canonical feature-tree digest, excluding REVIEW.md>`
+Review-SHA256: `<SHA-256 of this file with this entire line removed>`
 
 ## Next action
 <one safe next step>
