@@ -31,11 +31,8 @@ are claims, not proof.
 
 With `--adversarial`, perform the same two-axis inspection as a read-only
 adversary, but return candidate findings in the response instead of writing
-`REVIEW.md` or changing any file. Inspect the actual diff, changed files,
-tests, surrounding code, and repository instructions. Look especially for
-bugs, regressions, plan deviations, edge cases, weak or circular tests,
-concurrency, retry, rollback, atomicity, scope creep, and incomplete or debug
-code when relevant.
+`REVIEW.md` or changing any file. Inspect the actual diff and changed-file set
+in addition to the normal scope.
 
 Label every finding `candidate` and cite concrete evidence. State which tests
 or commands were freshly run and which evidence remains unverified. Do not

@@ -1,13 +1,10 @@
 # Persistent Adversarial Review
 
-Use the other supported coding agent as a read-only reviewer. Keep one reviewer
-session per feature and reuse it for both passes. The reviewer produces
-candidate findings; only the user may approve them, and only the primary agent
-may apply them.
-
-When Claude Code is primary, use Codex as reviewer. When Codex is primary, use
-Claude Code. Launch the reviewer directly from the primary session; never ask
-the user to open another terminal.
+Use another installed supported agent as a read-only reviewer. Infer the
+counterpart from the current environment. Keep one reviewer session per feature
+and reuse it for both passes. Launch it from the primary session; never ask the
+user to open another terminal. Its findings are candidates: only the user may
+approve them, and only the primary agent may apply them.
 
 ## Artifacts
 
@@ -21,10 +18,10 @@ Use only:
     └── EXECUTION-REVIEW.md
 ```
 
-The hidden JSON contains only `reviewer` (`claude` or `codex`) and
-`session_id`. Never create temporary review Markdown or session metadata
-Markdown. Create an artifact only after a command succeeds and its review is
-non-empty. Preserve an existing artifact on failure.
+The hidden JSON contains only the CLI adapter and `session_id`. Never create
+temporary review Markdown or session metadata Markdown. Create an artifact only
+after a command succeeds and its review is non-empty. Preserve an existing
+artifact on failure.
 
 ## Prompts
 
@@ -33,17 +30,18 @@ must ask only for contradictions with `CONTEXT.md` or ADRs, ambiguous public
 contracts, acceptance gaps, missing edge cases, non-observable behaviors, and
 testing that cannot demonstrate behavior.
 
-The execution prompt must tell Claude to invoke
-`/neural:neural-review <feature> --adversarial`, or Codex to invoke
-`$neural-review <feature> --adversarial`. Do not restate or imitate the skill.
-Include the actual diff and changed-file set in the review input, then let the
-skill inspect `CONTEXT.md`, `PLAN.md`, ADRs, `EXECUTION.md`, tests, surrounding
-code, and repository instructions. The reviewer must distinguish freshly
-verified evidence from claims it could not verify in read-only mode.
+The execution prompt must tell the reviewer to invoke
+`neural-review <feature> --adversarial` with its native skill syntax. Do not
+restate or imitate the skill. Include the actual diff and changed-file set in
+the review input. The reviewer must distinguish freshly verified evidence from
+claims it could not verify in read-only mode.
 
-## Claude reviewer
+## CLI adapters
 
-Start the plan review without disabling persistence:
+### `claude`
+
+Use `/neural:neural-review` in the execution prompt. Start the plan review
+without disabling persistence:
 
 ```bash
 result=$(claude -p \
@@ -57,8 +55,8 @@ review=$(printf '%s' "$result" | jq -er \
   'select(.is_error == false) | .result | select(length > 0)')
 ```
 
-Resume the same session for execution review. Claude effort is not persistent,
-so specify `high` again:
+Resume the same session for execution review. `--effort` is not persistent, so
+specify `high` again:
 
 ```bash
 result=$(claude -p \
@@ -74,9 +72,10 @@ review=$(printf '%s' "$result" | jq -er \
   'select(.is_error == false) | .result | select(length > 0)')
 ```
 
-## Codex reviewer
+### `codex`
 
-Start Codex in a read-only sandbox and capture JSONL:
+Use `$neural-review` in the execution prompt. Start in a read-only sandbox and
+capture JSONL:
 
 ```bash
 result=$(codex exec -C "$PWD" --sandbox read-only --json \
@@ -87,7 +86,7 @@ review=$(printf '%s' "$result" | jq -ser \
   '[.[] | select(.type == "item.completed" and .item.type == "agent_message") | .item.text] | last | select(length > 0)')
 ```
 
-Resume with the verified Codex subcommand syntax:
+Resume with the verified `codex exec resume` syntax:
 
 ```bash
 result=$(codex exec -C "$PWD" --sandbox read-only --json \
@@ -105,18 +104,18 @@ conversation.
 ## Persist and present
 
 After the plan pass succeeds, create `adversarial-review/`, write the review to
-`PLAN-REVIEW.md`, and write the reviewer and session ID to
+`PLAN-REVIEW.md`, and write the CLI adapter and session ID to
 `.adversarial-review.json`. Before the execution pass, require matching
 metadata and resume that exact session. Write its successful result to
 `EXECUTION-REVIEW.md`. Persist the reviewer text directly without a
-provider-specific wrapper.
+CLI-specific wrapper.
 
 If valid metadata already exists, do not replace it or create another plan
 review session. Surface the existing review and continue from its recorded
 state.
 
 Treat a missing CLI, missing skill, non-zero exit, malformed JSON, absent
-session ID, empty result, provider mismatch, or failed resume as an unavailable
+session ID, empty result, adapter mismatch, or failed resume as an unavailable
 review, never as a clean review. Report the failure and recovery command; do
 not silently start an independent replacement session. Show successful
 findings with their provenance and ask the user which specific findings to
