@@ -87,4 +87,11 @@ staged and unrelated changes exactly as found.
 
 Report behavior counts, deviations, local worktree state, and the
 `EXECUTION.md` path.
+If `.adversarial-review.json` exists, load
+[ADVERSARIAL-REVIEW.md](../neural-review/references/ADVERSARIAL-REVIEW.md), resume
+that exact reviewer session, and request `neural-review --adversarial`. Present
+its candidate findings for user approval; never apply them automatically. If
+there is no session metadata, do not create an independent execution-review
+session.
+
 All green: suggest `Ready to verify? Run neural-review.`

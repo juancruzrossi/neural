@@ -20,6 +20,7 @@ Workflow:
   neural-plan        Write a stable, shareable product specification → PLAN.md
   neural-execute     Plan just in time and implement with honest evidence → EXECUTION.md
   neural-review      Verify goal, implementation, and test quality → REVIEW.md
+                     Other agent may invoke it read-only for candidate findings
   neural-address-review  Apply approved fixes from a previous review.
   neural-archive     Freshness-check and archive a verified feature
   neural-learn       Rebuild project knowledge from all archives
@@ -28,7 +29,8 @@ Utility:
   neural-help        Show this reference
 
 Flow:
-  interview → plan → execute → review
-                               ├─ pass or accepted warnings → archive → learn
-                               └─ approved findings → address-review → review
+  interview → plan → optional adversarial plan review → execute
+                 → optional adversarial neural-review → final review
+                     ├─ pass or accepted warnings → archive → learn
+                     └─ approved findings → address-review → review
 ```

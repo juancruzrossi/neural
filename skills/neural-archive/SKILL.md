@@ -32,7 +32,8 @@ existing archive and the candidate feature in place. A missing required source
 stops the archive.
 
 Stop if `.neural/archive/<feature>/` already exists. Never overwrite or nest an
-archive.
+archive. Adversarial artifacts are optional; when present, they move with the
+complete feature directory without special handling.
 
 Show the verdict and freshness result, then ask once:
 `Archive <feature>? (y/n)`. On confirmation:

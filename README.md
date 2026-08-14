@@ -3,9 +3,11 @@
 **A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
 
 ```text
-interview → plan → execute → review
-                             ├─ pass or accepted warnings → archive → learn
-                             └─ approved findings → address-review → review
+interview → plan → optional adversarial plan review → execute
+  → optional adversarial neural-review (same reviewer session)
+  → optional approved fixes → final review
+                               ├─ pass → archive → learn
+                               └─ fail → address-review → review
 ```
 
 ## Why Neural?
@@ -58,6 +60,10 @@ All artifacts live in `.neural/` at your project root:
 │       ├── PLAN.md
 │       ├── EXECUTION.md
 │       ├── REVIEW.md
+│       ├── .adversarial-review.json         optional reviewer session
+│       ├── adversarial-review/              optional candidate findings
+│       │   ├── PLAN-REVIEW.md
+│       │   └── EXECUTION-REVIEW.md
 │       └── docs/adr/     optional, consequential decisions only
 ├── archive/
 │   └── <feature>/        freshly reviewed completed feature

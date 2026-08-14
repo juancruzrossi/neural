@@ -6,15 +6,19 @@ argument-hint: "[feature] [--skills <skill-1>, <skill-2>...]"
 
 # Neural Review
 
-Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
+Review from fresh evidence. `PLAN.md`, `EXECUTION.md`, and adversarial reviews
+are claims, not proof.
 
 ## Establish scope
 
-1. Parse `$ARGUMENTS`. When `--skills` is provided, keep the requested skills
-   in mind and load each one on demand when relevant to the current work.
+1. Parse `$ARGUMENTS`. `--adversarial` selects the read-only candidate-review
+   mode below. When `--skills` is provided, keep the requested skills in mind
+   and load each one on demand when relevant to the current work.
 2. Resolve the feature from the remaining selector or `.neural/wip/`. Require
    `CONTEXT.md`, `PLAN.md`, and `EXECUTION.md`; read every feature ADR and any
-   skills listed in the plan.
+   skills listed in the plan. Read `adversarial-review/PLAN-REVIEW.md` and
+   `adversarial-review/EXECUTION-REVIEW.md` when present, preserving their
+   provenance.
 
 3. Identify the product and test files implicated by the actual changes. Read
    them, inspect relevant wiring, and run the canonical suite plus targeted
@@ -22,6 +26,23 @@ Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 
 4. Identify repo standards that apply to changed files, including `AGENTS.md`,
    `CLAUDE.md`, relevant skills, and local equivalents.
+
+## Adversarial mode
+
+With `--adversarial`, perform the same two-axis inspection as a read-only
+adversary, but return candidate findings in the response instead of writing
+`REVIEW.md` or changing any file. Inspect the actual diff, changed files,
+tests, surrounding code, and repository instructions. Look especially for
+bugs, regressions, plan deviations, edge cases, weak or circular tests,
+concurrency, retry, rollback, atomicity, scope creep, and incomplete or debug
+code when relevant.
+
+Label every finding `candidate` and cite concrete evidence. State which tests
+or commands were freshly run and which evidence remains unverified. Do not
+issue the final Neural verdict, seal reviewed state, suggest archive, apply a
+fix, or treat earlier plan-review findings as true. Stop after returning the
+candidate report; the invoking workflow persists it as
+`adversarial-review/EXECUTION-REVIEW.md`.
 
 ## Model Invocable Skills
 
@@ -78,8 +99,9 @@ Write `.neural/wip/<feature>/REVIEW.md` using
 [REVIEW-FORMAT.md](./references/REVIEW-FORMAT.md).
 
 Always include a `## Reviewed state` listing every reviewed product file, test
-file, `CONTEXT.md`, `PLAN.md`, `EXECUTION.md`, and ADR with its SHA-256. In git
-repos also record `HEAD` and `git status --short --untracked-files=all`
+file, `CONTEXT.md`, `PLAN.md`, `EXECUTION.md`, ADR, and existing adversarial
+review with its SHA-256 and provenance. In git repos also record `HEAD` and
+`git status --short --untracked-files=all`
 excluding `.neural/`; otherwise record `Git: unavailable`. Create
 `Feature-Tree-SHA256` and `Review-SHA256` exactly as defined in
 [REVIEW-SEAL.md](./references/REVIEW-SEAL.md). Reconfirm the reviewed file set
