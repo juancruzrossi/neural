@@ -13,8 +13,8 @@ Review from fresh evidence. `PLAN.md` and `EXECUTION.md` are claims, not proof.
 1. Parse `$ARGUMENTS`. When `--skills` is provided, keep the requested skills
    in mind and load each one on demand when relevant to the current work.
 2. Resolve the feature from the remaining selector or `.neural/wip/`. Require
-   `CONTEXT.md` and `PLAN.md`; read `EXECUTION.md`, every feature ADR, and
-   any skills listed in the plan.
+   `CONTEXT.md`, `PLAN.md`, and `EXECUTION.md`; read every feature ADR and any
+   skills listed in the plan.
 
 3. Identify the product and test files implicated by the actual changes. Read
    them, inspect relevant wiring, and run the canonical suite plus targeted
@@ -52,12 +52,19 @@ the other.
    speculative interface or scope was added.
 3. Audit tests with the adversarial question: **could this test pass while the
    promised property is broken?** Check in particular:
+   - the recorded evidence mode matches `PLAN.md`; treat a missing mode in a
+     legacy plan as `outcome`. Test-first evidence includes a behavioral failure
+     through the intended public interface, not only an import or setup failure;
    - every observable state dimension after rejected or atomic operations;
    - every fallible boundary through atomic publication, using fault injection
      to prove no partial state, side effect, or reservation survives;
    - whether race, retry, rollback, timeout, ordering, or cache tests actively
      create the condition they claim to test, with a negative control when
-     critical RED evidence is missing;
+     critical outcome evidence is missing;
+   - relevant ambient state such as time, timezone, locale, decimal precision,
+     randomness, configuration, environment, or cache contents;
+   - unbounded input, nested work, or I/O per item without a stated bound and a
+     representative scale probe;
    - disabled, weak, circular, or implementation-coupled assertions;
    - expected values derived from an independent source.
 4. Scan changed files for context-relevant incomplete work, placeholders,
@@ -70,11 +77,13 @@ No concrete evidence means not verified.
 Write `.neural/wip/<feature>/REVIEW.md` using
 [REVIEW-FORMAT.md](./references/REVIEW-FORMAT.md).
 
-Always include a `## Reviewed state` listing every reviewed product and test
-file. In git repos also record `HEAD` and `git status --short` excluding
-`.neural/`; otherwise record `Git: unavailable`. Reconfirm the reviewed file
-set after writing. If product state drifted, gather evidence again before
-issuing a verdict.
+Always include a `## Reviewed state` listing every reviewed product file, test
+file, `CONTEXT.md`, `PLAN.md`, `EXECUTION.md`, and ADR with its SHA-256. In git
+repos also record `HEAD` and `git status --short --untracked-files=all`
+excluding `.neural/`; otherwise record `Git: unavailable`. Create
+`Feature-Tree-SHA256` and `Review-SHA256` exactly as defined in
+[REVIEW-SEAL.md](./references/REVIEW-SEAL.md). Reconfirm the reviewed file set
+and hashes. If state drifted, gather evidence again before issuing a verdict.
 
 Verdicts:
 

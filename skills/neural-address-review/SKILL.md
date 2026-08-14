@@ -13,9 +13,10 @@ Apply approved findings from `.neural/wip/<feature>/REVIEW.md` after the user ap
 2. If exactly one feature directory exists, use it automatically.
 3. If several exist and no argument matches one, list them and ask which review
    to address.
-4. Require `REVIEW.md`, `CONTEXT.md`, and `PLAN.md`. Read every feature ADR
-   and the review's `## Findings`, `## Behavior completion`, and
-   `## Goal-backward verification` sections.
+4. Require `REVIEW.md`, `EXECUTION.md`, `CONTEXT.md`, and `PLAN.md`. Read every
+   feature ADR, any skills listed in the plan, and the review's `## Findings`
+   and `## Contract verification` sections. Load listed skills on demand when
+   relevant to a fix.
 5. Treat `REVIEW.md` as evidence, not as permission to expand scope. Preserve
    the approved public contract and decision boundaries.
 
@@ -26,9 +27,8 @@ Classify each finding:
 - **Warning** — present it to the user for an explicit fix/skip decision.
 - **Info** — do not change product code unless the user requests it.
 
-Include behaviors marked `failed` or `partial` and goal-backward truths marked
-`FAIL` or `PARTIAL`. Produce a concise plan that maps each approved item to
-an observable correction and its verification.
+Include contract rows marked `FAIL` or `PARTIAL`. Produce a concise plan that
+maps each approved item to an observable correction and its verification.
 
 Stop and show the plan. Do not modify code until the user approves it.
 
@@ -39,7 +39,9 @@ For each approved item, in dependency order:
 2. Add or strengthen public-interface evidence when the review identified a
    coverage gap.
 3. Run focused verification and then the relevant full checks.
-4. Record deviations, blockers, and actual evidence locally.
+4. Append the approved correction, actual files, and evidence to
+   `EXECUTION.md`. Preserve its prior history.
+5. Record deviations and blockers locally.
 
 Do not rewrite `PLAN.md` to match an implementation. If a fix requires a new
 public contract, schema, dependency, or architectural decision, stop and return

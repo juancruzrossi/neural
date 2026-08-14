@@ -2,8 +2,10 @@
 
 **A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
 
-```
-interview → plan → execute → review → archive → learn
+```text
+interview → plan → execute → review
+                             ├─ pass or accepted warnings → archive → learn
+                             └─ approved findings → address-review → review
 ```
 
 ## Why Neural?
@@ -37,7 +39,7 @@ npx skills@latest add juancruzrossi/neural --skill '*'
 |---|---|
 | `neural-interview` | Clarify the feature → `CONTEXT.md` |
 | `neural-plan` | Write the product spec → `PLAN.md` |
-| `neural-execute` | Walks the plan task by task; vertical-slicing TDD |
+| `neural-execute` | Implements the plan with risk-selected evidence |
 | `neural-review` | Verifies plan vs. implementation |
 | `neural-address-review` | Apply approved fixes from a previous review. |
 | `neural-archive` | Freshness-check and archive the feature |
