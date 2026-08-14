@@ -37,8 +37,10 @@ For each group:
    - **Outcome**: model the complete behavior group, implement it coherently,
      then add focused tests or probes through the public interface.
    - **Test-first**: write or select one behavioral test, observe a behavioral
-     failure from an importable public interface, add the smallest coherent
-     implementation, and repeat. Never write the whole test suite before the
+     failure through the public interface, add the smallest coherent
+     implementation, and repeat. If a new interface cannot run yet, create only
+     its minimal compilable or runnable entry point first; import or setup
+     failure is not behavioral RED. Never write the whole test suite before the
      implementation. If the test is already green, confirm the behavior already
      exists; never weaken code or assertions to manufacture RED. Record the
      already-green result and continue with the next unmet behavior. Refactor

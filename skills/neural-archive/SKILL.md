@@ -24,8 +24,8 @@ Verify `## Reviewed state` before asking to move:
   match; never refresh a seal during archive;
 - in git repos, compare the recorded `HEAD` and status;
 - any drift stops the archive and requires a fresh review;
-- for a legacy review without recorded state, explain that freshness is
-  unverifiable and require explicit risk acceptance.
+- for a legacy review missing reviewed state or any required seal field,
+  explain that freshness is unverifiable and require explicit risk acceptance.
 
 Before asking, run the neural-learn source-coverage preflight against every
 existing archive and the candidate feature in place. A missing required source

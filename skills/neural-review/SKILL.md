@@ -54,7 +54,7 @@ the other.
    promised property is broken?** Check in particular:
    - the recorded evidence mode matches `PLAN.md`; treat a missing mode in a
      legacy plan as `outcome`. Test-first evidence includes a behavioral failure
-     at an importable public interface, not only an import or setup failure;
+     through the intended public interface, not only an import or setup failure;
    - every observable state dimension after rejected or atomic operations;
    - every fallible boundary through atomic publication, using fault injection
      to prove no partial state, side effect, or reservation survives;
