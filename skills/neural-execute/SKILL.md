@@ -39,7 +39,10 @@ For each group:
    - **Test-first**: write or select one behavioral test, observe a behavioral
      failure from an importable public interface, add the smallest coherent
      implementation, and repeat. Never write the whole test suite before the
-     implementation. Refactor only after the behavior group is green.
+     implementation. If the test is already green, confirm the behavior already
+     exists; never weaken code or assertions to manufacture RED. Record the
+     already-green result and continue with the next unmet behavior. Refactor
+     only after the behavior group is green.
 3. Require falsifiable evidence for every behavior: observe the public outcome
    and promised state, derive expectations independently, and prove the check
    could fail. Read [EVIDENCE.md](./references/EVIDENCE.md) when the behavior
@@ -47,9 +50,11 @@ For each group:
    that can grow.
 4. Refactor locally after the behavior is proven. Before changing a shared or
    hot path, prove no worse asymptotic complexity with a focused benchmark or
-   return the broader refactor to planning. Run the full suite at coherent
-   checkpoints and always before handoff, plus configured build, type, and lint
-   checks relevant to the actual changes.
+   return the broader refactor to planning. Discover canonical verification
+   commands from repository instructions, CI, wrappers, scripts, and
+   configuration. Run the full suite at coherent checkpoints and always before
+   handoff, plus configured build, type, and lint checks relevant to the actual
+   changes.
 5. Update `EXECUTION.md` with the behavior status, actual files, decisions, and
    evidence before choosing the next group.
 
