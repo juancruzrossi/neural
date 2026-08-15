@@ -23,6 +23,10 @@ Do not synthesize until each archive has source coverage. A missing required
 file is an error; an absent ADR directory is valid. Never infer “no findings”
 without reading the review.
 
+Do not use `adversarial-review/` as a direct knowledge source. Its findings are
+candidate evidence; confirmed outcomes must be reflected in the canonical
+sources above or current verified code before they can influence knowledge.
+
 Archived artifacts are historical evidence. Spot-check stack, convention, and
 architecture claims against the current repo. When archives disagree, prefer
 current verified code; if current code cannot resolve the conflict, record it

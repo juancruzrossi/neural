@@ -5,7 +5,7 @@ description: "Apply approved fixes from a previous review."
 
 # Neural Address Review
 
-Apply approved findings from `.neural/wip/<feature>/REVIEW.md` after the user approves the fix plan.
+Apply user-approved findings from a final or adversarial execution review.
 
 ## Establish scope
 
@@ -13,12 +13,14 @@ Apply approved findings from `.neural/wip/<feature>/REVIEW.md` after the user ap
 2. If exactly one feature directory exists, use it automatically.
 3. If several exist and no argument matches one, list them and ask which review
    to address.
-4. Require `REVIEW.md`, `EXECUTION.md`, `CONTEXT.md`, and `PLAN.md`. Read every
-   feature ADR, any skills listed in the plan, and the review's `## Findings`
-   and `## Contract verification` sections. Load listed skills on demand when
-   relevant to a fix.
-5. Treat `REVIEW.md` as evidence, not as permission to expand scope. Preserve
-   the approved public contract and decision boundaries.
+4. Require `EXECUTION.md`, `CONTEXT.md`, and `PLAN.md`, plus at least one finding
+   source: `REVIEW.md` or `adversarial-review/EXECUTION-REVIEW.md`. Read every
+   feature ADR, any skills listed in the plan, and only the source findings the
+   user selected. Load listed skills on demand when relevant to a fix.
+5. Keep the source path attached to every finding. Treat either review as
+   evidence, not as permission to expand scope. Never merge adversarial
+   findings silently into `REVIEW.md`. Preserve the approved public contract
+   and decision boundaries.
 
 ## Build the fix plan
 
@@ -27,8 +29,10 @@ Classify each finding:
 - **Warning** — present it to the user for an explicit fix/skip decision.
 - **Info** — do not change product code unless the user requests it.
 
-Include contract rows marked `FAIL` or `PARTIAL`. Produce a concise plan that
-maps each approved item to an observable correction and its verification.
+For `REVIEW.md`, include contract rows marked `FAIL` or `PARTIAL`. For either
+source, include only findings the user approved. Produce a concise plan that
+maps each approved item and its provenance to an observable correction and its
+verification.
 
 Stop and show the plan. Do not modify code until the user approves it.
 

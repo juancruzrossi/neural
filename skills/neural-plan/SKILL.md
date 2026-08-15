@@ -83,10 +83,11 @@ contains no implementation checklist or placeholder.
 
 ## Optional adversarial review
 
-If another supported coding agent is installed, offer one cross-review. Load
-[CROSS-REVIEW.md](./references/CROSS-REVIEW.md) only if the user accepts.
-Never change the specification from external feedback without explicit
-approval. When declined, omit review output.
+If another supported coding agent is installed, offer a persistent adversarial
+plan review. If the user accepts, load
+[ADVERSARIAL-REVIEW.md](../neural-review/references/ADVERSARIAL-REVIEW.md) and
+follow its plan-review flow. Never change the specification from candidate
+findings without explicit approval. When declined, omit adversarial artifacts.
 
 Report the behavior count and major public-interface decisions, then suggest:
 `Ready to execute? Run neural-execute.`
