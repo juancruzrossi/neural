@@ -13,7 +13,7 @@ review. Optional sections should appear only when they contain useful evidence.
 **Parent context:** <name> <!-- only for multi-context repos -->
 
 ## Problem
-<What must change and why.>
+<Whose problem this is, what must change, and why.>
 
 ## Language <!-- optional -->
 **<Domain term>**:
@@ -21,10 +21,10 @@ review. Optional sections should appear only when they contain useful evidence.
 _Avoid_: <aliases>
 
 ## Decisions
-- <Resolved product or technical choice>
+- <Resolved product or technical choice, including material priority trade-offs>
 
 ## Constraints <!-- optional -->
-- <Limit imposed by product, platform, policy, or compatibility>
+- <Non-negotiable limit imposed by product, platform, policy, or compatibility>
 
 ## Scenarios <!-- optional -->
 - <Representative flow or edge case>
@@ -40,7 +40,7 @@ _Avoid_: <aliases>
 - Ask user before: <scope, contract, irreversible, or high-risk choices>
 
 ## Acceptance Criteria
-- [ ] <Observable, testable outcome>
+- [ ] <Observable outcome and the public-interface test or evaluation that proves it>
 
 ## Open Items <!-- optional -->
 - <Unresolved question and why it remains unresolved>

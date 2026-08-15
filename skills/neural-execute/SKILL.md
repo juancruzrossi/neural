@@ -17,7 +17,9 @@ demand when its guidance is relevant to the current behavior.
 
 Require every product behavior to map to a public interface and testing
 decision. If an older plan omits the evidence mode, use the default below.
-Other incomplete specifications return to neural-plan.
+Require every non-negotiable priority in `CONTEXT.md` to survive in `PLAN.md`
+as a behavior, decision, or testing gate. Other incomplete specifications
+return to neural-plan.
 
 ## Execute
 
