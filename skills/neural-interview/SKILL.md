@@ -41,6 +41,12 @@ Decisions belong to the user when they change acceptance, scope, a public
 contract, or a hard-to-reverse choice. Use the interaction tools available on
 the platform when they make a frontier easier to answer.
 
+Before closing the frontier, establish three lenses without repeating resolved
+facts: whose problem the requirements solve and what counts as done; which of
+cost, speed, reliability, security, and privacy is non-negotiable; and what test
+or evaluation through a public interface would prove the result works. Ask only
+when repo evidence and prior decisions do not settle the answer.
+
 Use scenarios to expose relevant boundaries: success, failure, lifecycle,
 ownership, value ranges, scale limits, retries, concurrency, or time. Skip
 dimensions the feature does not have.

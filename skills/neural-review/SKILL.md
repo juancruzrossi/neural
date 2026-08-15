@@ -56,8 +56,8 @@ the other.
 
 1. Check each specified behavior against substantive files, wiring, and fresh
    command results. Verify declared deviations rather than accepting them.
-2. Derive observable truths from the product outcome and every acceptance
-   criterion.
+2. Derive observable truths from the product outcome, every acceptance
+   criterion, and every non-negotiable priority in `CONTEXT.md` and `PLAN.md`.
    For each truth, establish that the implementation exists, is substantive,
    is reachable through the intended public interface, and produces the
    promised outcome.

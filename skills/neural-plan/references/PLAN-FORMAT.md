@@ -9,10 +9,10 @@ Path: `.neural/wip/<feature>/PLAN.md`.
 <What is being built and the value it creates, in a short paragraph.>
 
 ## Problem
-<The current user or business problem.>
+<Whose current user or business problem this is and why it matters.>
 
 ## Product Outcome
-<The proposed experience and what success looks like.>
+<The proposed experience and what counts as done.>
 
 ## Product Behaviors
 | ID | Scenario | Expected outcome |
@@ -27,7 +27,7 @@ Path: `.neural/wip/<feature>/PLAN.md`.
 - **Failures**: <caller-visible errors and resulting state>
 
 ## Implementation Decisions
-- <Consequential module, schema, compatibility, or architectural decision>
+- <Consequential decision, including any material non-negotiable priority>
 
 ## Skills to load
 <!-- Include only when --skills was provided. -->

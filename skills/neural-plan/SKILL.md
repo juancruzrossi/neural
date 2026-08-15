@@ -18,13 +18,18 @@ built, not an implementation checklist. Do not create a separate PRD.
    exists, point to neural-interview; if several exist, ask which one.
 3. Require `CONTEXT.md`. Read it, every feature ADR, and `.neural/knowledge/`
    when present.
-4. Inspect related code and tests to understand current behavior, domain
+4. Trace the interview lenses into the specification without duplicating
+   rules: affected party into Problem; done into Product Outcome, behaviors,
+   and acceptance; non-negotiable priorities into the relevant behaviors,
+   decisions, and testing; proposed proof into Testing Strategy. Return any
+   lens that cannot be represented without guessing to neural-interview.
+5. Inspect related code and tests to understand current behavior, domain
    language, existing public interfaces, and testing precedent. Use that
    knowledge to keep the spec realistic, not to predict an edit list.
-5. Normalize each public operation and lifecycle transition into its input,
+6. Normalize each public operation and lifecycle transition into its input,
    success output, errors, next state, and observable side effects. If repeated
    statements conflict, return the exact conflict to neural-interview.
-6. Run a counterexample check: imagine two reasonable implementations that
+7. Run a counterexample check: imagine two reasonable implementations that
    satisfy the written context. If callers could observe different results for
    the same input or lifecycle, return the smallest distinguishing product
    decision to neural-interview.
