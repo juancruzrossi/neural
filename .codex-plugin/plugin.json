@@ -1,7 +1,7 @@
 {
   "name": "neural",
-  "version": "2.2.1",
-  "description": "Spec-driven feature development for Claude Code and Codex",
+  "version": "3.0.0",
+  "description": "Spec-driven development for AI coding agents",
   "skills": "./skills/",
   "author": {
     "name": "Juan Cruz Rossi",
@@ -20,8 +20,8 @@
   ],
   "interface": {
     "displayName": "Neural",
-    "shortDescription": "Spec-driven feature development",
-    "longDescription": "Turn feature requests into shareable product specs, tested implementation, independent verification, and reusable project knowledge.",
+    "shortDescription": "Spec-driven development for AI coding agents",
+    "longDescription": "Interview a feature into a shared context, plan it, implement it in vertical slices, review it against the plan, and archive it once it passes.",
     "developerName": "Juan Cruz Rossi",
     "category": "Coding",
     "capabilities": [
@@ -31,7 +31,7 @@
     ],
     "defaultPrompt": [
       "Help me define and build a feature with Neural.",
-      "Review my Neural feature against its product spec."
+      "Review my Neural feature against its plan."
     ]
   }
 }

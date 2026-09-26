@@ -9,7 +9,7 @@
     {
       "name": "neural",
       "displayName": "Neural",
-      "description": "Spec-driven feature development for Claude Code and Codex",
+      "description": "Spec-driven development for AI coding agents",
       "source": "./",
       "author": {
         "name": "Juan Cruz Rossi",

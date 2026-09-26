@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "neural",
-      "description": "Spec-driven feature development for Claude Code and Codex",
+      "description": "Spec-driven development for AI coding agents",
       "source": {
         "source": "url",
         "url": "https://github.com/juancruzrossi/neural.git",
