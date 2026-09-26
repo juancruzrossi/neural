@@ -27,6 +27,6 @@ Done when nothing that changes what gets built or how it is verified is still op
 
 Write `.neural/wip/<feature>/CONTEXT.md` with sections: Problem, Decisions, Non-goals, Acceptance criteria, Open items.
 
-Git: if this is a git repository, commit locally as you finish meaningful work. Never push. Without git, just work.
+Git: if this is a git repository, commit `CONTEXT.md` locally. Never push.
 
 Report: `Interview complete for <feature>. Context: .neural/wip/<feature>/CONTEXT.md. Next: neural-plan.`

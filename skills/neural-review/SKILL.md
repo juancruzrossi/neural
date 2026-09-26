@@ -23,6 +23,6 @@ Run the project's test suite and any command needed to verify a claim. Do not ac
 
 Write `.neural/wip/<feature>/REVIEW.md`: Verdict (PASS/FAIL), per-axis verdict, findings with location and fix, commands run. Overall verdict is the worse of the two axes.
 
-Git: if this is a git repository, commit locally as you finish meaningful work. Never push. Without git, just work.
+Git: if this is a git repository, commit `REVIEW.md` locally. Never push.
 
 Report the verdict. PASS: suggest neural-archive. FAIL: suggest neural-implement to fix the listed findings.
