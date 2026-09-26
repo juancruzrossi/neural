@@ -4,7 +4,6 @@
 
 ```text
 interview → plan → implement → review → archive
-                              └─ FAIL → implement
 ```
 
 ## Install
