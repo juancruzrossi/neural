@@ -13,7 +13,7 @@ Resolve the feature from the user's message or `.neural/wip/`. Require `CONTEXT.
 
 ## Two axes, each with its own verdict
 
-**Spec fidelity**: every behavior and acceptance criterion in `PLAN.md` is reachable through the public interface and proven by a test that would fail if the behavior broke.
+**Spec fidelity**: every behavior in `PLAN.md` and acceptance criterion in `CONTEXT.md` is reachable through the public interface and proven by a test that would fail if the behavior broke.
 
 **Standards**: the change follows `AGENTS.md`/`CLAUDE.md` and repo conventions, has no speculative code, and no leftover debug residue.
 

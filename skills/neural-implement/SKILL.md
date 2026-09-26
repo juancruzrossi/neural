@@ -9,7 +9,7 @@ Workflow: interview → plan → implement → review → archive. Previous: neu
 
 Resolve the feature from the user's message or `.neural/wip/`. Require `PLAN.md` with `Status: approved`; otherwise stop and send the user to neural-plan.
 
-If `.neural/wip/<feature>/REVIEW.md` exists with FAIL findings, fix only those findings — no new scope — then continue below.
+If `.neural/wip/<feature>/REVIEW.md` exists with FAIL findings, fix only those findings — no new scope — then go to Before handoff.
 
 ## Build in vertical slices
 
