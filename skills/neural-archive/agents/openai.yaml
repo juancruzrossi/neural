@@ -1,0 +1,3 @@
+interface:
+  display_name: "Neural Archive"
+  short_description: "Archive a feature that passed review"

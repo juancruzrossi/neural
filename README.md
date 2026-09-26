@@ -1,18 +1,13 @@
 # Neural
 
-**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents.**
+**A lightweight Spec-Driven Development workflow for AI coding agents.**
 
 ```text
-interview → plan → execute → review
-                             ├─ pass or accepted warnings → archive → learn
-                             └─ approved findings → address-review → review
+interview → plan → implement → review → archive
+                              └─ FAIL → implement
 ```
 
-## Why Neural?
-
-Most AI agent failures come from unclear requirements, fantasy plans, context rot, and "done" without evidence. Neural addresses each one.
-
-## Installation
+## Install
 
 ### Claude Code
 
@@ -28,9 +23,12 @@ codex plugin marketplace add juancruzrossi/neural
 codex plugin add neural@neural
 ```
 
-### Or, via skills protocol
-```bash
-npx skills@latest add juancruzrossi/neural --skill '*'
+### OpenCode
+
+OpenCode has no skill installer. Paste this prompt into OpenCode:
+
+```text
+Install the Neural skills globally: clone https://github.com/juancruzrossi/neural into a temporary directory, copy every folder under its skills/ directory into ~/.config/opencode/skills/ (create it if missing, overwrite existing neural-* folders), delete the temporary clone, then run `opencode debug skill` and confirm the five neural-* skills are listed.
 ```
 
 ## Skills
@@ -38,13 +36,10 @@ npx skills@latest add juancruzrossi/neural --skill '*'
 | Skill | What it does |
 |---|---|
 | `neural-interview` | Clarify the feature → `CONTEXT.md` |
-| `neural-plan` | Write the product spec → `PLAN.md` |
-| `neural-execute` | Implements the plan with risk-selected evidence |
-| `neural-review` | Verifies plan vs. implementation |
-| `neural-address-review` | Apply approved fixes from a previous review. |
-| `neural-archive` | Freshness-check and archive the feature |
-| `neural-learn` | Add project knowledge for future references |
-| `neural-help` | Show the workflow |
+| `neural-plan` | Write the approved plan → `PLAN.md` |
+| `neural-implement` | Build the plan in vertical slices |
+| `neural-review` | Verify the implementation against the plan |
+| `neural-archive` | Move a passed feature to the archive |
 
 ## Artifacts
 
@@ -56,14 +51,7 @@ All artifacts live in `.neural/` at your project root:
 │   └── <feature>/
 │       ├── CONTEXT.md
 │       ├── PLAN.md
-│       ├── EXECUTION.md
-│       ├── REVIEW.md
-│       └── docs/adr/     optional, consequential decisions only
-├── archive/
-│   └── <feature>/        freshly reviewed completed feature
-└── knowledge/            built by neural-learn after each archived feature
-    ├── PROJECT-CONTEXT.md   stack, conventions, recurring patterns
-    ├── GLOSSARY.md          unified domain vocabulary
-    ├── DECISIONS.md         cross-feature architectural decisions
-    └── ANTIPATTERNS.md      recurring review findings
+│       └── REVIEW.md
+└── archive/
+    └── <feature>/        moved here once REVIEW.md verdict is PASS
 ```

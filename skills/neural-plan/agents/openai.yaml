@@ -1,0 +1,3 @@
+interface:
+  display_name: "Neural Plan"
+  short_description: "Turn a context into an approved implementation plan"

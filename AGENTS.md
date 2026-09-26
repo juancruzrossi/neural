@@ -1,29 +1,13 @@
-# Neural SDD — Project Rules
+# Working with Neural
 
-## What is this
-A Spec-Driven Development plugin for AI coding agents. It ships as a plugin for both Claude Code and Codex from the same repo. Skills live in `skills/`. Manifests:
-- Claude Code: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`
-- Codex: `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json`
+1. `neural-interview` clarifies a feature request into `.neural/wip/<feature>/CONTEXT.md`. Done when nothing that changes scope or acceptance is still open and the user confirms.
+2. `neural-plan` turns `CONTEXT.md` into `.neural/wip/<feature>/PLAN.md`: behaviors, public interfaces, vertical slices. Requires the user's explicit approval (`Status: approved`) before moving on.
+3. `neural-implement` requires an approved `PLAN.md` and builds it one vertical slice at a time, test first through the public interface.
+4. `neural-review` checks the implementation against `PLAN.md` on two axes — spec fidelity and repo standards — and writes `.neural/wip/<feature>/REVIEW.md` with a PASS/FAIL verdict. FAIL sends the feature back to `neural-implement`.
+5. `neural-archive` moves a PASSed feature from `.neural/wip/<feature>/` to `.neural/archive/<feature>/`.
 
-## Versioning (do this on EVERY release)
-Each platform has one authoritative plugin manifest. On every release, bump the same semver version in:
-1. `.codex-plugin/plugin.json` — Codex manifest version
-2. `.claude-plugin/plugin.json`
+Git: if the project is a git repository, each skill commits locally as it finishes meaningful work. Never push.
 
-Do not duplicate plugin versions in marketplace catalogs. Claude resolves the version from `.claude-plugin/plugin.json`; Codex resolves it from `.codex-plugin/plugin.json`.
+## Releasing
 
-## When adding or removing skills
-1. Create/delete the skill directory in `skills/`
-2. Update `README.md` — add/remove the skill section
-3. Bump the version in both plugin manifests (see Versioning above)
-
-## Conventions
-- Skill logic lives in `SKILL.md` — one per skill. Auxiliary reference files (e.g., format templates) may sit alongside `SKILL.md` and be linked from it, so they load on-demand and keep `SKILL.md` light at trigger time.
-- Skill instructions in English, concise, imperative
-- Skill folders use `neural-` prefixed names (`neural-interview`, `neural-plan`, etc.) so skills stay namespaced on every platform
-- Claude Code invokes skills as `/neural:<name>` (e.g., `/neural:neural-plan`)
-- Codex invokes skills with `$<name>` (e.g., `$neural-plan`) or implicit matching
-- Code examples in skills and references use Python. Use Bash only for shell commands and `md` or `text` for artifact templates.
-- Descriptions: just `"<what it does>"` — no boilerplate prefixes or suffixes
-- Commits: conventional commits in English
-- PRs: squash & merge, delete branch after
+Bump the same semver version in `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` on every release. Adding or removing a skill also updates `README.md`.

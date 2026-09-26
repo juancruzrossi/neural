@@ -1,91 +1,32 @@
 ---
 name: neural-interview
-description: "Interview a feature request into testable acceptance, domain language, decision boundaries, and selective ADRs"
+description: "Interview a feature request into a shared, testable context before any plan or code exists. Use at the start of a new feature, or when scope, acceptance, or interfaces are still unclear."
 ---
 
 # Neural Interview
 
-Turn a raw feature request into a shared, testable context. Respond and write
-artifacts in the user's language.
+Workflow: interview → plan → implement → review → archive. Previous: none. Next: neural-plan.
 
-## Orient
+Resolve the feature name from the user's message or an existing `.neural/wip/<feature>/`; ask only if ambiguous. Normalize to kebab-case.
 
-1. Resolve the feature name and raw goal from `$ARGUMENTS`; ask only for what is
-   missing. Normalize the name to kebab-case.
-2. Inspect the repo for facts: git state, project context, related source and
-   tests, existing ADRs, `.neural/{wip,archive}/`, and `.neural/knowledge/`.
-   Established glossary and decisions are binding unless the user changes them
-   explicitly. Carry relevant terms, constraints, decisions, and recurring
-   warnings into the new context. Current verified code and an explicit user
-   decision override stale knowledge.
-3. In a multi-context repo, infer the parent context from `CONTEXT-MAP.md`; ask
-   only if evidence is ambiguous.
+## Separate facts from decisions
 
-Do not ask the user questions the repo can answer.
+Inspect the repo yourself for facts: git state, related code, tests, existing `.neural/wip/` or `.neural/archive/` entries. Never ask the user something the repo already answers.
 
-## Interview
+Decisions are the user's: anything that changes scope, acceptance, or a public interface.
 
-Map unresolved decisions as a dependency tree. In each round, compute the
-**frontier**: every decision whose prerequisites are already settled. Ask the
-whole frontier together, numbered, with a recommended answer and brief
-trade-off for each. A question that depends on an answer still open in this
-round belongs to the next round. Do not serialize independent decisions into
-one-question turns.
+## Interview in rounds
 
-Defer questions that depend on answers still open in the current round. The
-frontier may be smaller than the full list of decisions; completeness is
-required across rounds.
+Map open decisions as a dependency tree. Each round, ask the **frontier** — every decision whose prerequisites are already settled — as one set of numbered questions, each with a recommended answer. A question depending on an answer still open this round waits for the next round.
 
-Facts belong to the agent: inspect the repo or environment instead of asking.
-Decisions belong to the user when they change acceptance, scope, a public
-contract, or a hard-to-reverse choice. Use the interaction tools available on
-the platform when they make a frontier easier to answer.
-
-Before closing the frontier, establish three lenses without repeating resolved
-facts: whose problem the requirements solve and what counts as done; which of
-cost, speed, reliability, security, and privacy is non-negotiable; and what test
-or evaluation through a public interface would prove the result works. Ask only
-when repo evidence and prior decisions do not settle the answer.
-
-Use scenarios to expose relevant boundaries: success, failure, lifecycle,
-ownership, value ranges, scale limits, retries, concurrency, or time. Skip
-dimensions the feature does not have.
-
-When contract-relevant terms are ambiguous, resolve the distinction explicitly.
-Choose one canonical term and record meaningful aliases under `_Avoid_`.
-
-Use judgment for reversible details inside an agreed decision boundary. Record
-the choice as an assumption instead of asking for permission. Surface
-contradictions with existing language, code, or decisions.
-
-After each round, write resolved content to
-`.neural/wip/<feature>/CONTEXT.md` using
-[CONTEXT-FORMAT.md](./references/CONTEXT-FORMAT.md). Create the directory only
-when there is resolved content to preserve.
-
-Offer an ADR only when a decision is hard to reverse, surprising without its
-rationale, and the result of a real trade-off. If accepted, use
-[ADR-FORMAT.md](./references/ADR-FORMAT.md).
+Cover: the problem and who has it, what "done" means, scope and non-goals, the public interface and its results, failure cases, and how it will be tested.
 
 ## Finish
 
-Finish when the decision frontier is empty: acceptance criteria are testable,
-every externally visible operation has an exact interface and result,
-high-impact decisions are resolved, non-goals and assumptions are visible, and
-remaining external unknowns are explicit Open Items. Present the resulting
-contract for one final confirmation. Do not continue interviewing for
-reversible details the agent is authorized to decide.
+Done when nothing that changes what gets built or how it is verified is still open, and the user confirms shared understanding.
 
-If git is enabled and the repo is on a stable branch, ask once whether to create
-an appropriate feature branch or stay. Never stage, commit, or push during the
-interview; preserve pre-existing staged and unrelated changes as found.
+Write `.neural/wip/<feature>/CONTEXT.md` with sections: Problem, Decisions, Non-goals, Acceptance criteria, Open items.
 
-Report:
+Git: if this is a git repository, commit locally as you finish meaningful work. Never push. Without git, just work.
 
-```text
-Interview complete for <feature>
-Context: .neural/wip/<feature>/CONTEXT.md
-ADRs: <count>
-Open items: <count>
-Next: neural-plan
-```
+Report: `Interview complete for <feature>. Context: .neural/wip/<feature>/CONTEXT.md. Next: neural-plan.`

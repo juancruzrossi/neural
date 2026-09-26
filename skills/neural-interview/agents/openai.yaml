@@ -1,0 +1,3 @@
+interface:
+  display_name: "Neural Interview"
+  short_description: "Interview a feature into a shared, testable context"
