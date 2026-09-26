@@ -20,6 +20,6 @@ mkdir -p .neural/archive/
 mv .neural/wip/<feature>/ .neural/archive/<feature>/
 ```
 
-Git: if this is a git repository, commit locally as you finish meaningful work. Never push. Without git, just work.
+Git: if this is a git repository, commit the move locally. Never push.
 
 Report: `Feature '<feature>' archived.`

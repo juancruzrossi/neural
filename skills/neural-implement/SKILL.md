@@ -15,12 +15,12 @@ If `.neural/wip/<feature>/REVIEW.md` exists with FAIL findings, fix only those f
 
 Take the plan's slices in order. For each: write a failing test through the public interface, write the smallest code across every layer to pass it, then move to the next slice. Refactor only while the suite is green.
 
-Stop and ask before a scope change, a new dependency, or a public-contract change. Never rewrite `PLAN.md` to match the implementation.
+Stop and ask before a scope change, a new dependency, or a public-contract change. Never rewrite `PLAN.md` to match the implementation; neural-review checks the code against it.
 
 ## Before handoff
 
-Run the project's own tests, types, and lint, then the full suite.
+Run the tests, type checks, and lint that cover the changed code, not the full suite.
 
-Git: if this is a git repository, commit locally as you finish meaningful work. Never push. Without git, just work.
+Git: if this is a git repository, commit each finished slice locally. Never push.
 
 Report the slices done and any deviations. Suggest neural-review.

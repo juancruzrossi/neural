@@ -27,7 +27,7 @@ codex plugin add neural@neural
 OpenCode has no skill installer. Paste this prompt into OpenCode:
 
 ```text
-Install the Neural skills globally: clone https://github.com/juancruzrossi/neural into a temporary directory, copy every folder under its skills/ directory into ~/.config/opencode/skills/ (create it if missing, overwrite existing neural-* folders), delete the temporary clone, then run `opencode debug skill` and confirm the five neural-* skills are listed.
+Install the Neural skills globally: clone https://github.com/juancruzrossi/neural into a temporary directory, delete every existing neural-* folder in ~/.config/opencode/skills/ (create the directory if missing), copy every folder under its skills/ directory into it, delete the temporary clone, then run `opencode debug skill` and confirm the five neural-* skills are listed.
 ```
 
 ## Skills

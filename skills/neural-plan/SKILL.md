@@ -25,6 +25,6 @@ No file paths, task checklists, or code snippets — those belong to implementat
 
 Show the plan and ask for explicit approval. On approval, set `Status: approved`. Do not proceed to implementation without it.
 
-Git: if this is a git repository, commit locally as you finish meaningful work. Never push. Without git, just work.
+Git: if this is a git repository, commit `PLAN.md` locally. Never push.
 
 Report: `Plan ready for <feature>. Plan: .neural/wip/<feature>/PLAN.md. Next: neural-implement.`

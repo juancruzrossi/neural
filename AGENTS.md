@@ -6,7 +6,7 @@
 4. `neural-review` checks the implementation against `PLAN.md` on two axes — spec fidelity and repo standards — and writes `.neural/wip/<feature>/REVIEW.md` with a PASS/FAIL verdict. FAIL sends the feature back to `neural-implement`.
 5. `neural-archive` moves a PASSed feature from `.neural/wip/<feature>/` to `.neural/archive/<feature>/`.
 
-Git: if the project is a git repository, each skill commits locally as it finishes meaningful work. Never push.
+Git: if the project is a git repository, each skill commits its own output locally. Never push.
 
 ## Releasing
 
